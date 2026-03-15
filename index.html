@@ -13,6 +13,11 @@
       --bg:#FFF9FA; --bg2:#FEF3F5; --white:#FFFFFF;
       --ink:#230F17; --ink2:#5E2E3C; --ink3:#AA7888;
       --bdr:rgba(232,131,154,0.18);
+      /* hero overlay colors (themeable) */
+      --ho1:rgba(253,238,241,.72);
+      --ho2:rgba(250,215,222,.80);
+      --ho3:rgba(248,200,212,.90);
+      --ho4:rgba(255,249,250,1);
       --serif:'Playfair Display',Georgia,serif;
       --sans:'Outfit',system-ui,sans-serif;
       --ease:cubic-bezier(.4,0,.2,1);
@@ -20,7 +25,7 @@
     html { scroll-behavior:smooth; }
     body { font-family:var(--sans); background:var(--bg); color:var(--ink); overflow-x:hidden; }
 
-    /* ══ NAV ══ */
+    /* ══ NAV — original, unchanged ══ */
     #nav {
       position:fixed; top:0; left:0; right:0; z-index:999;
       height:60px; display:flex; align-items:center; justify-content:space-between;
@@ -39,6 +44,82 @@
     .n-links a:hover { color:var(--p7); }
     #nav.on .n-links a:hover { color:var(--p5); }
 
+    /* Customize pill — sits right after the nav links, same visual language */
+    .n-theme-btn {
+      display:inline-flex; align-items:center; gap:.4rem;
+      font-size:.62rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--p6); background:rgba(255,255,255,.75);
+      border:1px solid rgba(200,92,120,.22); backdrop-filter:blur(8px);
+      padding:.32rem .9rem; border-radius:2rem;
+      cursor:pointer; transition:all .22s var(--ease);
+      text-shadow:0 1px 6px rgba(255,255,255,.8);
+    }
+    .n-theme-btn:hover { background:rgba(255,255,255,.95); border-color:var(--p3); color:var(--p7); }
+    #nav.on .n-theme-btn { background:rgba(255,255,255,.9); text-shadow:none; border-color:rgba(200,92,120,.25); }
+    .n-theme-btn svg { flex-shrink:0; }
+
+    /* ══ THEME PANEL ══ */
+    #themePanel {
+      position:fixed; top:68px; right:1.5rem; z-index:998;
+      width:320px;
+      background:#fff;
+      border:1px solid var(--bdr);
+      border-radius:20px;
+      padding:1.5rem 1.6rem 1.2rem;
+      box-shadow:0 20px 60px rgba(155,58,84,.14), 0 4px 16px rgba(0,0,0,.06);
+      transform:translateY(-10px) scale(.97);
+      opacity:0; pointer-events:none;
+      transition:all .3s var(--ease);
+    }
+    #themePanel.open { transform:translateY(0) scale(1); opacity:1; pointer-events:all; }
+
+    .tp-head {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:1.1rem;
+    }
+    .tp-title {
+      font-family:var(--serif); font-size:1.05rem; font-weight:700; color:var(--ink);
+    }
+    .tp-close {
+      background:none; border:none; color:var(--ink3); cursor:pointer;
+      font-size:.9rem; line-height:1; padding:.2rem; transition:color .2s;
+    }
+    .tp-close:hover { color:var(--p5); }
+
+    /* Template grid */
+    .tp-sec { font-size:.6rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ink3); margin-bottom:.7rem; }
+    .tp-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; margin-bottom:1.2rem; }
+    .tp-card {
+      border-radius:12px; overflow:hidden; cursor:pointer;
+      border:2px solid transparent; transition:all .22s var(--ease);
+      position:relative;
+    }
+    .tp-card:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.1); }
+    .tp-card.active { border-color:var(--p5); box-shadow:0 0 0 3px rgba(200,92,120,.15); }
+    .tp-preview {
+      height:52px;
+      display:flex; flex-direction:column;
+    }
+    .tp-nav-stripe { height:14px; display:flex; align-items:center; padding:0 6px; gap:3px; }
+    .tp-nav-dot { width:3px; height:3px; border-radius:50%; background:rgba(255,255,255,.6); }
+    .tp-hero-stripe { flex:1; }
+    .tp-body-stripe { height:16px; display:flex; align-items:center; padding:0 6px; gap:3px; }
+    .tp-body-bar { height:3px; border-radius:2px; background:rgba(0,0,0,.1); }
+    .tp-name {
+      font-size:.6rem; font-weight:600; color:var(--ink2); text-align:center;
+      padding:.35rem .3rem .4rem; background:#fff;
+    }
+    .tp-card.active .tp-name { color:var(--p5); font-weight:700; }
+
+    /* check badge */
+    .tp-card.active::after {
+      content:'✓'; position:absolute; top:.3rem; right:.35rem;
+      font-size:.6rem; font-weight:700; color:#fff;
+      background:var(--p5); width:14px; height:14px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      line-height:14px; text-align:center;
+    }
+
     /* ══ HERO ══ */
     #hero { height:100vh; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; }
     .hbg {
@@ -50,18 +131,10 @@
     .hov {
       position:absolute; inset:0; z-index:1;
       background:linear-gradient(to bottom,
-        rgba(253,238,241,.72) 0%,
-        rgba(250,215,222,.80) 40%,
-        rgba(248,200,212,.90) 72%,
-        rgba(255,249,250,1)   100%);
+        var(--ho1) 0%, var(--ho2) 40%, var(--ho3) 72%, var(--ho4) 100%);
+      transition:background .5s var(--ease);
     }
-
-    /* Center text */
-    .h-box {
-      position:relative; z-index:3;
-      text-align:center; max-width:680px; padding:0 2rem;
-      margin-top:-60px;
-    }
+    .h-box { position:relative; z-index:3; text-align:center; max-width:680px; padding:0 2rem; margin-top:-60px; }
     .h-pill {
       display:inline-flex; align-items:center; gap:.5rem;
       font-size:.62rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
@@ -70,16 +143,8 @@
       padding:.38rem 1.1rem; border-radius:2rem; margin-bottom:1.6rem;
     }
     .h-pill::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--p4); }
-    .h-year {
-      font-family:var(--sans); font-size:.78rem; font-weight:700;
-      letter-spacing:.22em; text-transform:uppercase; color:var(--p4);
-      margin-bottom:.6rem;
-    }
-    .h-name {
-      font-family:var(--serif); font-size:clamp(2.6rem,5.5vw,4.8rem);
-      font-weight:700; color:var(--p6); line-height:1.0;
-      letter-spacing:-.02em; margin-bottom:.5rem;
-    }
+    .h-year { font-family:var(--sans); font-size:.78rem; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--p4); margin-bottom:.6rem; }
+    .h-name { font-family:var(--serif); font-size:clamp(2.6rem,5.5vw,4.8rem); font-weight:700; color:var(--p6); line-height:1.0; letter-spacing:-.02em; margin-bottom:.5rem; }
     .h-name em { font-style:italic; font-weight:400; color:var(--p5); display:block; font-size:.65em; margin-top:.2rem; }
     .h-sub { font-family:var(--serif); font-style:italic; font-size:clamp(.95rem,1.8vw,1.2rem); color:var(--p5); margin-bottom:1.2rem; }
     .h-desc { font-size:.88rem; color:var(--ink2); line-height:1.9; max-width:440px; margin:0 auto 2rem; }
@@ -94,18 +159,8 @@
     .hst:last-child { border-right:none; }
     .hst-n { font-family:var(--serif); font-size:1.9rem; font-weight:700; color:var(--p6); display:block; line-height:1; }
     .hst-l { font-size:.57rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--p4); }
-
-    /* ══ STUDENT CHARACTER — no frame, just image ══ */
-    .h-student {
-      position: absolute; bottom: 0; right: 6%; z-index: 4;
-      width: 260px;
-    }
-    .h-student img {
-      width: 100%; display: block;
-      -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-      mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-    }
-
+    .h-student { position:absolute; bottom:0; right:6%; z-index:4; width:260px; }
+    .h-student img { width:100%; display:block; -webkit-mask-image:linear-gradient(to bottom,black 70%,transparent 100%); mask-image:linear-gradient(to bottom,black 70%,transparent 100%); }
     .h-scroll { position:absolute; bottom:1.6rem; left:50%; transform:translateX(-50%); z-index:5; display:flex; flex-direction:column; align-items:center; gap:.3rem; color:var(--p5); font-size:.57rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; opacity:.7; animation:sbb 2.4s ease-in-out infinite; }
     @keyframes sbb { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(7px)} }
 
@@ -117,7 +172,7 @@
     .s-ln { width:36px; height:2px; background:var(--p3); border-radius:2px; margin-bottom:3rem; }
     .s-c { text-align:center; } .s-c .s-ln { margin-left:auto; margin-right:auto; }
 
-    /* ══ ABOUT — bento boxes ══ */
+    /* ══ ABOUT ══ */
     #about { background:#fff; }
     .bento { display:grid; grid-template-columns:repeat(12,1fr); grid-auto-rows:200px; gap:1rem; }
     .b { border-radius:20px; overflow:hidden; position:relative; }
@@ -131,15 +186,15 @@
     .b-title { font-family:var(--serif); font-size:1.4rem; font-weight:700; line-height:1.2; }
     .b-text { font-size:.85rem; line-height:1.85; margin-top:.5rem; }
     .b-num { font-family:var(--serif); font-size:3rem; font-weight:700; line-height:1; }
-    .light .b-label { color:var(--p4); } .light .b-title { color:var(--ink); } .light .b-text { color:var(--ink2); }
-    .dark .b-label { color:rgba(255,255,255,.6); } .dark .b-title { color:#fff; } .dark .b-text { color:rgba(255,255,255,.75); } .dark .b-num { color:#fff; }
-    .soft .b-label { color:var(--p5); } .soft .b-num { color:var(--p6); } .soft .b-text { color:var(--ink2); font-size:.78rem; }
+    .light .b-label{color:var(--p4)}.light .b-title{color:var(--ink)}.light .b-text{color:var(--ink2)}
+    .dark .b-label{color:rgba(255,255,255,.6)}.dark .b-title{color:#fff}.dark .b-text{color:rgba(255,255,255,.75)}.dark .b-num{color:#fff}
+    .soft .b-label{color:var(--p5)}.soft .b-num{color:var(--p6)}.soft .b-text{color:var(--ink2);font-size:.78rem}
 
     /* ══ EXPERIENCE ══ */
     #experience { background:var(--bg2); }
     .xtl { position:relative; padding-left:2rem; display:flex; flex-direction:column; gap:0; }
     .xtl::before { content:''; position:absolute; left:0; top:24px; bottom:24px; width:2px; background:linear-gradient(to bottom,var(--p3),transparent); border-radius:1px; }
-    .xcard { position:relative; background:#fff; border:1px solid var(--bdr); border-radius:18px; padding:2rem 2.2rem; margin-bottom:1.2rem; transition:transform .3s var(--ease), box-shadow .3s var(--ease); }
+    .xcard { position:relative; background:#fff; border:1px solid var(--bdr); border-radius:18px; padding:2rem 2.2rem; margin-bottom:1.2rem; transition:transform .3s var(--ease),box-shadow .3s var(--ease); }
     .xcard:hover { transform:translateX(6px); box-shadow:0 14px 40px rgba(200,92,120,.13); }
     .xcard::before { content:''; position:absolute; left:-2.55rem; top:1.8rem; width:12px; height:12px; border-radius:50%; background:var(--p4); border:3px solid #fff; box-shadow:0 0 0 2px var(--p4); }
     .xdate { font-size:.62rem; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--p5); margin-bottom:.25rem; }
@@ -149,30 +204,15 @@
     .chips { display:flex; flex-wrap:wrap; gap:.4rem; }
     .chip { font-size:.62rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; padding:.26rem .75rem; border-radius:2rem; background:var(--p1); color:var(--p6); }
 
-    /* ══ LESSONS — 2×5 grid ══ */
+    /* ══ LESSONS ══ */
     #lessons { background:#fff; }
     .lg { display:grid; grid-template-columns:repeat(5,1fr); gap:1.2rem; }
     .lc { background:#fff; border:1px solid var(--bdr); border-radius:16px; overflow:hidden; transition:transform .3s var(--ease),box-shadow .3s var(--ease); }
     .lc:hover { transform:translateY(-4px); box-shadow:0 14px 36px rgba(200,92,120,.14); }
-    .lc-top {
-      height:110px;
-      overflow:hidden;
-      position:relative;
-    }
-    .lc-top img {
-      width:100%; height:100%;
-      object-fit:cover;
-      display:block;
-      transition:transform .45s var(--ease);
-    }
+    .lc-top { height:110px; overflow:hidden; position:relative; }
+    .lc-top img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .45s var(--ease); }
     .lc:hover .lc-top img { transform:scale(1.07); }
-    /* Gradient overlay on card images */
-    .lc-top::after {
-      content:'';
-      position:absolute; inset:0;
-      background:linear-gradient(to bottom, rgba(155,58,84,0.18) 0%, rgba(155,58,84,0.38) 100%);
-      pointer-events:none;
-    }
+    .lc-top::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,rgba(155,58,84,0.18) 0%,rgba(155,58,84,0.38) 100%); pointer-events:none; }
     .lc-body { padding:1rem 1.1rem; }
     .lc-meta { font-size:.58rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--ink3); margin-bottom:.25rem; }
     .lc-title { font-family:var(--serif); font-size:.98rem; font-weight:700; color:var(--ink); margin-bottom:.35rem; line-height:1.25; }
@@ -180,7 +220,7 @@
     .lc-link { font-size:.6rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--p5); text-decoration:none; }
     .lc-link:hover { color:var(--p7); }
 
-    /* ══ GALLERY — slider with videos ══ */
+    /* ══ GALLERY ══ */
     #gallery { background:var(--bg2); }
     .gal-slider { position:relative; overflow:hidden; border-radius:20px; }
     .gal-track { display:flex; transition:transform .5s var(--ease); }
@@ -192,14 +232,9 @@
     .gi.vid .play-btn { position:absolute; width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,.22); backdrop-filter:blur(4px); border:2px solid rgba(255,255,255,.6); display:flex; align-items:center; justify-content:center; }
     .gi.vid .play-btn svg { margin-left:3px; }
     .gi.vid .vid-label { position:absolute; bottom:.7rem; left:.8rem; font-size:.6rem; font-weight:600; color:rgba(255,255,255,.8); letter-spacing:.08em; text-transform:uppercase; }
-    .gi:nth-child(1) { grid-column:span 2; grid-row:span 2; }
-    .gi:nth-child(2) { grid-column:span 1; }
-    .gi:nth-child(3) { grid-column:span 1; }
-    /* page 2 first item also spans */
-    .gal-page:nth-child(2) .gi:nth-child(1) { grid-column:span 1; grid-row:span 1; }
-    .gal-page:nth-child(2) .gi:nth-child(4) { grid-column:span 2; grid-row:span 2; }
-
-    /* Nav arrows */
+    .gi:nth-child(1){grid-column:span 2;grid-row:span 2}.gi:nth-child(2){grid-column:span 1}.gi:nth-child(3){grid-column:span 1}
+    .gal-page:nth-child(2) .gi:nth-child(1){grid-column:span 1;grid-row:span 1}
+    .gal-page:nth-child(2) .gi:nth-child(4){grid-column:span 2;grid-row:span 2}
     .gal-nav { display:flex; align-items:center; justify-content:center; gap:1rem; margin-top:1.2rem; }
     .gal-btn { width:40px; height:40px; border-radius:50%; background:#fff; border:1px solid var(--bdr); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .22s; color:var(--p5); }
     .gal-btn:hover { background:var(--p5); color:#fff; border-color:var(--p5); }
@@ -258,59 +293,76 @@
     footer strong { color:var(--p2); font-weight:500; }
 
     /* ══ ANIMATIONS ══ */
-    [data-a] { opacity:0; transition:opacity .65s var(--ease), transform .65s var(--ease); }
-    [data-a="up"]    { transform:translateY(30px); }
-    [data-a="left"]  { transform:translateX(-30px); }
-    [data-a="right"] { transform:translateX(30px); }
-    [data-a="zoom"]  { transform:scale(.94); }
+    [data-a] { opacity:0; transition:opacity .65s var(--ease),transform .65s var(--ease); }
+    [data-a="up"]   {transform:translateY(30px)}
+    [data-a="left"] {transform:translateX(-30px)}
+    [data-a="right"]{transform:translateX(30px)}
+    [data-a="zoom"] {transform:scale(.94)}
     [data-a].vis { opacity:1; transform:none; }
     [data-d="1"]{transition-delay:.1s}[data-d="2"]{transition-delay:.2s}[data-d="3"]{transition-delay:.3s}[data-d="4"]{transition-delay:.4s}[data-d="5"]{transition-delay:.5s}
 
     /* ══ RESPONSIVE ══ */
     @media(max-width:860px){
-      .h-student { width:150px; right:2%; }
-      .bento { grid-template-columns:1fr 1fr; grid-auto-rows:160px; }
-      .b1,.b2,.b3,.b4,.b5 { grid-column:span 2; grid-row:span 1; }
-      .lg { grid-template-columns:repeat(2,1fr); }
-      .gal-page { grid-template-columns:1fr 1fr; }
-      .gi:nth-child(1) { grid-column:span 2; }
-      .rg,.sk-g,.cg { grid-template-columns:1fr; gap:2rem; }
-      #nav { padding:0 1.25rem; }
-      .n-links { display:none; }
-      .sec { padding:4rem 1.25rem; }
-      .fb-card { padding:2rem; }
-      .cfr { grid-template-columns:1fr; }
+      .h-student{width:150px;right:2%}
+      .bento{grid-template-columns:1fr 1fr;grid-auto-rows:160px}
+      .b1,.b2,.b3,.b4,.b5{grid-column:span 2;grid-row:span 1}
+      .lg{grid-template-columns:repeat(2,1fr)}
+      .gal-page{grid-template-columns:1fr 1fr}
+      .gi:nth-child(1){grid-column:span 2}
+      .rg,.sk-g,.cg{grid-template-columns:1fr;gap:2rem}
+      #nav{padding:0 1.25rem}
+      .n-links{display:none}
+      .n-theme-btn span{display:none}
+      .sec{padding:4rem 1.25rem}
+      .fb-card{padding:2rem}
+      .cfr{grid-template-columns:1fr}
+      #themePanel{right:.75rem;width:290px}
     }
   </style>
 </head>
 <body>
 
-<!-- NAV -->
+<!-- ══ NAV — original, with Themes button added ══ -->
 <nav id="nav">
   <a href="#hero" class="n-logo">Emelyn S. Ulanday</a>
-  <ul class="n-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#lessons">Lessons</a></li>
-    <li><a href="#gallery">Gallery</a></li>
-    <li><a href="#reflection">Reflections</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
+  <div style="display:flex;align-items:center;gap:2rem">
+    <ul class="n-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#lessons">Lessons</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#reflection">Reflections</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="n-theme-btn" id="themeToggle">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+      <span>Themes</span>
+    </button>
+  </div>
 </nav>
+
+<!-- ══ THEME PANEL ══ -->
+<div id="themePanel">
+  <div class="tp-head">
+    <div class="tp-title">Page Themes</div>
+    <button class="tp-close" id="themeClose">✕</button>
+  </div>
+  <div class="tp-sec">Choose a color theme</div>
+  <div class="tp-grid" id="tpGrid">
+    <!-- cards injected by JS -->
+  </div>
+</div>
 
 <!-- HERO -->
 <section id="hero">
   <div class="hbg" id="hbg"></div>
-  <div class="hov"></div>
-
-  <!-- Centered text -->
+  <div class="hov" id="hov"></div>
   <div class="h-box">
     <div class="h-pill">Daraga Community College · BEED 4th Year</div>
     <div class="h-year">2025 – 2026</div>
-    <h1 class="h-name">
-      My Teaching
-      <em>Internship Journey</em>
-    </h1>
+    <h1 class="h-name">My Teaching<em>Internship Journey</em></h1>
     <p class="h-sub">Emelyn S. Ulanday · Pre-Service Teacher</p>
     <p class="h-desc">A passionate pre-service teacher from Daraga Community College, dedicated to creating meaningful and inclusive learning experiences for every child.</p>
     <div class="h-btns">
@@ -324,22 +376,14 @@
       <div class="hst"><span class="hst-n">BEED</span><span class="hst-l">4th Year</span></div>
     </div>
   </div>
-
-  <!-- 3D student character — no frame, just sitting there -->
-  <div class="h-student">
-    <!--<img-->
-    <!--  src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA4L2hpcHBvdW5pY29ybl8zZF9yZW5kZXJfY2hhcmFjdGVyX29mX3RlYWNoZXJfY2h1YmJ5X2xlZ3Nfd29tYW5fY181ZmRhZDk2YS03Y2YxLTQ3MDktOWJlMS05NTAwYmU1YWY2NTVfMS5wbmc.png"-->
-    <!--  alt="Teacher character"-->
-    <!--/>-->
-  </div>
-
+  <div class="h-student"></div>
   <div class="h-scroll">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     scroll
   </div>
 </section>
 
-<!-- ABOUT — bento grid layout -->
+<!-- ABOUT -->
 <section id="about" class="sec">
   <div class="wrap">
     <div class="s-c" style="margin-bottom:2.5rem">
@@ -348,29 +392,22 @@
       <div class="s-ln" data-a="zoom" data-d="2"></div>
     </div>
     <div class="bento" data-a="up" data-d="2">
-      <!-- Big classroom image -->
-      <div class="b b1">
-        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&q=80" alt="Classroom"/>
-      </div>
-      <!-- Who I am -->
+      <div class="b b1"><img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&q=80" alt="Classroom"/></div>
       <div class="b b2 light">
         <div class="b-label">Who I Am</div>
         <div class="b-title">Emelyn S. Ulanday</div>
         <div class="b-text">4th-year BEED student at Daraga Community College, Daraga, Albay. I spent three transformative months as a pre-service teacher, working with young learners who challenged and inspired me every day.</div>
       </div>
-      <!-- Stat -->
       <div class="b b3 dark">
         <div class="b-label">Practice Teaching</div>
         <div class="b-num">3</div>
         <div class="b-text">Months of hands-on classroom experience</div>
       </div>
-      <!-- Stat -->
       <div class="b b4 soft">
         <div class="b-label">Students</div>
         <div class="b-num" style="color:var(--p6)">20</div>
         <div class="b-text" style="color:var(--ink2);font-size:.75rem">Learners mentored</div>
       </div>
-      <!-- Philosophy -->
       <div class="b b5 light">
         <div class="b-label">✨ Teaching Philosophy</div>
         <div class="b-text" style="font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--ink2);">"Education is about building relationships, fostering curiosity, and empowering students to become lifelong learners. Every lesson I design starts with: How will this help my students grow as thinkers and as people?"</div>
@@ -379,7 +416,7 @@
   </div>
 </section>
 
-<!-- EXPERIENCE — timeline -->
+<!-- EXPERIENCE -->
 <section id="experience" class="sec">
   <div class="wrap">
     <p class="s-ey" data-a="up">Experience</p>
@@ -404,14 +441,14 @@
         <div class="xdesc">Currently in 4th year. Coursework includes curriculum development, educational psychology, child and adolescent development, instructional design, assessment and evaluation, and values education.</div>
         <div class="chips">
           <span class="chip">Curriculum Development</span><span class="chip">Educational Psychology</span>
-          <span class="chip">Child Development</span><span class="chip">Values Education</span><span class="chip">Assessment & Evaluation</span>
+          <span class="chip">Child Development</span><span class="chip">Values Education</span><span class="chip">Assessment &amp; Evaluation</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- LESSONS — 2×5 grid = 10 lessons -->
+<!-- LESSONS -->
 <section id="lessons" class="sec">
   <div class="wrap">
     <div class="s-c" style="margin-bottom:2.5rem">
@@ -420,142 +457,21 @@
       <div class="s-ln" data-a="zoom" data-d="2"></div>
     </div>
     <div class="lg">
-
-      <!-- 1. Fractions -->
-      <div class="lc" data-a="up" data-d="1">
-        <div class="lc-top">
-          <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&q=80" alt="Fractions math lesson"/>
-        </div>
-        <div class="lc-body">
-          <p class="lc-meta">Math · Grade [X]</p>
-          <h3 class="lc-title">Introduction to Fractions</h3>
-          <p class="lc-desc">Hands-on lesson using manipulatives to introduce fraction concepts.</p>
-          <a href="#" class="lc-link">View Plan →</a>
-        </div>
-      </div>
-
-      <!-- 2. Water Cycle -->
-      <div class="lc" data-a="up" data-d="2">
-        <div class="lc-top">
-          <img src="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=400&q=80" alt="Water cycle science lesson"/>
-        </div>
-        <div class="lc-body">
-          <p class="lc-meta">Science · Grade [X]</p>
-          <h3 class="lc-title">The Water Cycle</h3>
-          <p class="lc-desc">Inquiry-based lesson on evaporation, condensation, and precipitation.</p>
-          <a href="#" class="lc-link">View Plan →</a>
-        </div>
-      </div>
-
-      <!-- 3. Parts of Speech -->
-      <div class="lc" data-a="up" data-d="3">
-        <div class="lc-top">
-          <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400&q=80" alt="English grammar lesson"/>
-        </div>
-        <div class="lc-body">
-          <p class="lc-meta">English · Grade [X]</p>
-          <h3 class="lc-title">Parts of Speech</h3>
-          <p class="lc-desc">Interactive grammar lesson using games to identify nouns and verbs.</p>
-          <a href="#" class="lc-link">View Plan →</a>
-        </div>
-      </div>
-
-      <!-- 4. Our Local Community -->
-      <div class="lc" data-a="up" data-d="4">
-        <div class="lc-top">
-          <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&q=80" alt="Community social studies lesson"/>
-        </div>
-        <div class="lc-body">
-          <p class="lc-meta">Araling Panlipunan</p>
-          <h3 class="lc-title">Our Local Community</h3>
-          <p class="lc-desc">Lesson on community helpers and local governance using visual aids.</p>
-          <a href="#" class="lc-link">View Plan →</a>
-        </div>
-      </div>
-
-      <!-- 5. Elements of Art -->
-      <div class="lc" data-a="up" data-d="5">
-        <div class="lc-top">
-          <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&q=80" alt="Art lesson drawing"/>
-        </div>
-        <div class="lc-body">
-          <p class="lc-meta">MAPEH · Grade [X]</p>
-          <h3 class="lc-title">Elements of Art</h3>
-          <p class="lc-desc">Creative lesson on line, color, and shape using drawing activities.</p>
-          <a href="#" class="lc-link">View Plan →</a>
-        </div>
-      </div>
-
-      <!-- 6. Addition & Subtraction -->
-      <div class="lc" data-a="up" data-d="1">
-        <div class="lc-top">
-          <img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&q=80" alt="Addition subtraction math lesson"/>
-        </div>
-        <div class="lc-body">
-          <p class="lc-meta">Math · Grade [X]</p>
-          <h3 class="lc-title">Addition &amp; Subtraction</h3>
-          <p class="lc-desc">Concrete-pictorial-abstract approach to mastering basic operations.</p>
-          <a href="#" class="lc-link">View Plan →</a>
-        </div>
-      </div>
-
-      <!-- 7. Parts of a Plant -->
-      <div class="lc" data-a="up" data-d="2">
-        <div class="lc-top">
-          <img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80" alt="Plant science lesson"/>
-        </div>
-        <div class="lc-body">
-          <p class="lc-meta">Science · Grade [X]</p>
-          <h3 class="lc-title">Parts of a Plant</h3>
-          <p class="lc-desc">Hands-on lesson using real plants to identify roots, stem, and leaves.</p>
-          <a href="#" class="lc-link">View Plan →</a>
-        </div>
-      </div>
-
-      <!-- 8. Writing a Simple Sentence -->
-      <div class="lc" data-a="up" data-d="3">
-        <div class="lc-top">
-          <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&q=80" alt="Writing English lesson"/>
-        </div>
-        <div class="lc-body">
-          <p class="lc-meta">English · Grade [X]</p>
-          <h3 class="lc-title">Writing a Simple Sentence</h3>
-          <p class="lc-desc">Guided writing lesson on constructing clear and simple sentences.</p>
-          <a href="#" class="lc-link">View Plan →</a>
-        </div>
-      </div>
-
-      <!-- 9. Showing Respect -->
-      <div class="lc" data-a="up" data-d="4">
-        <div class="lc-top">
-          <img src="https://images.unsplash.com/photo-1536337005238-94b997371b40?w=400&q=80" alt="Values education lesson respect"/>
-        </div>
-        <div class="lc-body">
-          <p class="lc-meta">Values Ed · Grade [X]</p>
-          <h3 class="lc-title">Showing Respect</h3>
-          <p class="lc-desc">Values lesson on respect for teachers, peers, and elders using role play.</p>
-          <a href="#" class="lc-link">View Plan →</a>
-        </div>
-      </div>
-
-      <!-- 10. Folk Dance Basics -->
-      <div class="lc" data-a="up" data-d="5">
-        <div class="lc-top">
-          <img src="https://images.unsplash.com/photo-1518834107812-67b0b7c58434?w=400&q=80" alt="Folk dance MAPEH lesson"/>
-        </div>
-        <div class="lc-body">
-          <p class="lc-meta">MAPEH · Grade [X]</p>
-          <h3 class="lc-title">Folk Dance Basics</h3>
-          <p class="lc-desc">Introduction to Philippine folk dances: steps, rhythm, and cultural context.</p>
-          <a href="#" class="lc-link">View Plan →</a>
-        </div>
-      </div>
-
+      <div class="lc" data-a="up" data-d="1"><div class="lc-top"><img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&q=80" alt="Fractions"/></div><div class="lc-body"><p class="lc-meta">Math · Grade [X]</p><h3 class="lc-title">Introduction to Fractions</h3><p class="lc-desc">Hands-on lesson using manipulatives to introduce fraction concepts.</p><a href="#" class="lc-link">View Plan →</a></div></div>
+      <div class="lc" data-a="up" data-d="2"><div class="lc-top"><img src="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=400&q=80" alt="Water Cycle"/></div><div class="lc-body"><p class="lc-meta">Science · Grade [X]</p><h3 class="lc-title">The Water Cycle</h3><p class="lc-desc">Inquiry-based lesson on evaporation, condensation, and precipitation.</p><a href="#" class="lc-link">View Plan →</a></div></div>
+      <div class="lc" data-a="up" data-d="3"><div class="lc-top"><img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400&q=80" alt="Parts of Speech"/></div><div class="lc-body"><p class="lc-meta">English · Grade [X]</p><h3 class="lc-title">Parts of Speech</h3><p class="lc-desc">Interactive grammar lesson using games to identify nouns and verbs.</p><a href="#" class="lc-link">View Plan →</a></div></div>
+      <div class="lc" data-a="up" data-d="4"><div class="lc-top"><img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&q=80" alt="Community"/></div><div class="lc-body"><p class="lc-meta">Araling Panlipunan</p><h3 class="lc-title">Our Local Community</h3><p class="lc-desc">Lesson on community helpers and local governance using visual aids.</p><a href="#" class="lc-link">View Plan →</a></div></div>
+      <div class="lc" data-a="up" data-d="5"><div class="lc-top"><img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400&q=80" alt="Elements of Art"/></div><div class="lc-body"><p class="lc-meta">MAPEH · Grade [X]</p><h3 class="lc-title">Elements of Art</h3><p class="lc-desc">Creative lesson on line, color, and shape using drawing activities.</p><a href="#" class="lc-link">View Plan →</a></div></div>
+      <div class="lc" data-a="up" data-d="1"><div class="lc-top"><img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&q=80" alt="Addition"/></div><div class="lc-body"><p class="lc-meta">Math · Grade [X]</p><h3 class="lc-title">Addition &amp; Subtraction</h3><p class="lc-desc">Concrete-pictorial-abstract approach to mastering basic operations.</p><a href="#" class="lc-link">View Plan →</a></div></div>
+      <div class="lc" data-a="up" data-d="2"><div class="lc-top"><img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80" alt="Plants"/></div><div class="lc-body"><p class="lc-meta">Science · Grade [X]</p><h3 class="lc-title">Parts of a Plant</h3><p class="lc-desc">Hands-on lesson using real plants to identify roots, stem, and leaves.</p><a href="#" class="lc-link">View Plan →</a></div></div>
+      <div class="lc" data-a="up" data-d="3"><div class="lc-top"><img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&q=80" alt="Writing"/></div><div class="lc-body"><p class="lc-meta">English · Grade [X]</p><h3 class="lc-title">Writing a Simple Sentence</h3><p class="lc-desc">Guided writing lesson on constructing clear and simple sentences.</p><a href="#" class="lc-link">View Plan →</a></div></div>
+      <div class="lc" data-a="up" data-d="4"><div class="lc-top"><img src="https://images.unsplash.com/photo-1536337005238-94b997371b40?w=400&q=80" alt="Respect"/></div><div class="lc-body"><p class="lc-meta">Values Ed · Grade [X]</p><h3 class="lc-title">Showing Respect</h3><p class="lc-desc">Values lesson on respect for teachers, peers, and elders using role play.</p><a href="#" class="lc-link">View Plan →</a></div></div>
+      <div class="lc" data-a="up" data-d="5"><div class="lc-top"><img src="https://images.unsplash.com/photo-1518834107812-67b0b7c58434?w=400&q=80" alt="Folk Dance"/></div><div class="lc-body"><p class="lc-meta">MAPEH · Grade [X]</p><h3 class="lc-title">Folk Dance Basics</h3><p class="lc-desc">Introduction to Philippine folk dances: steps, rhythm, and cultural context.</p><a href="#" class="lc-link">View Plan →</a></div></div>
     </div>
   </div>
 </section>
 
-<!-- GALLERY — slider with photos + videos -->
+<!-- GALLERY -->
 <section id="gallery" class="sec">
   <div class="wrap">
     <div class="s-c" style="margin-bottom:2.5rem">
@@ -563,75 +479,34 @@
       <h2 class="s-h" data-a="up" data-d="1">Gallery</h2>
       <div class="s-ln" data-a="zoom" data-d="2"></div>
     </div>
-
     <div class="gal-slider" data-a="up" data-d="2">
       <div class="gal-track" id="galTrack">
-
-        <!-- PAGE 1 -->
         <div class="gal-page">
           <div class="gi" style="background:linear-gradient(135deg,var(--p1),var(--p2))">📸 Add Photo</div>
-          <div class="gi">📸 Add Photo</div>
-          <div class="gi">📸 Add Photo</div>
-          <div class="gi">📸 Add Photo</div>
-          <!-- Video placeholder 1 -->
-          <div class="gi vid">
-            <div class="play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
-            <div class="vid-label">Classroom Activity</div>
-          </div>
-          <!-- Video placeholder 2 -->
-          <div class="gi vid">
-            <div class="play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
-            <div class="vid-label">Lesson Demo</div>
-          </div>
+          <div class="gi">📸 Add Photo</div><div class="gi">📸 Add Photo</div><div class="gi">📸 Add Photo</div>
+          <div class="gi vid"><div class="play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div><div class="vid-label">Classroom Activity</div></div>
+          <div class="gi vid"><div class="play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div><div class="vid-label">Lesson Demo</div></div>
         </div>
-
-        <!-- PAGE 2 -->
         <div class="gal-page">
-          <div class="gi">📸 Add Photo</div>
-          <div class="gi">📸 Add Photo</div>
-          <!-- Video placeholder 3 -->
-          <div class="gi vid">
-            <div class="play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
-            <div class="vid-label">Student Presentation</div>
-          </div>
-          <div class="gi">📸 Add Photo</div>
-          <div class="gi">📸 Add Photo</div>
-          <div class="gi">📸 Add Photo</div>
+          <div class="gi">📸 Add Photo</div><div class="gi">📸 Add Photo</div>
+          <div class="gi vid"><div class="play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div><div class="vid-label">Student Presentation</div></div>
+          <div class="gi">📸 Add Photo</div><div class="gi">📸 Add Photo</div><div class="gi">📸 Add Photo</div>
         </div>
-
-        <!-- PAGE 3 -->
         <div class="gal-page">
-          <div class="gi">📸 Add Photo</div>
-          <div class="gi">📸 Add Photo</div>
-          <div class="gi">📸 Add Photo</div>
-          <div class="gi vid">
-            <div class="play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
-            <div class="vid-label">Culminating Activity</div>
-          </div>
-          <div class="gi">📸 Add Photo</div>
-          <div class="gi">📸 Add Photo</div>
+          <div class="gi">📸 Add Photo</div><div class="gi">📸 Add Photo</div><div class="gi">📸 Add Photo</div>
+          <div class="gi vid"><div class="play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div><div class="vid-label">Culminating Activity</div></div>
+          <div class="gi">📸 Add Photo</div><div class="gi">📸 Add Photo</div>
         </div>
-
       </div>
     </div>
-
-    <!-- Slider controls -->
     <div class="gal-nav">
-      <button class="gal-btn" id="galPrev">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg>
-      </button>
+      <button class="gal-btn" id="galPrev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
       <div class="gal-dots" id="galDots">
-        <div class="gdot on" data-i="0"></div>
-        <div class="gdot" data-i="1"></div>
-        <div class="gdot" data-i="2"></div>
+        <div class="gdot on" data-i="0"></div><div class="gdot" data-i="1"></div><div class="gdot" data-i="2"></div>
       </div>
-      <button class="gal-btn" id="galNext">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
-      </button>
+      <button class="gal-btn" id="galNext"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></button>
     </div>
-    <p style="text-align:center;margin-top:.8rem;font-size:.72rem;color:var(--ink3);">
-      Replace photo placeholders with &lt;img src="..."&gt; · Video placeholders with &lt;video src="..."&gt;
-    </p>
+    <p style="text-align:center;margin-top:.8rem;font-size:.72rem;color:var(--ink3);">Replace photo placeholders with &lt;img src="..."&gt; · Video placeholders with &lt;video src="..."&gt;</p>
   </div>
 </section>
 
@@ -740,67 +615,226 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <p>© 2025 <strong>Emelyn S. Ulanday</strong> &nbsp;·&nbsp; Pre-Service Teacher Portfolio &nbsp;·&nbsp; Daraga Community College, Albay</p>
 </footer>
 
 <script>
-  // Nav
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => nav.classList.toggle('on', scrollY > 50), { passive: true });
+/* ── Nav scroll ── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('on', scrollY > 50), { passive:true });
 
-  // Parallax
-  const hbg = document.getElementById('hbg');
-  window.addEventListener('scroll', () => {
-    if (scrollY < window.innerHeight) hbg.style.transform = `translateY(${scrollY * 0.28}px)`;
-  }, { passive: true });
+/* ── Parallax ── */
+const hbg = document.getElementById('hbg');
+window.addEventListener('scroll', () => {
+  if (scrollY < innerHeight) hbg.style.transform = `translateY(${scrollY * 0.28}px)`;
+}, { passive:true });
 
-  // Scroll reveal
-  const io = new IntersectionObserver(entries =>
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } }),
-    { threshold: 0.08 }
-  );
-  document.querySelectorAll('[data-a]').forEach(el => io.observe(el));
+/* ── Scroll reveal ── */
+const io = new IntersectionObserver(entries =>
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } }),
+  { threshold:0.08 }
+);
+document.querySelectorAll('[data-a]').forEach(el => io.observe(el));
 
-  // Skill bars
-  const skio = new IntersectionObserver(entries =>
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.querySelectorAll('.sk-fill').forEach(b => b.style.width = b.dataset.w + '%');
-        skio.unobserve(e.target);
-      }
-    }), { threshold: 0.3 }
-  );
-  const sg = document.getElementById('skgrid');
-  if (sg) skio.observe(sg);
+/* ── Skill bars ── */
+const skio = new IntersectionObserver(entries =>
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.sk-fill').forEach(b => b.style.width = b.dataset.w + '%');
+      skio.unobserve(e.target);
+    }
+  }), { threshold:0.3 }
+);
+const sg = document.getElementById('skgrid');
+if (sg) skio.observe(sg);
 
-  // Gallery slider
-  let cur = 0;
-  const total = 3;
-  const track = document.getElementById('galTrack');
-  const dots = document.querySelectorAll('.gdot');
+/* ── Gallery slider ── */
+let cur = 0; const total = 3;
+const track = document.getElementById('galTrack');
+const dots  = document.querySelectorAll('.gdot');
+function goTo(n) {
+  cur = (n + total) % total;
+  track.style.transform = `translateX(-${cur * 100}%)`;
+  dots.forEach((d,i) => d.classList.toggle('on', i === cur));
+}
+document.getElementById('galNext').addEventListener('click', () => goTo(cur+1));
+document.getElementById('galPrev').addEventListener('click', () => goTo(cur-1));
+dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.i)));
+setInterval(() => goTo(cur+1), 5000);
+let touchX = 0;
+track.addEventListener('touchstart', e => touchX = e.touches[0].clientX, { passive:true });
+track.addEventListener('touchend',   e => {
+  const diff = touchX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) goTo(diff > 0 ? cur+1 : cur-1);
+}, { passive:true });
 
-  function goTo(n) {
-    cur = (n + total) % total;
-    track.style.transform = `translateX(-${cur * 100}%)`;
-    dots.forEach((d, i) => d.classList.toggle('on', i === cur));
-  }
+/* ══════════════════════════════════════════
+   PAGE-WIDE THEME SYSTEM
+══════════════════════════════════════════ */
+const root = document.documentElement;
 
-  document.getElementById('galNext').addEventListener('click', () => goTo(cur + 1));
-  document.getElementById('galPrev').addEventListener('click', () => goTo(cur - 1));
-  dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.i)));
+/* Each theme defines ALL CSS variables that affect color across the page */
+const THEMES = [
+  {
+    id:'blush-pink', name:'Blush Pink',
+    nav:'#9B3A54', // nav color swatch
+    hero:['rgba(253,238,241,.72)','rgba(250,215,222,.80)','rgba(248,200,212,.90)','rgba(255,249,250,1)'],
+    vars:{
+      '--p1':'#FDEEF1','--p2':'#FAD7DE','--p3':'#F4AEBB','--p4':'#E8839A',
+      '--p5':'#C85C78','--p6':'#9B3A54','--p7':'#6E2039',
+      '--bg':'#FFF9FA','--bg2':'#FEF3F5',
+      '--ink':'#230F17','--ink2':'#5E2E3C','--ink3':'#AA7888',
+      '--bdr':'rgba(232,131,154,0.18)',
+    }
+  },
+  {
+    id:'gold-cream', name:'Gold & Cream',
+    nav:'#8B6914',
+    hero:['rgba(255,248,230,.75)','rgba(255,237,180,.82)','rgba(255,224,140,.88)','rgba(255,252,240,1)'],
+    vars:{
+      '--p1':'#FFF8E6','--p2':'#FDECC8','--p3':'#F8D68A','--p4':'#E8B84B',
+      '--p5':'#C49020','--p6':'#8B6914','--p7':'#5C440A',
+      '--bg':'#FFFDF5','--bg2':'#FFF9E8',
+      '--ink':'#2A1F05','--ink2':'#5A4510','--ink3':'#9A8050',
+      '--bdr':'rgba(232,184,75,0.2)',
+    }
+  },
+  {
+    id:'rose-gold', name:'Rose Gold',
+    nav:'#8B4A5C',
+    hero:['rgba(255,235,238,.74)','rgba(255,210,218,.82)','rgba(245,180,192,.90)','rgba(255,245,247,1)'],
+    vars:{
+      '--p1':'#FFEBEE','--p2':'#FFD2DA','--p3':'#F5B4C0','--p4':'#E88498',
+      '--p5':'#C8566C','--p6':'#8B4A5C','--p7':'#5E2E3C',
+      '--bg':'#FFF7F8','--bg2':'#FFEFF2',
+      '--ink':'#2A0F14','--ink2':'#5E2A34','--ink3':'#AA7888',
+      '--bdr':'rgba(232,132,152,0.18)',
+    }
+  },
+  {
+    id:'sky-blue', name:'Sky & Lilac',
+    nav:'#4A5E8B',
+    hero:['rgba(230,238,255,.74)','rgba(208,220,255,.82)','rgba(190,205,250,.90)','rgba(245,248,255,1)'],
+    vars:{
+      '--p1':'#E8EEFF','--p2':'#D0DCFF','--p3':'#A8BCFF','--p4':'#7898F0',
+      '--p5':'#4A6CD4','--p6':'#2A4A9B','--p7':'#162E6E',
+      '--bg':'#F5F8FF','--bg2':'#EEF3FF',
+      '--ink':'#0A1230','--ink2':'#2A3860','--ink3':'#7080AA',
+      '--bdr':'rgba(120,152,240,0.18)',
+    }
+  },
+  {
+    id:'sage-green', name:'Sage & Mint',
+    nav:'#3A6B4A',
+    hero:['rgba(230,245,234,.74)','rgba(200,235,210,.82)','rgba(170,218,185,.90)','rgba(240,250,243,1)'],
+    vars:{
+      '--p1':'#E8F5EC','--p2':'#C8EBD2','--p3':'#96D4A8','--p4':'#5CB87A',
+      '--p5':'#2E9456','--p6':'#1E6B3A','--p7':'#0F4224',
+      '--bg':'#F4FBF6','--bg2':'#EAF6EE',
+      '--ink':'#0A200F','--ink2':'#1E4A28','--ink3':'#6A9878',
+      '--bdr':'rgba(92,184,122,0.18)',
+    }
+  },
+  {
+    id:'lavender', name:'Lavender',
+    nav:'#5E3A8B',
+    hero:['rgba(243,236,255,.74)','rgba(230,215,255,.82)','rgba(210,188,252,.90)','rgba(250,246,255,1)'],
+    vars:{
+      '--p1':'#F3ECFF','--p2':'#E6D7FF','--p3':'#C8AAFF','--p4':'#A07AEE',
+      '--p5':'#7848D4','--p6':'#5030A0','--p7':'#32186E',
+      '--bg':'#FAF7FF','--bg2':'#F4EEFF',
+      '--ink':'#1A0830','--ink2':'#3A1860','--ink3':'#8870AA',
+      '--bdr':'rgba(160,122,238,0.18)',
+    }
+  },
+  {
+    id:'peach-coral', name:'Peach Coral',
+    nav:'#8B4A2A',
+    hero:['rgba(255,240,232,.74)','rgba(255,220,198,.82)','rgba(255,195,165,.90)','rgba(255,248,244,1)'],
+    vars:{
+      '--p1':'#FFF0E8','--p2':'#FFDCC6','--p3':'#FFBB96','--p4':'#F0906A',
+      '--p5':'#D4623A','--p6':'#9B3E1E','--p7':'#6E2010',
+      '--bg':'#FFF9F6','--bg2':'#FFF3EC',
+      '--ink':'#2A1208','--ink2':'#5E2C18','--ink3':'#AA7865',
+      '--bdr':'rgba(240,144,106,0.18)',
+    }
+  },
+  {
+    id:'midnight', name:'Midnight Rose',
+    nav:'#C84878',
+    hero:['rgba(30,10,20,.82)','rgba(60,15,30,.88)','rgba(80,20,40,.92)','rgba(15,5,10,1)'],
+    vars:{
+      '--p1':'#3A1525','--p2':'#4E1E30','--p3':'#8B3A5A','--p4':'#C45A80',
+      '--p5':'#E87AA0','--p6':'#F4A0BC','--p7':'#FDD0E0',
+      '--bg':'#0F0508','--bg2':'#1A0810',
+      '--ink':'#FDE8F0','--ink2':'#F0C0D4','--ink3':'#C890A8',
+      '--bdr':'rgba(196,90,128,0.25)',
+    }
+  },
+  {
+    id:'ocean', name:'Ocean Breeze',
+    nav:'#1A5A7A',
+    hero:['rgba(220,240,250,.74)','rgba(180,220,242,.82)','rgba(140,200,232,.90)','rgba(235,248,255,1)'],
+    vars:{
+      '--p1':'#DCF0FA','--p2':'#B4DCF2','--p3':'#78BEE0','--p4':'#3A9AC8',
+      '--p5':'#1A78A8','--p6':'#0E5278','--p7':'#063248',
+      '--bg':'#F0FAFF','--bg2':'#E4F4FC',
+      '--ink':'#051828','--ink2':'#1A3E54','--ink3':'#6898B0',
+      '--bdr':'rgba(58,154,200,0.18)',
+    }
+  },
+];
 
-  // Auto-advance gallery every 5s
-  setInterval(() => goTo(cur + 1), 5000);
+/* Build preview cards */
+const grid = document.getElementById('tpGrid');
+THEMES.forEach((t, idx) => {
+  const ho = t.hero;
+  const card = document.createElement('div');
+  card.className = 'tp-card' + (idx === 0 ? ' active' : '');
+  card.dataset.id = t.id;
+  card.innerHTML = `
+    <div class="tp-preview">
+      <div class="tp-nav-stripe" style="background:${t.nav}">
+        <div class="tp-nav-dot"></div><div class="tp-nav-dot"></div><div class="tp-nav-dot"></div>
+      </div>
+      <div class="tp-hero-stripe" style="background:linear-gradient(to bottom,${ho[0]},${ho[1]},${ho[2]},${ho[3]})"></div>
+      <div class="tp-body-stripe" style="background:${t.vars['--bg2'] || '#f5f5f5'}">
+        <div class="tp-body-bar" style="width:40%;background:${t.vars['--p3']}"></div>
+        <div class="tp-body-bar" style="width:25%;background:${t.vars['--p2']}"></div>
+      </div>
+    </div>
+    <div class="tp-name">${t.name}</div>`;
+  card.addEventListener('click', () => applyTheme(t.id));
+  grid.appendChild(card);
+});
 
-  // Touch/swipe support for gallery
-  let touchX = 0;
-  track.addEventListener('touchstart', e => touchX = e.touches[0].clientX, { passive: true });
-  track.addEventListener('touchend', e => {
-    const diff = touchX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) goTo(diff > 0 ? cur + 1 : cur - 1);
-  }, { passive: true });
+function applyTheme(id) {
+  const t = THEMES.find(x => x.id === id);
+  if (!t) return;
+
+  // Apply all CSS vars
+  Object.entries(t.vars).forEach(([k,v]) => root.style.setProperty(k, v));
+
+  // Hero overlay gradient (smooth transition via CSS)
+  const ho = t.hero;
+  const hov = document.getElementById('hov');
+  hov.style.background = `linear-gradient(to bottom,${ho[0]} 0%,${ho[1]} 40%,${ho[2]} 72%,${ho[3]} 100%)`;
+
+  // Mark active card
+  document.querySelectorAll('.tp-card').forEach(c => c.classList.toggle('active', c.dataset.id === id));
+}
+
+/* Panel toggle */
+const themePanel  = document.getElementById('themePanel');
+const themeToggle = document.getElementById('themeToggle');
+const themeClose  = document.getElementById('themeClose');
+
+themeToggle.addEventListener('click', e => { e.stopPropagation(); themePanel.classList.toggle('open'); });
+themeClose.addEventListener('click',  () => themePanel.classList.remove('open'));
+document.addEventListener('click',    e => {
+  if (!themePanel.contains(e.target) && e.target !== themeToggle) themePanel.classList.remove('open');
+});
 </script>
 </body>
 </html>
