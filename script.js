@@ -42,17 +42,35 @@ track.addEventListener('touchend',   e => {
 const root = document.documentElement;
 
 const THEMES = [
-  { id:'navy-pro', name:'Professional', nav:'#1A3E6E', hero:['rgba(232,238,246,.52)','rgba(200,214,235,.62)','rgba(148,174,207,.72)','rgba(244,247,251,1)'], vars:{ '--p1':'#E8EEF6','--p2':'#C8D6EB','--p3':'#94AECF','--p4':'#5A82B4','--p5':'#2D5F9A','--p6':'#1A3E6E','--p7':'#0D2245','--bg':'#F4F7FB','--bg2':'#EBF0F8','--ink':'#0D1B2E','--ink2':'#2A3F5C','--ink3':'#6A85A8','--bdr':'rgba(90,130,180,0.16)' } },
-  { id:'blush-pink', name:'Blush Pink', nav:'#9B3A54', hero:['rgba(253,238,241,.52)','rgba(250,215,222,.62)','rgba(248,200,212,.72)','rgba(255,249,250,1)'], vars:{ '--p1':'#FDEEF1','--p2':'#FAD7DE','--p3':'#F4AEBB','--p4':'#E8839A','--p5':'#C85C78','--p6':'#9B3A54','--p7':'#6E2039','--bg':'#FFF9FA','--bg2':'#FEF3F5','--ink':'#230F17','--ink2':'#5E2E3C','--ink3':'#AA7888','--bdr':'rgba(232,131,154,0.18)' } },
-  { id:'gold-cream', name:'Gold & Cream', nav:'#8B6914', hero:['rgba(255,248,230,.52)','rgba(255,237,180,.62)','rgba(255,224,140,.72)','rgba(255,252,240,1)'], vars:{ '--p1':'#FFF8E6','--p2':'#FDECC8','--p3':'#F8D68A','--p4':'#E8B84B','--p5':'#C49020','--p6':'#8B6914','--p7':'#5C440A','--bg':'#FFFDF5','--bg2':'#FFF9E8','--ink':'#2A1F05','--ink2':'#5A4510','--ink3':'#9A8050','--bdr':'rgba(232,184,75,0.2)' } },
-  { id:'rose-gold', name:'Rose Gold', nav:'#8B4A5C', hero:['rgba(255,235,238,.52)','rgba(255,210,218,.62)','rgba(245,180,192,.72)','rgba(255,245,247,1)'], vars:{ '--p1':'#FFEBEE','--p2':'#FFD2DA','--p3':'#F5B4C0','--p4':'#E88498','--p5':'#C8566C','--p6':'#8B4A5C','--p7':'#5E2E3C','--bg':'#FFF7F8','--bg2':'#FFEFF2','--ink':'#2A0F14','--ink2':'#5E2A34','--ink3':'#AA7888','--bdr':'rgba(232,132,152,0.18)' } },
-  { id:'sky-blue', name:'Sky & Lilac', nav:'#4A5E8B', hero:['rgba(230,238,255,.52)','rgba(208,220,255,.62)','rgba(190,205,250,.72)','rgba(245,248,255,1)'], vars:{ '--p1':'#E8EEFF','--p2':'#D0DCFF','--p3':'#A8BCFF','--p4':'#7898F0','--p5':'#4A6CD4','--p6':'#2A4A9B','--p7':'#162E6E','--bg':'#F5F8FF','--bg2':'#EEF3FF','--ink':'#0A1230','--ink2':'#2A3860','--ink3':'#7080AA','--bdr':'rgba(120,152,240,0.18)' } },
-  { id:'sage-green', name:'Sage & Mint', nav:'#3A6B4A', hero:['rgba(230,245,234,.52)','rgba(200,235,210,.62)','rgba(170,218,185,.72)','rgba(240,250,243,1)'], vars:{ '--p1':'#E8F5EC','--p2':'#C8EBD2','--p3':'#96D4A8','--p4':'#5CB87A','--p5':'#2E9456','--p6':'#1E6B3A','--p7':'#0F4224','--bg':'#F4FBF6','--bg2':'#EAF6EE','--ink':'#0A200F','--ink2':'#1E4A28','--ink3':'#6A9878','--bdr':'rgba(92,184,122,0.18)' } },
-  { id:'lavender', name:'Lavender', nav:'#5E3A8B', hero:['rgba(243,236,255,.52)','rgba(230,215,255,.62)','rgba(210,188,252,.72)','rgba(250,246,255,1)'], vars:{ '--p1':'#F3ECFF','--p2':'#E6D7FF','--p3':'#C8AAFF','--p4':'#A07AEE','--p5':'#7848D4','--p6':'#5030A0','--p7':'#32186E','--bg':'#FAF7FF','--bg2':'#F4EEFF','--ink':'#1A0830','--ink2':'#3A1860','--ink3':'#8870AA','--bdr':'rgba(160,122,238,0.18)' } },
-  { id:'peach-coral', name:'Peach Coral', nav:'#8B4A2A', hero:['rgba(255,240,232,.52)','rgba(255,220,198,.62)','rgba(255,195,165,.72)','rgba(255,248,244,1)'], vars:{ '--p1':'#FFF0E8','--p2':'#FFDCC6','--p3':'#FFBB96','--p4':'#F0906A','--p5':'#D4623A','--p6':'#9B3E1E','--p7':'#6E2010','--bg':'#FFF9F6','--bg2':'#FFF3EC','--ink':'#2A1208','--ink2':'#5E2C18','--ink3':'#AA7865','--bdr':'rgba(240,144,106,0.18)' } },
-  { id:'midnight', name:'Midnight Rose', nav:'#C84878', hero:['rgba(30,10,20,.72)','rgba(60,15,30,.82)','rgba(80,20,40,.88)','rgba(15,5,10,1)'], vars:{ '--p1':'#3A1525','--p2':'#4E1E30','--p3':'#8B3A5A','--p4':'#C45A80','--p5':'#E87AA0','--p6':'#F4A0BC','--p7':'#FDD0E0','--bg':'#0F0508','--bg2':'#1A0810','--ink':'#FDE8F0','--ink2':'#F0C0D4','--ink3':'#C890A8','--bdr':'rgba(196,90,128,0.25)' } },
-  { id:'ocean', name:'Ocean Breeze', nav:'#1A5A7A', hero:['rgba(220,240,250,.52)','rgba(180,220,242,.62)','rgba(140,200,232,.72)','rgba(235,248,255,1)'], vars:{ '--p1':'#DCF0FA','--p2':'#B4DCF2','--p3':'#78BEE0','--p4':'#3A9AC8','--p5':'#1A78A8','--p6':'#0E5278','--p7':'#063248','--bg':'#F0FAFF','--bg2':'#E4F4FC','--ink':'#051828','--ink2':'#1A3E54','--ink3':'#6898B0','--bdr':'rgba(58,154,200,0.18)' } },
+  { id:'navy-pro', name:'Professional', nav:'#1A3E6E', sbTrack:'rgba(90,130,180,0.12)', sbThumb:'rgba(90,130,180,0.45)', sbHover:'rgba(45,95,154,0.7)', hero:['rgba(232,238,246,.52)','rgba(200,214,235,.62)','rgba(148,174,207,.72)','rgba(244,247,251,1)'], vars:{ '--p1':'#E8EEF6','--p2':'#C8D6EB','--p3':'#94AECF','--p4':'#5A82B4','--p5':'#2D5F9A','--p6':'#1A3E6E','--p7':'#0D2245','--bg':'#F4F7FB','--bg2':'#EBF0F8','--ink':'#0D1B2E','--ink2':'#2A3F5C','--ink3':'#6A85A8','--bdr':'rgba(90,130,180,0.16)' } },
+  { id:'blush-pink', name:'Blush Pink', nav:'#9B3A54', sbTrack:'rgba(232,131,154,0.12)', sbThumb:'rgba(200,90,120,0.4)', sbHover:'rgba(155,58,84,0.65)', hero:['rgba(253,238,241,.52)','rgba(250,215,222,.62)','rgba(248,200,212,.72)','rgba(255,249,250,1)'], vars:{ '--p1':'#FDEEF1','--p2':'#FAD7DE','--p3':'#F4AEBB','--p4':'#E8839A','--p5':'#C85C78','--p6':'#9B3A54','--p7':'#6E2039','--bg':'#FFF9FA','--bg2':'#FEF3F5','--ink':'#230F17','--ink2':'#5E2E3C','--ink3':'#AA7888','--bdr':'rgba(232,131,154,0.18)' } },
+  { id:'gold-cream', name:'Gold & Cream', nav:'#8B6914', sbTrack:'rgba(232,184,75,0.15)', sbThumb:'rgba(196,144,32,0.45)', sbHover:'rgba(139,105,20,0.65)', hero:['rgba(255,248,230,.52)','rgba(255,237,180,.62)','rgba(255,224,140,.72)','rgba(255,252,240,1)'], vars:{ '--p1':'#FFF8E6','--p2':'#FDECC8','--p3':'#F8D68A','--p4':'#E8B84B','--p5':'#C49020','--p6':'#8B6914','--p7':'#5C440A','--bg':'#FFFDF5','--bg2':'#FFF9E8','--ink':'#2A1F05','--ink2':'#5A4510','--ink3':'#9A8050','--bdr':'rgba(232,184,75,0.2)' } },
+  { id:'rose-gold', name:'Rose Gold', nav:'#8B4A5C', sbTrack:'rgba(232,132,152,0.12)', sbThumb:'rgba(200,86,108,0.4)', sbHover:'rgba(139,74,92,0.65)', hero:['rgba(255,235,238,.52)','rgba(255,210,218,.62)','rgba(245,180,192,.72)','rgba(255,245,247,1)'], vars:{ '--p1':'#FFEBEE','--p2':'#FFD2DA','--p3':'#F5B4C0','--p4':'#E88498','--p5':'#C8566C','--p6':'#8B4A5C','--p7':'#5E2E3C','--bg':'#FFF7F8','--bg2':'#FFEFF2','--ink':'#2A0F14','--ink2':'#5E2A34','--ink3':'#AA7888','--bdr':'rgba(232,132,152,0.18)' } },
+  { id:'sky-blue', name:'Sky & Lilac', nav:'#4A5E8B', sbTrack:'rgba(120,152,240,0.12)', sbThumb:'rgba(74,108,212,0.4)', sbHover:'rgba(42,74,155,0.65)', hero:['rgba(230,238,255,.52)','rgba(208,220,255,.62)','rgba(190,205,250,.72)','rgba(245,248,255,1)'], vars:{ '--p1':'#E8EEFF','--p2':'#D0DCFF','--p3':'#A8BCFF','--p4':'#7898F0','--p5':'#4A6CD4','--p6':'#2A4A9B','--p7':'#162E6E','--bg':'#F5F8FF','--bg2':'#EEF3FF','--ink':'#0A1230','--ink2':'#2A3860','--ink3':'#7080AA','--bdr':'rgba(120,152,240,0.18)' } },
+  { id:'sage-green', name:'Sage & Mint', nav:'#3A6B4A', sbTrack:'rgba(92,184,122,0.12)', sbThumb:'rgba(46,148,86,0.4)', sbHover:'rgba(30,107,58,0.65)', hero:['rgba(230,245,234,.52)','rgba(200,235,210,.62)','rgba(170,218,185,.72)','rgba(240,250,243,1)'], vars:{ '--p1':'#E8F5EC','--p2':'#C8EBD2','--p3':'#96D4A8','--p4':'#5CB87A','--p5':'#2E9456','--p6':'#1E6B3A','--p7':'#0F4224','--bg':'#F4FBF6','--bg2':'#EAF6EE','--ink':'#0A200F','--ink2':'#1E4A28','--ink3':'#6A9878','--bdr':'rgba(92,184,122,0.18)' } },
+  { id:'lavender', name:'Lavender', nav:'#5E3A8B', sbTrack:'rgba(160,122,238,0.12)', sbThumb:'rgba(120,72,212,0.4)', sbHover:'rgba(80,48,160,0.65)', hero:['rgba(243,236,255,.52)','rgba(230,215,255,.62)','rgba(210,188,252,.72)','rgba(250,246,255,1)'], vars:{ '--p1':'#F3ECFF','--p2':'#E6D7FF','--p3':'#C8AAFF','--p4':'#A07AEE','--p5':'#7848D4','--p6':'#5030A0','--p7':'#32186E','--bg':'#FAF7FF','--bg2':'#F4EEFF','--ink':'#1A0830','--ink2':'#3A1860','--ink3':'#8870AA','--bdr':'rgba(160,122,238,0.18)' } },
+  { id:'peach-coral', name:'Peach Coral', nav:'#8B4A2A', sbTrack:'rgba(240,144,106,0.12)', sbThumb:'rgba(212,98,58,0.4)', sbHover:'rgba(155,62,30,0.65)', hero:['rgba(255,240,232,.52)','rgba(255,220,198,.62)','rgba(255,195,165,.72)','rgba(255,248,244,1)'], vars:{ '--p1':'#FFF0E8','--p2':'#FFDCC6','--p3':'#FFBB96','--p4':'#F0906A','--p5':'#D4623A','--p6':'#9B3E1E','--p7':'#6E2010','--bg':'#FFF9F6','--bg2':'#FFF3EC','--ink':'#2A1208','--ink2':'#5E2C18','--ink3':'#AA7865','--bdr':'rgba(240,144,106,0.18)' } },
+  { id:'midnight', name:'Midnight Rose', nav:'#C84878', sbTrack:'rgba(196,90,128,0.18)', sbThumb:'rgba(228,122,160,0.5)', sbHover:'rgba(244,160,188,0.75)', hero:['rgba(30,10,20,.72)','rgba(60,15,30,.82)','rgba(80,20,40,.88)','rgba(15,5,10,1)'], vars:{ '--p1':'#3A1525','--p2':'#4E1E30','--p3':'#8B3A5A','--p4':'#C45A80','--p5':'#E87AA0','--p6':'#F4A0BC','--p7':'#FDD0E0','--bg':'#0F0508','--bg2':'#1A0810','--ink':'#FDE8F0','--ink2':'#F0C0D4','--ink3':'#C890A8','--bdr':'rgba(196,90,128,0.25)' } },
+  { id:'ocean', name:'Ocean Breeze', nav:'#1A5A7A', sbTrack:'rgba(58,154,200,0.12)', sbThumb:'rgba(26,120,168,0.4)', sbHover:'rgba(14,82,120,0.65)', hero:['rgba(220,240,250,.52)','rgba(180,220,242,.62)','rgba(140,200,232,.72)','rgba(235,248,255,1)'], vars:{ '--p1':'#DCF0FA','--p2':'#B4DCF2','--p3':'#78BEE0','--p4':'#3A9AC8','--p5':'#1A78A8','--p6':'#0E5278','--p7':'#063248','--bg':'#F0FAFF','--bg2':'#E4F4FC','--ink':'#051828','--ink2':'#1A3E54','--ink3':'#6898B0','--bdr':'rgba(58,154,200,0.18)' } },
 ];
+
+/* ── Inject dynamic scrollbar style ── */
+const sbStyle = document.createElement('style');
+sbStyle.id = 'sb-theme';
+document.head.appendChild(sbStyle);
+
+function updateScrollbar(t) {
+  sbStyle.textContent = `
+    ::-webkit-scrollbar { width: 3px; height: 3px; }
+    ::-webkit-scrollbar-track { background: ${t.sbTrack}; }
+    ::-webkit-scrollbar-thumb { background: ${t.sbThumb}; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: ${t.sbHover}; }
+    * { scrollbar-width: thin; scrollbar-color: ${t.sbThumb} ${t.sbTrack}; }
+  `;
+}
+
+/* Init with default theme */
+updateScrollbar(THEMES[0]);
 
 const grid = document.getElementById('tpGrid');
 THEMES.forEach((t, idx) => {
@@ -73,6 +91,7 @@ function applyTheme(id) {
   const hov = document.getElementById('hov');
   hov.style.background = `linear-gradient(to bottom,${ho[0]} 0%,${ho[1]} 40%,${ho[2]} 72%,${ho[3]} 100%)`;
   document.querySelectorAll('.tp-card').forEach(c => c.classList.toggle('active', c.dataset.id === id));
+  updateScrollbar(t);
 }
 
 const themePanel  = document.getElementById('themePanel');
@@ -82,4 +101,143 @@ themeToggle.addEventListener('click', e => { e.stopPropagation(); themePanel.cla
 themeClose.addEventListener('click',  () => themePanel.classList.remove('open'));
 document.addEventListener('click',    e => {
   if (!themePanel.contains(e.target) && e.target !== themeToggle) themePanel.classList.remove('open');
+});
+
+/* ══════════════════════════════════════════
+   IMAGE / FILE PREVIEW SYSTEM
+══════════════════════════════════════════ */
+function makePreviewZone(container, opts = {}) {
+  /* opts: { accept, label, aspect } */
+  const accept  = opts.accept  || 'image/*';
+  const label   = opts.label   || 'Upload file';
+  const isImage = accept.startsWith('image');
+
+  container.style.position = 'relative';
+  container.style.cursor   = 'pointer';
+
+  /* hidden input */
+  const input = document.createElement('input');
+  input.type   = 'file';
+  input.accept = accept;
+  input.style.cssText = 'position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;z-index:5;';
+  container.appendChild(input);
+
+  /* overlay hint – shown when no file */
+  const hint = document.createElement('div');
+  hint.className = 'pz-hint';
+  hint.innerHTML = `
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+    </svg>
+    <span>${label}</span>
+    <small>Click or drag &amp; drop</small>`;
+  container.appendChild(hint);
+
+  /* preview element */
+  let preview = null;
+
+  input.addEventListener('change', () => {
+    const file = input.files[0];
+    if (!file) return;
+
+    if (preview) { preview.remove(); preview = null; }
+    hint.style.display = 'none';
+
+    if (isImage || file.type.startsWith('image/')) {
+      preview = document.createElement('img');
+      preview.className = 'pz-preview-img';
+      preview.src = URL.createObjectURL(file);
+      container.prepend(preview);
+    } else {
+      /* non-image: show file card */
+      preview = document.createElement('div');
+      preview.className = 'pz-file-card';
+      const ext = file.name.split('.').pop().toUpperCase();
+      const size = file.size > 1048576
+        ? (file.size/1048576).toFixed(1) + ' MB'
+        : (file.size/1024).toFixed(0)  + ' KB';
+      preview.innerHTML = `
+        <div class="pz-file-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+          </svg>
+          <span class="pz-ext">${ext}</span>
+        </div>
+        <div class="pz-file-name">${file.name}</div>
+        <div class="pz-file-size">${size}</div>`;
+      container.prepend(preview);
+
+      /* if PDF, also embed */
+      if (file.type === 'application/pdf') {
+        const frame = document.createElement('iframe');
+        frame.src = URL.createObjectURL(file);
+        frame.className = 'pz-pdf-frame';
+        frame.title = file.name;
+        container.prepend(frame);
+        preview.style.display = 'none';
+      }
+    }
+
+    /* remove-btn */
+    const rm = document.createElement('button');
+    rm.className = 'pz-remove';
+    rm.title = 'Remove';
+    rm.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+    rm.addEventListener('click', e => {
+      e.stopPropagation(); e.preventDefault();
+      preview.remove(); rm.remove(); preview = null;
+      hint.style.display = '';
+      input.value = '';
+    });
+    container.appendChild(rm);
+  });
+
+  /* drag-over glow */
+  container.addEventListener('dragover', e => { e.preventDefault(); container.classList.add('pz-drag'); });
+  ['dragleave','drop'].forEach(ev => container.addEventListener(ev, () => container.classList.remove('pz-drag')));
+}
+
+/* ── Wire up all preview zones after DOM ready ── */
+document.addEventListener('DOMContentLoaded', () => {
+  /* CV */
+  const cvBox = document.querySelector('.cv-placeholder');
+  if (cvBox) makePreviewZone(cvBox, { accept:'image/*,application/pdf', label:'Upload CV / Résumé' });
+
+  /* Certificate */
+  const certBox = document.querySelector('.cert-placeholder');
+  if (certBox) makePreviewZone(certBox, { accept:'image/*,application/pdf', label:'Upload Certificate' });
+
+  /* Coop school main photo */
+  document.querySelectorAll('.coop-img-box').forEach(b =>
+    makePreviewZone(b, { accept:'image/*', label:'Upload school photo' }));
+
+  /* Coop photo strip */
+  document.querySelectorAll('.coop-photo-item').forEach(b =>
+    makePreviewZone(b, { accept:'image/*', label:'Add photo' }));
+
+  /* Journal entries */
+  document.querySelectorAll('.jt-img-wrap').forEach((b,i) =>
+    makePreviewZone(b, { accept:'image/*', label:`Week ${i+1} photo` }));
+
+  /* PPST domain images */
+  document.querySelectorAll('.ppst-4img').forEach((b,i) =>
+    makePreviewZone(b, { accept:'image/*', label:'Add photo' }));
+
+  /* Observation/eval sheets */
+  document.querySelectorAll('.obs-placeholder').forEach(b =>
+    makePreviewZone(b, { accept:'image/*,application/pdf', label:'Upload document' }));
+
+  /* Gallery items */
+  document.querySelectorAll('.gi:not(.vid)').forEach(b =>
+    makePreviewZone(b, { accept:'image/*', label:'Add photo' }));
+
+  /* Other docs */
+  document.querySelectorAll('.other-card').forEach(b => {
+    const uploadDiv = b.querySelector('.other-upload');
+    if (!uploadDiv) return;
+    const zone = document.createElement('div');
+    zone.className = 'other-preview-zone';
+    b.insertBefore(zone, uploadDiv);
+    makePreviewZone(zone, { accept:'image/*,application/pdf', label:'Upload document' });
+  });
 });
