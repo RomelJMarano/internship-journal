@@ -15,18 +15,6 @@ const io = new IntersectionObserver(entries =>
 );
 document.querySelectorAll('[data-a]').forEach(el => io.observe(el));
 
-/* ── Skill bars ── */
-const skio = new IntersectionObserver(entries =>
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.querySelectorAll('.sk-fill').forEach(b => b.style.width = b.dataset.w + '%');
-      skio.unobserve(e.target);
-    }
-  }), { threshold:0.3 }
-);
-const sg = document.getElementById('skgrid');
-if (sg) skio.observe(sg);
-
 /* ── Gallery slider ── */
 let cur = 0; const total = 3;
 const track = document.getElementById('galTrack');
