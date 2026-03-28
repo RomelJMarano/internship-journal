@@ -35,10 +35,7 @@ track.addEventListener('touchend',   e => {
   if (Math.abs(diff) > 50) goTo(diff > 0 ? cur+1 : cur-1);
 }, { passive:true });
 
-/* ══════════════════════════════════════════
-   PAGE-WIDE THEME SYSTEM
-   Default: Professional Navy (index 0)
-══════════════════════════════════════════ */
+/* ══ THEME SYSTEM ══ */
 const root = document.documentElement;
 
 const THEMES = [
@@ -54,7 +51,7 @@ const THEMES = [
   { id:'ocean', name:'Ocean Breeze', nav:'#1A5A7A', sbTrack:'rgba(58,154,200,0.12)', sbThumb:'rgba(26,120,168,0.4)', sbHover:'rgba(14,82,120,0.65)', hero:['rgba(220,240,250,.52)','rgba(180,220,242,.62)','rgba(140,200,232,.72)','rgba(235,248,255,1)'], vars:{ '--p1':'#DCF0FA','--p2':'#B4DCF2','--p3':'#78BEE0','--p4':'#3A9AC8','--p5':'#1A78A8','--p6':'#0E5278','--p7':'#063248','--bg':'#F0FAFF','--bg2':'#E4F4FC','--ink':'#051828','--ink2':'#1A3E54','--ink3':'#6898B0','--bdr':'rgba(58,154,200,0.18)' } },
 ];
 
-/* ── Inject dynamic scrollbar style ── */
+/* ── Scrollbar style injected per theme ── */
 const sbStyle = document.createElement('style');
 sbStyle.id = 'sb-theme';
 document.head.appendChild(sbStyle);
@@ -68,28 +65,25 @@ function updateScrollbar(t) {
     * { scrollbar-width: thin; scrollbar-color: ${t.sbThumb} ${t.sbTrack}; }
   `;
 }
-
-/* Init with default theme */
 updateScrollbar(THEMES[0]);
 
-const grid = document.getElementById('tpGrid');
+const tpGrid = document.getElementById('tpGrid');
 THEMES.forEach((t, idx) => {
   const ho = t.hero;
   const card = document.createElement('div');
   card.className = 'tp-card' + (idx === 0 ? ' active' : '');
   card.dataset.id = t.id;
-  card.innerHTML = `<div class="tp-preview"><div class="tp-nav-stripe" style="background:${t.nav}"><div class="tp-nav-dot"></div><div class="tp-nav-dot"></div><div class="tp-nav-dot"></div></div><div class="tp-hero-stripe" style="background:linear-gradient(to bottom,${ho[0]},${ho[1]},${ho[2]},${ho[3]})"></div><div class="tp-body-stripe" style="background:${t.vars['--bg2'] || '#f5f5f5'}"><div class="tp-body-bar" style="width:40%;background:${t.vars['--p3']}"></div><div class="tp-body-bar" style="width:25%;background:${t.vars['--p2']}"></div></div></div><div class="tp-name">${t.name}</div>`;
+  card.innerHTML = `<div class="tp-preview"><div class="tp-nav-stripe" style="background:${t.nav}"><div class="tp-nav-dot"></div><div class="tp-nav-dot"></div><div class="tp-nav-dot"></div></div><div class="tp-hero-stripe" style="background:linear-gradient(to bottom,${ho[0]},${ho[1]},${ho[2]},${ho[3]})"></div><div class="tp-body-stripe" style="background:${t.vars['--bg2']||'#f5f5f5'}"><div class="tp-body-bar" style="width:40%;background:${t.vars['--p3']}"></div><div class="tp-body-bar" style="width:25%;background:${t.vars['--p2']}"></div></div></div><div class="tp-name">${t.name}</div>`;
   card.addEventListener('click', () => applyTheme(t.id));
-  grid.appendChild(card);
+  tpGrid.appendChild(card);
 });
 
 function applyTheme(id) {
   const t = THEMES.find(x => x.id === id);
   if (!t) return;
   Object.entries(t.vars).forEach(([k,v]) => root.style.setProperty(k, v));
-  const ho = t.hero;
-  const hov = document.getElementById('hov');
-  hov.style.background = `linear-gradient(to bottom,${ho[0]} 0%,${ho[1]} 40%,${ho[2]} 72%,${ho[3]} 100%)`;
+  document.getElementById('hov').style.background =
+    `linear-gradient(to bottom,${t.hero[0]} 0%,${t.hero[1]} 40%,${t.hero[2]} 72%,${t.hero[3]} 100%)`;
   document.querySelectorAll('.tp-card').forEach(c => c.classList.toggle('active', c.dataset.id === id));
   updateScrollbar(t);
 }
@@ -99,145 +93,6 @@ const themeToggle = document.getElementById('themeToggle');
 const themeClose  = document.getElementById('themeClose');
 themeToggle.addEventListener('click', e => { e.stopPropagation(); themePanel.classList.toggle('open'); });
 themeClose.addEventListener('click',  () => themePanel.classList.remove('open'));
-document.addEventListener('click',    e => {
+document.addEventListener('click', e => {
   if (!themePanel.contains(e.target) && e.target !== themeToggle) themePanel.classList.remove('open');
-});
-
-/* ══════════════════════════════════════════
-   IMAGE / FILE PREVIEW SYSTEM
-══════════════════════════════════════════ */
-function makePreviewZone(container, opts = {}) {
-  /* opts: { accept, label, aspect } */
-  const accept  = opts.accept  || 'image/*';
-  const label   = opts.label   || 'Upload file';
-  const isImage = accept.startsWith('image');
-
-  container.style.position = 'relative';
-  container.style.cursor   = 'pointer';
-
-  /* hidden input */
-  const input = document.createElement('input');
-  input.type   = 'file';
-  input.accept = accept;
-  input.style.cssText = 'position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;z-index:5;';
-  container.appendChild(input);
-
-  /* overlay hint – shown when no file */
-  const hint = document.createElement('div');
-  hint.className = 'pz-hint';
-  hint.innerHTML = `
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-    </svg>
-    <span>${label}</span>
-    <small>Click or drag &amp; drop</small>`;
-  container.appendChild(hint);
-
-  /* preview element */
-  let preview = null;
-
-  input.addEventListener('change', () => {
-    const file = input.files[0];
-    if (!file) return;
-
-    if (preview) { preview.remove(); preview = null; }
-    hint.style.display = 'none';
-
-    if (isImage || file.type.startsWith('image/')) {
-      preview = document.createElement('img');
-      preview.className = 'pz-preview-img';
-      preview.src = URL.createObjectURL(file);
-      container.prepend(preview);
-    } else {
-      /* non-image: show file card */
-      preview = document.createElement('div');
-      preview.className = 'pz-file-card';
-      const ext = file.name.split('.').pop().toUpperCase();
-      const size = file.size > 1048576
-        ? (file.size/1048576).toFixed(1) + ' MB'
-        : (file.size/1024).toFixed(0)  + ' KB';
-      preview.innerHTML = `
-        <div class="pz-file-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-          </svg>
-          <span class="pz-ext">${ext}</span>
-        </div>
-        <div class="pz-file-name">${file.name}</div>
-        <div class="pz-file-size">${size}</div>`;
-      container.prepend(preview);
-
-      /* if PDF, also embed */
-      if (file.type === 'application/pdf') {
-        const frame = document.createElement('iframe');
-        frame.src = URL.createObjectURL(file);
-        frame.className = 'pz-pdf-frame';
-        frame.title = file.name;
-        container.prepend(frame);
-        preview.style.display = 'none';
-      }
-    }
-
-    /* remove-btn */
-    const rm = document.createElement('button');
-    rm.className = 'pz-remove';
-    rm.title = 'Remove';
-    rm.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
-    rm.addEventListener('click', e => {
-      e.stopPropagation(); e.preventDefault();
-      preview.remove(); rm.remove(); preview = null;
-      hint.style.display = '';
-      input.value = '';
-    });
-    container.appendChild(rm);
-  });
-
-  /* drag-over glow */
-  container.addEventListener('dragover', e => { e.preventDefault(); container.classList.add('pz-drag'); });
-  ['dragleave','drop'].forEach(ev => container.addEventListener(ev, () => container.classList.remove('pz-drag')));
-}
-
-/* ── Wire up all preview zones after DOM ready ── */
-document.addEventListener('DOMContentLoaded', () => {
-  /* CV */
-  const cvBox = document.querySelector('.cv-placeholder');
-  if (cvBox) makePreviewZone(cvBox, { accept:'image/*,application/pdf', label:'Upload CV / Résumé' });
-
-  /* Certificate */
-  const certBox = document.querySelector('.cert-placeholder');
-  if (certBox) makePreviewZone(certBox, { accept:'image/*,application/pdf', label:'Upload Certificate' });
-
-  /* Coop school main photo */
-  document.querySelectorAll('.coop-img-box').forEach(b =>
-    makePreviewZone(b, { accept:'image/*', label:'Upload school photo' }));
-
-  /* Coop photo strip */
-  document.querySelectorAll('.coop-photo-item').forEach(b =>
-    makePreviewZone(b, { accept:'image/*', label:'Add photo' }));
-
-  /* Journal entries */
-  document.querySelectorAll('.jt-img-wrap').forEach((b,i) =>
-    makePreviewZone(b, { accept:'image/*', label:`Week ${i+1} photo` }));
-
-  /* PPST domain images */
-  document.querySelectorAll('.ppst-4img').forEach((b,i) =>
-    makePreviewZone(b, { accept:'image/*', label:'Add photo' }));
-
-  /* Observation/eval sheets */
-  document.querySelectorAll('.obs-placeholder').forEach(b =>
-    makePreviewZone(b, { accept:'image/*,application/pdf', label:'Upload document' }));
-
-  /* Gallery items */
-  document.querySelectorAll('.gi:not(.vid)').forEach(b =>
-    makePreviewZone(b, { accept:'image/*', label:'Add photo' }));
-
-  /* Other docs */
-  document.querySelectorAll('.other-card').forEach(b => {
-    const uploadDiv = b.querySelector('.other-upload');
-    if (!uploadDiv) return;
-    const zone = document.createElement('div');
-    zone.className = 'other-preview-zone';
-    b.insertBefore(zone, uploadDiv);
-    makePreviewZone(zone, { accept:'image/*,application/pdf', label:'Upload document' });
-  });
 });
