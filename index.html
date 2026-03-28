@@ -1,98 +1,984 @@
-/* ── Nav scroll ── */
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => nav.classList.toggle('on', scrollY > 50), { passive:true });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emelyn S. Ulanday · Pre-Service Teacher Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root { --serif: 'Times New Roman', 'Crimson Text', 'Georgia', serif; --poppins: 'Poppins', 'Arial', sans-serif; }
+  </style>
+</head>
+<body>
 
-/* ── Parallax ── */
-const hbg = document.getElementById('hbg');
-window.addEventListener('scroll', () => {
-  if (scrollY < innerHeight) hbg.style.transform = `translateY(${scrollY * 0.28}px)`;
-}, { passive:true });
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <a href="#hero" class="n-logo">Emelyn S. Ulanday</a>
+  <div style="display:flex;align-items:center;gap:2rem">
+    <ul class="n-links">
+      <li><a href="#toc">Contents</a></li>
+      <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#acknowledgment">Acknowledgment</a></li>
+      <li><a href="#ppst">PPST</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#philosophy">Philosophy</a></li>
+    </ul>
+    <button class="n-theme-btn" id="themeToggle">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+      </svg>
+      <span>Themes</span>
+    </button>
+  </div>
+</nav>
 
-/* ── Scroll reveal ── */
-const io = new IntersectionObserver(entries =>
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } }),
-  { threshold:0.08 }
-);
-document.querySelectorAll('[data-a]').forEach(el => io.observe(el));
+<!-- ══ THEME PANEL ══ -->
+<div id="themePanel">
+  <div class="tp-head">
+    <div class="tp-title">Page Themes</div>
+    <button class="tp-close" id="themeClose">✕</button>
+  </div>
+  <div class="tp-sec">Choose a color theme</div>
+  <div class="tp-grid" id="tpGrid"></div>
+</div>
 
-/* ── Gallery slider ── */
-let cur = 0; const total = 3;
-const track = document.getElementById('galTrack');
-const dots  = document.querySelectorAll('.gdot');
-function goTo(n) {
-  cur = (n + total) % total;
-  track.style.transform = `translateX(-${cur * 100}%)`;
-  dots.forEach((d,i) => d.classList.toggle('on', i === cur));
-}
-document.getElementById('galNext').addEventListener('click', () => goTo(cur+1));
-document.getElementById('galPrev').addEventListener('click', () => goTo(cur-1));
-dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.i)));
-setInterval(() => goTo(cur+1), 5000);
-let touchX = 0;
-track.addEventListener('touchstart', e => touchX = e.touches[0].clientX, { passive:true });
-track.addEventListener('touchend',   e => {
-  const diff = touchX - e.changedTouches[0].clientX;
-  if (Math.abs(diff) > 50) goTo(diff > 0 ? cur+1 : cur-1);
-}, { passive:true });
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hbg" id="hbg"></div>
+  <div class="hov" id="hov"></div>
+  <div class="h-box">
 
-/* ══ THEME SYSTEM ══ */
-const root = document.documentElement;
+    <div class="inst-header">
+      <div class="inst-logo-wrap">
+        <div class="inst-logo">
+          <img src="img/dcomc-logo.png" alt="Daraga Community College Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="logo-placeholder">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+        </div>
+        <div class="inst-text">
+          <p class="inst-line inst-republic">Republic of the Philippines</p>
+          <p class="inst-line inst-muni">Municipality of Daraga</p>
+          <p class="inst-line inst-school">Daraga Community College</p>
+          <p class="inst-line inst-address">Salvacion, Daraga, Albay, 4501</p>
+        </div>
+        <div class="inst-logo">
+          <img src="img/ched-logo.png" alt="School Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="logo-placeholder">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
 
-const THEMES = [
-  { id:'navy-pro', name:'Professional', nav:'#1A3E6E', sbTrack:'rgba(90,130,180,0.12)', sbThumb:'rgba(90,130,180,0.45)', sbHover:'rgba(45,95,154,0.7)', hero:['rgba(232,238,246,.52)','rgba(200,214,235,.62)','rgba(148,174,207,.72)','rgba(244,247,251,1)'], vars:{ '--p1':'#E8EEF6','--p2':'#C8D6EB','--p3':'#94AECF','--p4':'#5A82B4','--p5':'#2D5F9A','--p6':'#1A3E6E','--p7':'#0D2245','--bg':'#F4F7FB','--bg2':'#EBF0F8','--ink':'#0D1B2E','--ink2':'#2A3F5C','--ink3':'#6A85A8','--bdr':'rgba(90,130,180,0.16)' } },
-  { id:'blush-pink', name:'Blush Pink', nav:'#9B3A54', sbTrack:'rgba(232,131,154,0.12)', sbThumb:'rgba(200,90,120,0.4)', sbHover:'rgba(155,58,84,0.65)', hero:['rgba(253,238,241,.52)','rgba(250,215,222,.62)','rgba(248,200,212,.72)','rgba(255,249,250,1)'], vars:{ '--p1':'#FDEEF1','--p2':'#FAD7DE','--p3':'#F4AEBB','--p4':'#E8839A','--p5':'#C85C78','--p6':'#9B3A54','--p7':'#6E2039','--bg':'#FFF9FA','--bg2':'#FEF3F5','--ink':'#230F17','--ink2':'#5E2E3C','--ink3':'#AA7888','--bdr':'rgba(232,131,154,0.18)' } },
-  { id:'gold-cream', name:'Gold & Cream', nav:'#8B6914', sbTrack:'rgba(232,184,75,0.15)', sbThumb:'rgba(196,144,32,0.45)', sbHover:'rgba(139,105,20,0.65)', hero:['rgba(255,248,230,.52)','rgba(255,237,180,.62)','rgba(255,224,140,.72)','rgba(255,252,240,1)'], vars:{ '--p1':'#FFF8E6','--p2':'#FDECC8','--p3':'#F8D68A','--p4':'#E8B84B','--p5':'#C49020','--p6':'#8B6914','--p7':'#5C440A','--bg':'#FFFDF5','--bg2':'#FFF9E8','--ink':'#2A1F05','--ink2':'#5A4510','--ink3':'#9A8050','--bdr':'rgba(232,184,75,0.2)' } },
-  { id:'rose-gold', name:'Rose Gold', nav:'#8B4A5C', sbTrack:'rgba(232,132,152,0.12)', sbThumb:'rgba(200,86,108,0.4)', sbHover:'rgba(139,74,92,0.65)', hero:['rgba(255,235,238,.52)','rgba(255,210,218,.62)','rgba(245,180,192,.72)','rgba(255,245,247,1)'], vars:{ '--p1':'#FFEBEE','--p2':'#FFD2DA','--p3':'#F5B4C0','--p4':'#E88498','--p5':'#C8566C','--p6':'#8B4A5C','--p7':'#5E2E3C','--bg':'#FFF7F8','--bg2':'#FFEFF2','--ink':'#2A0F14','--ink2':'#5E2A34','--ink3':'#AA7888','--bdr':'rgba(232,132,152,0.18)' } },
-  { id:'sky-blue', name:'Sky & Lilac', nav:'#4A5E8B', sbTrack:'rgba(120,152,240,0.12)', sbThumb:'rgba(74,108,212,0.4)', sbHover:'rgba(42,74,155,0.65)', hero:['rgba(230,238,255,.52)','rgba(208,220,255,.62)','rgba(190,205,250,.72)','rgba(245,248,255,1)'], vars:{ '--p1':'#E8EEFF','--p2':'#D0DCFF','--p3':'#A8BCFF','--p4':'#7898F0','--p5':'#4A6CD4','--p6':'#2A4A9B','--p7':'#162E6E','--bg':'#F5F8FF','--bg2':'#EEF3FF','--ink':'#0A1230','--ink2':'#2A3860','--ink3':'#7080AA','--bdr':'rgba(120,152,240,0.18)' } },
-  { id:'sage-green', name:'Sage & Mint', nav:'#3A6B4A', sbTrack:'rgba(92,184,122,0.12)', sbThumb:'rgba(46,148,86,0.4)', sbHover:'rgba(30,107,58,0.65)', hero:['rgba(230,245,234,.52)','rgba(200,235,210,.62)','rgba(170,218,185,.72)','rgba(240,250,243,1)'], vars:{ '--p1':'#E8F5EC','--p2':'#C8EBD2','--p3':'#96D4A8','--p4':'#5CB87A','--p5':'#2E9456','--p6':'#1E6B3A','--p7':'#0F4224','--bg':'#F4FBF6','--bg2':'#EAF6EE','--ink':'#0A200F','--ink2':'#1E4A28','--ink3':'#6A9878','--bdr':'rgba(92,184,122,0.18)' } },
-  { id:'lavender', name:'Lavender', nav:'#5E3A8B', sbTrack:'rgba(160,122,238,0.12)', sbThumb:'rgba(120,72,212,0.4)', sbHover:'rgba(80,48,160,0.65)', hero:['rgba(243,236,255,.52)','rgba(230,215,255,.62)','rgba(210,188,252,.72)','rgba(250,246,255,1)'], vars:{ '--p1':'#F3ECFF','--p2':'#E6D7FF','--p3':'#C8AAFF','--p4':'#A07AEE','--p5':'#7848D4','--p6':'#5030A0','--p7':'#32186E','--bg':'#FAF7FF','--bg2':'#F4EEFF','--ink':'#1A0830','--ink2':'#3A1860','--ink3':'#8870AA','--bdr':'rgba(160,122,238,0.18)' } },
-  { id:'peach-coral', name:'Peach Coral', nav:'#8B4A2A', sbTrack:'rgba(240,144,106,0.12)', sbThumb:'rgba(212,98,58,0.4)', sbHover:'rgba(155,62,30,0.65)', hero:['rgba(255,240,232,.52)','rgba(255,220,198,.62)','rgba(255,195,165,.72)','rgba(255,248,244,1)'], vars:{ '--p1':'#FFF0E8','--p2':'#FFDCC6','--p3':'#FFBB96','--p4':'#F0906A','--p5':'#D4623A','--p6':'#9B3E1E','--p7':'#6E2010','--bg':'#FFF9F6','--bg2':'#FFF3EC','--ink':'#2A1208','--ink2':'#5E2C18','--ink3':'#AA7865','--bdr':'rgba(240,144,106,0.18)' } },
-  { id:'midnight', name:'Midnight Rose', nav:'#C84878', sbTrack:'rgba(196,90,128,0.18)', sbThumb:'rgba(228,122,160,0.5)', sbHover:'rgba(244,160,188,0.75)', hero:['rgba(30,10,20,.72)','rgba(60,15,30,.82)','rgba(80,20,40,.88)','rgba(15,5,10,1)'], vars:{ '--p1':'#3A1525','--p2':'#4E1E30','--p3':'#8B3A5A','--p4':'#C45A80','--p5':'#E87AA0','--p6':'#F4A0BC','--p7':'#FDD0E0','--bg':'#0F0508','--bg2':'#1A0810','--ink':'#FDE8F0','--ink2':'#F0C0D4','--ink3':'#C890A8','--bdr':'rgba(196,90,128,0.25)' } },
-  { id:'ocean', name:'Ocean Breeze', nav:'#1A5A7A', sbTrack:'rgba(58,154,200,0.12)', sbThumb:'rgba(26,120,168,0.4)', sbHover:'rgba(14,82,120,0.65)', hero:['rgba(220,240,250,.52)','rgba(180,220,242,.62)','rgba(140,200,232,.72)','rgba(235,248,255,1)'], vars:{ '--p1':'#DCF0FA','--p2':'#B4DCF2','--p3':'#78BEE0','--p4':'#3A9AC8','--p5':'#1A78A8','--p6':'#0E5278','--p7':'#063248','--bg':'#F0FAFF','--bg2':'#E4F4FC','--ink':'#051828','--ink2':'#1A3E54','--ink3':'#6898B0','--bdr':'rgba(58,154,200,0.18)' } },
-];
+    <div class="inst-divider"></div>
 
-/* ── Scrollbar style injected per theme ── */
-const sbStyle = document.createElement('style');
-sbStyle.id = 'sb-theme';
-document.head.appendChild(sbStyle);
+    <div class="hero-school-badge" data-a="up">
+      <div class="hsb-inner">
+        <div class="hsb-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="hsb-info">
+          <div class="hsb-name">Malobago Elementary School</div>
+          <div class="hsb-period">January 19, 2026 – March 27, 2026</div>
+        </div>
+      </div>
+    </div>
 
-function updateScrollbar(t) {
-  sbStyle.textContent = `
-    ::-webkit-scrollbar { width: 3px; height: 3px; }
-    ::-webkit-scrollbar-track { background: ${t.sbTrack}; }
-    ::-webkit-scrollbar-thumb { background: ${t.sbThumb}; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: ${t.sbHover}; }
-    * { scrollbar-width: thin; scrollbar-color: ${t.sbThumb} ${t.sbTrack}; }
-  `;
-}
-updateScrollbar(THEMES[0]);
+    <div class="h-pill">Teaching Internship Portfolio · BEED 4th Year</div>
+    <div class="h-year">School Year 2025 – 2026</div>
+    <h1 class="h-name">My Teaching<em>Internship Journey</em></h1>
+    <p class="h-sub">Emelyn S. Ulanday · Pre-Service Teacher</p>
+    <p class="h-desc">A passionate pre-service teacher from Daraga Community College, dedicated to creating meaningful and inclusive learning experiences rooted in the PPST domains.</p>
+    <div class="h-btns">
+      <a href="#introduction" class="btn btn-fill">Explore Portfolio</a>
+      <a href="#gallery" class="btn btn-soft">View Gallery</a>
+    </div>
+    <div class="h-stats">
+      <div class="hst"><span class="hst-n">360</span><span class="hst-l">Hours</span></div>
+      <div class="hst"><span class="hst-n">10+</span><span class="hst-l">Lessons</span></div>
+      <div class="hst"><span class="hst-n">20</span><span class="hst-l">Students</span></div>
+      <div class="hst"><span class="hst-n">7</span><span class="hst-l">PPST Domains</span></div>
+    </div>
+  </div>
+  <div class="h-scroll">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    scroll
+  </div>
+</section>
 
-const tpGrid = document.getElementById('tpGrid');
-THEMES.forEach((t, idx) => {
-  const ho = t.hero;
-  const card = document.createElement('div');
-  card.className = 'tp-card' + (idx === 0 ? ' active' : '');
-  card.dataset.id = t.id;
-  card.innerHTML = `<div class="tp-preview"><div class="tp-nav-stripe" style="background:${t.nav}"><div class="tp-nav-dot"></div><div class="tp-nav-dot"></div><div class="tp-nav-dot"></div></div><div class="tp-hero-stripe" style="background:linear-gradient(to bottom,${ho[0]},${ho[1]},${ho[2]},${ho[3]})"></div><div class="tp-body-stripe" style="background:${t.vars['--bg2']||'#f5f5f5'}"><div class="tp-body-bar" style="width:40%;background:${t.vars['--p3']}"></div><div class="tp-body-bar" style="width:25%;background:${t.vars['--p2']}"></div></div></div><div class="tp-name">${t.name}</div>`;
-  card.addEventListener('click', () => applyTheme(t.id));
-  tpGrid.appendChild(card);
-});
+<!-- ══ TABLE OF CONTENTS ══ -->
+<section id="toc" class="sec toc-sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey poppins-label" data-a="up">Portfolio Overview</p>
+      <h2 class="s-h" data-a="up" data-d="1">Table of Contents</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+    </div>
+    <div class="toc-list" data-a="up" data-d="3">
+      <a href="#introduction" class="toc-row"><span class="toc-num">01</span><span class="toc-title">Introduction</span><span class="toc-line"></span><span class="toc-arrow">→</span></a>
+      <a href="#acknowledgment" class="toc-row"><span class="toc-num">02</span><span class="toc-title">Acknowledgment</span><span class="toc-line"></span><span class="toc-arrow">→</span></a>
+      <a href="#cv" class="toc-row"><span class="toc-num">03</span><span class="toc-title">Curriculum Vitae</span><span class="toc-line"></span><span class="toc-arrow">→</span></a>
+      <a href="#certificate" class="toc-row"><span class="toc-num">04</span><span class="toc-title">Certificate of Completion</span><span class="toc-line"></span><span class="toc-arrow">→</span></a>
+      <a href="#readings" class="toc-row"><span class="toc-num">05</span><span class="toc-title">Professional Readings</span><span class="toc-line"></span><span class="toc-arrow">→</span></a>
+      <a href="#coop-school" class="toc-row"><span class="toc-num">06</span><span class="toc-title">My Cooperating School</span><span class="toc-line"></span><span class="toc-arrow">→</span></a>
+      <a href="#journal" class="toc-row"><span class="toc-num">07</span><span class="toc-title">My Journal</span><span class="toc-line"></span><span class="toc-arrow">→</span></a>
+      <a href="#ppst" class="toc-row"><span class="toc-num">08</span><span class="toc-title">PPST Domain Reflections</span><span class="toc-line"></span><span class="toc-arrow">→</span></a>
+      <a href="#philosophy" class="toc-row"><span class="toc-num">09</span><span class="toc-title">My Teaching Philosophy as a Beginner</span><span class="toc-line"></span><span class="toc-arrow">→</span></a>
+      <a href="#gallery" class="toc-row"><span class="toc-num">10</span><span class="toc-title">Documentation</span><span class="toc-line"></span><span class="toc-arrow">→</span></a>
+      <a href="#obs-eval" class="toc-row"><span class="toc-num">11</span><span class="toc-title">Observation &amp; Evaluation Sheets</span><span class="toc-line"></span><span class="toc-arrow">→</span></a>
+      <a href="#certificate" class="toc-row"><span class="toc-num">12</span><span class="toc-title">Certificate</span><span class="toc-line"></span><span class="toc-arrow">→</span></a>
+      <a href="#other-docs" class="toc-row"><span class="toc-num">13</span><span class="toc-title">Other Documents</span><span class="toc-line"></span><span class="toc-arrow">→</span></a>
+    </div>
+  </div>
+</section>
 
-function applyTheme(id) {
-  const t = THEMES.find(x => x.id === id);
-  if (!t) return;
-  Object.entries(t.vars).forEach(([k,v]) => root.style.setProperty(k, v));
-  document.getElementById('hov').style.background =
-    `linear-gradient(to bottom,${t.hero[0]} 0%,${t.hero[1]} 40%,${t.hero[2]} 72%,${t.hero[3]} 100%)`;
-  document.querySelectorAll('.tp-card').forEach(c => c.classList.toggle('active', c.dataset.id === id));
-  updateScrollbar(t);
-}
+<!-- ══ INTRODUCTION ══ -->
+<section id="introduction" class="sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey poppins-label" data-a="up">Section 1</p>
+      <h2 class="s-h" data-a="up" data-d="1">Introduction</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+    </div>
+    <div class="intro-stats-bar" data-a="up" data-d="2">
+      <div class="isb-item">
+        <span class="isb-num">360</span>
+        <span class="isb-label">Hours of Pre-Service Teaching</span>
+        <span class="isb-sub">January 19 – March 27, 2026</span>
+      </div>
+      <div class="isb-divider"></div>
+      <div class="isb-item">
+        <span class="isb-num">20</span>
+        <span class="isb-label">Young Learners</span>
+        <span class="isb-sub">Malobago ES Site 2</span>
+      </div>
+      <div class="isb-divider"></div>
+      <div class="isb-item">
+        <span class="isb-num">7</span>
+        <span class="isb-label">PPST Domains</span>
+        <span class="isb-sub">Covered &amp; Reflected</span>
+      </div>
+      <div class="isb-divider"></div>
+      <div class="isb-item">
+        <span class="isb-num">BEED</span>
+        <span class="isb-label">4th Year</span>
+        <span class="isb-sub">Daraga Community College</span>
+      </div>
+    </div>
+    <div class="intro-text-card" data-a="up" data-d="3">
+      <div class="intro-text-header">
+        <div class="intro-header-accent"></div>
+        <h3 class="intro-text-title">Emelyn S. Ulanday</h3>
+        <p class="intro-text-subtitle poppins-label">Pre-Service Teacher · Bachelor of Elementary Education</p>
+      </div>
+      <div class="intro-text-body">
+        <p class="intro-paragraph">This Teaching Internship Portfolio is a reflection of my journey as a pre-service teacher, showcasing the knowledge, skills, and experiences I have gained throughout my internship at Malobago Elementary School. Each entry is a testament to my evolving pedagogical approach, the challenges I've overcome, and the milestones I've achieved. It represents not only the lessons I have taught but also the lessons I have learned—about students, teaching, and myself as an educator.</p>
+        <p class="intro-paragraph">Throughout this internship, I have had the opportunity to apply educational theories in a real classroom setting, develop meaningful relationships with students, and collaborate with experienced mentors. This portfolio highlights my growth in lesson planning, classroom management, instructional strategies, and assessment practices. It also includes reflections, sample lesson plans, student work, diverse activities I conducted and feedback that demonstrate my commitment to continuous learning through creating a supportive and effective learning environment.</p>
+        <p class="intro-paragraph intro-paragraph-last">As you explore this portfolio, I hope it conveys the passion, dedication, and continuous effort I bring to the teaching profession. I hope you find inspiration in my journey and gain a deeper appreciation for the noble profession of teaching. I welcome you to the world of endless learning and growth. As you delve into the pages, let me share to you the beginning of my lifelong journey as an educator—one built on growth, reflection, and a deep desire to make a positive impact in the lives of students.</p>
+      </div>
+      <div class="intro-signature-row">
+        <div class="intro-sig-line"></div>
+        <span class="intro-sig-name">Emelyn S. Ulanday</span>
+        <span class="intro-sig-role poppins-label">Pre-Service Teacher · 2026</span>
+      </div>
+    </div>
+    <div class="info-cards" data-a="up" data-d="4">
+      <div class="ic">
+        <div class="ic-ico">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
+        <div class="ic-label poppins-label">Program</div>
+        <div class="ic-val">Bachelor of Elementary Education (BEED)</div>
+      </div>
+      <div class="ic">
+        <div class="ic-ico">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="ic-label poppins-label">Institution</div>
+        <div class="ic-val">Daraga Community College</div>
+      </div>
+      <div class="ic">
+        <div class="ic-ico">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="ic-label poppins-label">Practice School</div>
+        <div class="ic-val">Malobago Elementary School Site 2</div>
+      </div>
+      <div class="ic">
+        <div class="ic-ico">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="ic-label poppins-label">Internship Period</div>
+        <div class="ic-val">January 19 – March 27, 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-const themePanel  = document.getElementById('themePanel');
-const themeToggle = document.getElementById('themeToggle');
-const themeClose  = document.getElementById('themeClose');
-themeToggle.addEventListener('click', e => { e.stopPropagation(); themePanel.classList.toggle('open'); });
-themeClose.addEventListener('click',  () => themePanel.classList.remove('open'));
-document.addEventListener('click', e => {
-  if (!themePanel.contains(e.target) && e.target !== themeToggle) themePanel.classList.remove('open');
-});
+<!-- ══ ACKNOWLEDGMENT ══ -->
+<section id="acknowledgment" class="sec ack-sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey poppins-label" data-a="up">Section 2</p>
+      <h2 class="s-h" data-a="up" data-d="1">Acknowledgment</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+    </div>
+    <div class="ack-card" data-a="up" data-d="2">
+      <div class="ack-quote">"</div>
+      <p class="ack-text">I extend my deepest gratitude to all those who made this teaching internship a transformative and meaningful experience.</p>
+      <p class="ack-text">To my <strong>cooperating teacher, Ritchel L. Echemane</strong>, thank you for your unwavering patience, guidance, and wisdom. You modeled what it truly means to be a dedicated and compassionate educator. Your mentorship was my greatest classroom.</p>
+      <p class="ack-text">To the <strong>administration and staff of Malobago Elementary School Site 2</strong>, thank you for welcoming me into your community with warmth and professionalism. Your support created a safe space for me to grow.</p>
+      <p class="ack-text">To my <strong>professors and internship coordinator at Daraga Community College</strong>, thank you for the rigorous preparation, the constructive feedback, and the belief you placed in each one of us pre-service teachers.</p>
+      <p class="ack-text">To my <strong>family and friends</strong>, your encouragement, prayers, and love carried me through every challenging day in the classroom.</p>
+      <p class="ack-text">And to my <strong>20 wonderful students</strong> — you were not just my learners; you were my greatest teachers. Every smile, every question, and every moment of understanding reminded me why I chose this path.</p>
+      <p class="ack-sig">— Emelyn S. Ulanday</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CURRICULUM VITAE ══ -->
+<section id="cv" class="sec cv-sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey poppins-label" data-a="up">Section 3</p>
+      <h2 class="s-h" data-a="up" data-d="1">Curriculum Vitae</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+      <p style="font-size:var(--fs-body);color:var(--ink2);max-width:520px;margin:0 auto 2rem;line-height:var(--lh);" data-a="up" data-d="3">Personal profile, educational background, and pre-service teaching credentials.</p>
+    </div>
+    <div class="cv-wrap" data-a="up" data-d="3">
+      <!-- preview zone will be wired by JS -->
+      <div class="cv-placeholder">
+        <div class="cv-upload-area">
+          <div class="cv-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          </div>
+          <div class="cv-title">Curriculum Vitae / Résumé</div>
+          <div class="cv-sub">Upload your CV or résumé here as an image or PDF</div>
+        </div>
+      </div>
+      <div class="cv-info-strip">
+        <div class="cv-info-item">
+          <div class="cv-info-label poppins-label">Full Name</div>
+          <div class="cv-info-val">Emelyn S. Ulanday</div>
+        </div>
+        <div class="cv-info-item">
+          <div class="cv-info-label poppins-label">Program</div>
+          <div class="cv-info-val">BEED — 4th Year</div>
+        </div>
+        <div class="cv-info-item">
+          <div class="cv-info-label poppins-label">Institution</div>
+          <div class="cv-info-val">Daraga Community College</div>
+        </div>
+        <div class="cv-info-item">
+          <div class="cv-info-label poppins-label">Practice School</div>
+          <div class="cv-info-val">Malobago ES Site 2</div>
+        </div>
+        <div class="cv-info-item">
+          <div class="cv-info-label poppins-label">Internship Period</div>
+          <div class="cv-info-val">Jan 19 – Mar 27, 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CERTIFICATE ══ -->
+<section id="certificate" class="sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey poppins-label" data-a="up">Section 4</p>
+      <h2 class="s-h" data-a="up" data-d="1">Certificate of Completion</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+      <p style="font-size:var(--fs-body);color:var(--ink2);max-width:520px;margin:0 auto 2rem;line-height:var(--lh);" data-a="up" data-d="3">360 Hours of Pre-Service Teaching — January 19 – March 27, 2026</p>
+    </div>
+    <div class="cert-wrap" data-a="up" data-d="3">
+      <div class="cert-placeholder">
+        <div class="cert-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+        </div>
+        <div class="cert-title">Certificate of Completion</div>
+        <div class="cert-sub">Upload your certificate here as a PDF or image</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROFESSIONAL READINGS ══ -->
+<section id="readings" class="sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey poppins-label" data-a="up">Section 5</p>
+      <h2 class="s-h" data-a="up" data-d="1">Professional Readings</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+      <p style="font-size:var(--fs-body);color:var(--ink2);max-width:560px;margin:0 auto 2rem;line-height:var(--lh);" data-a="up" data-d="3">Selected readings that shaped my understanding of pedagogy, child development, and professional teaching practice.</p>
+    </div>
+    <div class="read-grid" data-a="up" data-d="3">
+      <div class="read-card">
+        <div class="read-num">01</div>
+        <div class="read-body">
+          <div class="read-title">Philippine Professional Standards for Teachers (PPST)</div>
+          <div class="read-src poppins-label">DepEd Order No. 42, s. 2017 · Department of Education</div>
+          <div class="read-note">The foundational framework guiding my internship. It defined the competencies I aimed to develop across seven domains and helped me set measurable goals for my teaching practice.</div>
+          <a href="https://www.deped.gov.ph" target="_blank" class="read-link">View Resource →</a>
+        </div>
+      </div>
+      <div class="read-card">
+        <div class="read-num">02</div>
+        <div class="read-body">
+          <div class="read-title">K–12 Curriculum Guide for Elementary Grades</div>
+          <div class="read-src poppins-label">Department of Education Philippines</div>
+          <div class="read-note">Essential reference for aligning my lesson plans with the K–12 curriculum framework. Guided my understanding of competencies, learning objectives, and subject-area progressions.</div>
+          <a href="https://www.deped.gov.ph" target="_blank" class="read-link">View Resource →</a>
+        </div>
+      </div>
+      <div class="read-card">
+        <div class="read-num">03</div>
+        <div class="read-body">
+          <div class="read-title">Child and Adolescent Development</div>
+          <div class="read-src poppins-label">Recommended Textbook · BEED Curriculum</div>
+          <div class="read-note">Deepened my understanding of developmental stages, learning readiness, and the social-emotional needs of elementary learners — helping me design more responsive and inclusive lessons.</div>
+          <a href="#" class="read-link">View Resource →</a>
+        </div>
+      </div>
+      <div class="read-card">
+        <div class="read-num">04</div>
+        <div class="read-body">
+          <div class="read-title">Assessment for Learning: Putting It Into Practice</div>
+          <div class="read-src poppins-label">Black &amp; Wiliam · Educational Research</div>
+          <div class="read-note">Informed my use of formative assessment strategies — exit tickets, observation, questioning — and helped me understand how feedback drives student improvement and engagement.</div>
+          <a href="#" class="read-link">View Resource →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MY COOPERATING SCHOOL ══ -->
+<section id="coop-school" class="sec coop-sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey poppins-label" data-a="up">Section 6</p>
+      <h2 class="s-h" data-a="up" data-d="1">My Cooperating School</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+      <p style="font-size:var(--fs-body);color:var(--ink2);max-width:560px;margin:0 auto 2rem;line-height:var(--lh);" data-a="up" data-d="3">The place where my teaching journey unfolded — Malobago Elementary School Site 2.</p>
+    </div>
+
+    <div class="coop-layout" data-a="up" data-d="3">
+      <div class="coop-img-wrap">
+        <!-- preview zone wired by JS -->
+        <div class="coop-img-box">
+          <img src="img/school-photo.jpg" alt="Malobago Elementary School Site 2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="coop-img-fallback">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <small>Upload school photo here<br><code>img/school-photo.jpg</code></small>
+          </div>
+        </div>
+        <div class="coop-img-caption">Malobago Elementary School Site 2 · Daraga, Albay</div>
+      </div>
+
+      <div class="coop-info">
+        <div class="coop-name-block">
+          <div class="coop-school-name">Malobago Elementary School</div>
+          <div class="coop-school-sub poppins-label">Site 2 · Daraga, Albay, Philippines</div>
+        </div>
+        <p class="coop-text">Malobago Elementary School Site 2 served as my practice school during my 360-hour teaching internship from January 19 to March 27, 2026. Under the guidance of my cooperating teacher, Ms. Ritchel L. Echemane, I had the privilege of working closely with 20 dedicated young learners in a nurturing and supportive school environment.</p>
+        <p class="coop-text">The school community — from the principal and fellow teachers to the non-teaching staff and the parents — welcomed me with warmth and professionalism. Their collective dedication to quality education inspired me daily and reinforced my commitment to becoming a responsive and caring educator.</p>
+        <div class="coop-details">
+          <div class="coop-detail-item">
+            <div class="coop-detail-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div class="coop-detail-label poppins-label">Location</div>
+              <div class="coop-detail-val">Malobago, Daraga, Albay, Philippines</div>
+            </div>
+          </div>
+          <div class="coop-detail-item">
+            <div class="coop-detail-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <div class="coop-detail-label poppins-label">Cooperating Teacher</div>
+              <div class="coop-detail-val">Ritchel L. Echemane</div>
+            </div>
+          </div>
+          <div class="coop-detail-item">
+            <div class="coop-detail-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <div class="coop-detail-label poppins-label">Number of Students</div>
+              <div class="coop-detail-val">20 Learners</div>
+            </div>
+          </div>
+          <div class="coop-detail-item">
+            <div class="coop-detail-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div>
+              <div class="coop-detail-label poppins-label">Internship Duration</div>
+              <div class="coop-detail-val">January 19 – March 27, 2026 (360 Hours)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="coop-photos" data-a="up" data-d="4">
+      <div class="coop-photo-item">
+        <img src="img/school-1.jpg" alt="Classroom" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="coop-photo-fallback">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <small>Add Photo</small>
+        </div>
+        <div class="coop-photo-cap">The Classroom</div>
+      </div>
+      <div class="coop-photo-item">
+        <img src="img/school-2.jpg" alt="School Grounds" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="coop-photo-fallback">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <small>Add Photo</small>
+        </div>
+        <div class="coop-photo-cap">School Grounds</div>
+      </div>
+      <div class="coop-photo-item">
+        <img src="img/school-3.jpg" alt="Flag Ceremony" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="coop-photo-fallback">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <small>Add Photo</small>
+        </div>
+        <div class="coop-photo-cap">Flag Ceremony</div>
+      </div>
+      <div class="coop-photo-item">
+        <img src="img/school-4.jpg" alt="With Students" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="coop-photo-fallback">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <small>Add Photo</small>
+        </div>
+        <div class="coop-photo-cap">With My Students</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MY JOURNAL ══ -->
+<section id="journal" class="sec journal-sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey poppins-label" data-a="up">Section 7</p>
+      <h2 class="s-h" data-a="up" data-d="1">My Journal</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+      <p style="font-size:var(--fs-body);color:var(--ink2);max-width:580px;margin:0 auto 2rem;line-height:var(--lh);" data-a="up" data-d="3">Weekly reflective journal entries documenting teaching experiences, challenges, breakthroughs, and personal growth throughout the 360-hour internship.</p>
+    </div>
+
+    <div class="journal-timeline" data-a="up" data-d="3">
+
+      <div class="jt-entry">
+        <div class="jt-marker"><div class="jt-dot"></div><div class="jt-stem"></div></div>
+        <div class="jt-card">
+          <div class="jt-header">
+            <div class="jt-week-badge poppins-label">Week 1</div>
+            <div class="jt-date">January 19–24, 2026</div>
+          </div>
+          <div class="jt-body">
+            <div class="jt-img-wrap">
+              <img src="img/journal-1.jpg" alt="Week 1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+              <div class="jt-img-fallback">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <small>Add photo · <code>img/journal-1.jpg</code></small>
+              </div>
+            </div>
+            <div class="jt-text-wrap">
+              <p class="jt-text">Add your Week 1 journal entry here. Describe your first impressions of the school, your students, and your cooperating teacher. What did you feel? What surprised you?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="jt-entry jt-right">
+        <div class="jt-marker"><div class="jt-dot"></div><div class="jt-stem"></div></div>
+        <div class="jt-card">
+          <div class="jt-header">
+            <div class="jt-week-badge poppins-label">Week 2</div>
+            <div class="jt-date">January 26–31, 2026</div>
+          </div>
+          <div class="jt-body">
+            <div class="jt-img-wrap">
+              <img src="img/journal-2.jpg" alt="Week 2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+              <div class="jt-img-fallback">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <small>Add photo · <code>img/journal-2.jpg</code></small>
+              </div>
+            </div>
+            <div class="jt-text-wrap">
+              <p class="jt-text">Add your Week 2 journal entry here. What teaching strategies did you begin to try? What worked well, and what challenged you?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="jt-entry">
+        <div class="jt-marker"><div class="jt-dot"></div><div class="jt-stem"></div></div>
+        <div class="jt-card">
+          <div class="jt-header">
+            <div class="jt-week-badge poppins-label">Week 3</div>
+            <div class="jt-date">February 2–7, 2026</div>
+          </div>
+          <div class="jt-body">
+            <div class="jt-img-wrap">
+              <img src="img/journal-3.jpg" alt="Week 3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+              <div class="jt-img-fallback">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <small>Add photo · <code>img/journal-3.jpg</code></small>
+              </div>
+            </div>
+            <div class="jt-text-wrap">
+              <p class="jt-text">Add your Week 3 journal entry here. How are you building relationships with your students? Describe a memorable classroom moment.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="jt-entry jt-right">
+        <div class="jt-marker"><div class="jt-dot"></div><div class="jt-stem"></div></div>
+        <div class="jt-card">
+          <div class="jt-header">
+            <div class="jt-week-badge poppins-label">Week 4</div>
+            <div class="jt-date">February 9–14, 2026</div>
+          </div>
+          <div class="jt-body">
+            <div class="jt-img-wrap">
+              <img src="img/journal-4.jpg" alt="Week 4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+              <div class="jt-img-fallback">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <small>Add photo · <code>img/journal-4.jpg</code></small>
+              </div>
+            </div>
+            <div class="jt-text-wrap">
+              <p class="jt-text">Add your Week 4 journal entry here. What feedback have you received from your cooperating teacher? How are you applying it?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="jt-entry">
+        <div class="jt-marker"><div class="jt-dot"></div><div class="jt-stem"></div></div>
+        <div class="jt-card">
+          <div class="jt-header">
+            <div class="jt-week-badge poppins-label">Weeks 5–8</div>
+            <div class="jt-date">February 16 – March 13, 2026</div>
+          </div>
+          <div class="jt-body">
+            <div class="jt-img-wrap">
+              <img src="img/journal-5.jpg" alt="Weeks 5-8" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+              <div class="jt-img-fallback">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <small>Add photo · <code>img/journal-5.jpg</code></small>
+              </div>
+            </div>
+            <div class="jt-text-wrap">
+              <p class="jt-text">Add your mid-internship journal entries here. Describe your growth, the lessons that went well, and the moments of struggle and breakthrough.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="jt-entry jt-right">
+        <div class="jt-marker"><div class="jt-dot"></div></div>
+        <div class="jt-card jt-final">
+          <div class="jt-header">
+            <div class="jt-week-badge jt-week-final poppins-label">Final Week</div>
+            <div class="jt-date">March 23–27, 2026</div>
+          </div>
+          <div class="jt-body">
+            <div class="jt-img-wrap">
+              <img src="img/journal-6.jpg" alt="Final Week" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+              <div class="jt-img-fallback">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <small>Add photo · <code>img/journal-6.jpg</code></small>
+              </div>
+            </div>
+            <div class="jt-text-wrap">
+              <p class="jt-text">Add your final week journal entry here. Reflect on the entire internship journey. What did you learn about teaching? About yourself? What kind of teacher do you want to become?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p style="text-align:center;margin-top:2rem;font-size:var(--fs-xs);color:var(--ink3);" data-a="up" data-d="4">Replace each card's placeholder text and image with your actual weekly reflections and photos.</p>
+  </div>
+</section>
+
+<!-- ══ PPST REFLECTIONS ══ -->
+<section id="ppst" class="sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey poppins-label" data-a="up">Section 8</p>
+      <h2 class="s-h" data-a="up" data-d="1">PPST Domain Reflections</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+      <p style="font-size:var(--fs-body);color:var(--ink2);max-width:600px;margin:0 auto 2rem;line-height:var(--lh);" data-a="up" data-d="3">Reflections on my developmental experiences across the seven domains of the Philippine Professional Standards for Teachers.</p>
+    </div>
+
+    <!-- Domain A -->
+    <div class="ppst-domain" data-a="up" data-d="1">
+      <div class="ppst-hd">
+        <div class="ppst-letter">A</div>
+        <div>
+          <div class="ppst-tag poppins-label">Domain 1</div>
+          <div class="ppst-title">Content Knowledge and Pedagogy</div>
+        </div>
+      </div>
+      <div class="ppst-body">
+        <div class="ppst-col ppst-img-col">
+          <div class="ppst-sub poppins-label">Experiences</div>
+          <div class="ppst-4grid">
+            <div class="ppst-4img"><img src="img/ppst-a1.jpg" alt="Domain A Experience 1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 1</small></div></div>
+            <div class="ppst-4img"><img src="img/ppst-a2.jpg" alt="Domain A Experience 2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 2</small></div></div>
+            <div class="ppst-4img"><img src="img/ppst-a3.jpg" alt="Domain A Experience 3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 3</small></div></div>
+            <div class="ppst-4img"><img src="img/ppst-a4.jpg" alt="Domain A Experience 4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 4</small></div></div>
+          </div>
+        </div>
+        <div class="ppst-col">
+          <div class="ppst-sub poppins-label">Reflections</div>
+          <p class="ppst-ref">Teaching content effectively required me to deeply understand the material first — I could not simply follow the textbook. I learned to anticipate student misconceptions, especially in Math, and to have multiple explanations ready. I realized that pedagogy is not a one-size-fits-all approach: the same concept might need a different entry point depending on the learner. This domain pushed me to become not just a teacher of subjects, but a teacher of students.</p>
+        </div>
+      </div>
+      <div class="ppst-footer-row">
+        <a href="ppst-details.html#domain-a" class="ppst-view-btn">View Full Reflection &amp; Evidence <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+
+    <!-- Domain B -->
+    <div class="ppst-domain" data-a="up" data-d="1">
+      <div class="ppst-hd">
+        <div class="ppst-letter">B</div>
+        <div>
+          <div class="ppst-tag poppins-label">Domain 2</div>
+          <div class="ppst-title">Learning Environment</div>
+        </div>
+      </div>
+      <div class="ppst-body">
+        <div class="ppst-col ppst-img-col">
+          <div class="ppst-sub poppins-label">Experiences</div>
+          <div class="ppst-4grid">
+            <div class="ppst-4img"><img src="img/ppst-b1.jpg" alt="B1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 1</small></div></div>
+            <div class="ppst-4img"><img src="img/ppst-b2.jpg" alt="B2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 2</small></div></div>
+            <div class="ppst-4img"><img src="img/ppst-b3.jpg" alt="B3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 3</small></div></div>
+            <div class="ppst-4img"><img src="img/ppst-b4.jpg" alt="B4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 4</small></div></div>
+          </div>
+        </div>
+        <div class="ppst-col">
+          <div class="ppst-sub poppins-label">Reflections</div>
+          <p class="ppst-ref">I underestimated how much the physical and emotional environment shapes learning. In my first weeks, I focused on my lesson content and often overlooked transitions — and that is where most disruptions happened. Observing my cooperating teacher showed me that a well-managed classroom is built over time through consistent routines and genuine relationships. By Week 6, our classroom had a rhythm, and I felt the difference in student focus and participation.</p>
+        </div>
+      </div>
+      <div class="ppst-footer-row"><a href="ppst-details.html#domain-b" class="ppst-view-btn">View Full Reflection &amp; Evidence <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+    </div>
+
+    <!-- Domain C -->
+    <div class="ppst-domain" data-a="up" data-d="2">
+      <div class="ppst-hd"><div class="ppst-letter">C</div><div><div class="ppst-tag poppins-label">Domain 3</div><div class="ppst-title">Diversity of Learners</div></div></div>
+      <div class="ppst-body">
+        <div class="ppst-col ppst-img-col"><div class="ppst-sub poppins-label">Experiences</div><div class="ppst-4grid"><div class="ppst-4img"><img src="img/ppst-c1.jpg" alt="C1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 1</small></div></div><div class="ppst-4img"><img src="img/ppst-c2.jpg" alt="C2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 2</small></div></div><div class="ppst-4img"><img src="img/ppst-c3.jpg" alt="C3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 3</small></div></div><div class="ppst-4img"><img src="img/ppst-c4.jpg" alt="C4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 4</small></div></div></div></div>
+        <div class="ppst-col"><div class="ppst-sub poppins-label">Reflections</div><p class="ppst-ref">Every child in my class of 20 was unique — different learning speeds, different home situations, different strengths. I had to learn to see each student as an individual, not as "the class." Differentiation was the hardest skill to develop, but also the most rewarding. When a struggling student finally grasped a concept through a different approach I had tried, that moment of understanding made every extra hour of planning worthwhile.</p></div>
+      </div>
+      <div class="ppst-footer-row"><a href="ppst-details.html#domain-c" class="ppst-view-btn">View Full Reflection &amp; Evidence <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+    </div>
+
+    <!-- Domain D -->
+    <div class="ppst-domain" data-a="up" data-d="2">
+      <div class="ppst-hd"><div class="ppst-letter">D</div><div><div class="ppst-tag poppins-label">Domain 4</div><div class="ppst-title">Curriculum and Planning</div></div></div>
+      <div class="ppst-body">
+        <div class="ppst-col ppst-img-col"><div class="ppst-sub poppins-label">Experiences</div><div class="ppst-4grid"><div class="ppst-4img"><img src="img/ppst-d1.jpg" alt="D1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 1</small></div></div><div class="ppst-4img"><img src="img/ppst-d2.jpg" alt="D2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 2</small></div></div><div class="ppst-4img"><img src="img/ppst-d3.jpg" alt="D3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 3</small></div></div><div class="ppst-4img"><img src="img/ppst-d4.jpg" alt="D4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 4</small></div></div></div></div>
+        <div class="ppst-col"><div class="ppst-sub poppins-label">Reflections</div><p class="ppst-ref">Planning a lesson is one thing — planning a curriculum is another. I learned to think beyond the single lesson and consider where students are coming from and where they need to go. Time management within lessons was a consistent challenge; I often planned too much content and had to learn to prioritize depth over breadth. My cooperating teacher's advice — "plan for the learner, not for the subject" — became my guiding principle.</p></div>
+      </div>
+      <div class="ppst-footer-row"><a href="ppst-details.html#domain-d" class="ppst-view-btn">View Full Reflection &amp; Evidence <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+    </div>
+
+    <!-- Domain E -->
+    <div class="ppst-domain" data-a="up" data-d="3">
+      <div class="ppst-hd"><div class="ppst-letter">E</div><div><div class="ppst-tag poppins-label">Domain 5</div><div class="ppst-title">Assessment and Reporting</div></div></div>
+      <div class="ppst-body">
+        <div class="ppst-col ppst-img-col"><div class="ppst-sub poppins-label">Experiences</div><div class="ppst-4grid"><div class="ppst-4img"><img src="img/ppst-e1.jpg" alt="E1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 1</small></div></div><div class="ppst-4img"><img src="img/ppst-e2.jpg" alt="E2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 2</small></div></div><div class="ppst-4img"><img src="img/ppst-e3.jpg" alt="E3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 3</small></div></div><div class="ppst-4img"><img src="img/ppst-e4.jpg" alt="E4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 4</small></div></div></div></div>
+        <div class="ppst-col"><div class="ppst-sub poppins-label">Reflections</div><p class="ppst-ref">Assessment transformed from something I did to students into something I did for students. I learned that the real purpose of assessment is not to grade, but to understand. Watching students' faces during oral questioning told me more about their comprehension than any written test. I also struggled at first with providing meaningful written feedback — I defaulted to "Good job!" — but learned to make feedback specific, actionable, and kind.</p></div>
+      </div>
+      <div class="ppst-footer-row"><a href="ppst-details.html#domain-e" class="ppst-view-btn">View Full Reflection &amp; Evidence <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+    </div>
+
+    <!-- Domain F -->
+    <div class="ppst-domain" data-a="up" data-d="3">
+      <div class="ppst-hd"><div class="ppst-letter">F</div><div><div class="ppst-tag poppins-label">Domain 6</div><div class="ppst-title">Community Linkages and Professional Engagement</div></div></div>
+      <div class="ppst-body">
+        <div class="ppst-col ppst-img-col"><div class="ppst-sub poppins-label">Experiences</div><div class="ppst-4grid"><div class="ppst-4img"><img src="img/ppst-f1.jpg" alt="F1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 1</small></div></div><div class="ppst-4img"><img src="img/ppst-f2.jpg" alt="F2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 2</small></div></div><div class="ppst-4img"><img src="img/ppst-f3.jpg" alt="F3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 3</small></div></div><div class="ppst-4img"><img src="img/ppst-f4.jpg" alt="F4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 4</small></div></div></div></div>
+        <div class="ppst-col"><div class="ppst-sub poppins-label">Reflections</div><p class="ppst-ref">Teaching does not happen in isolation. The school is a community, and being a professional member of that community required more than just classroom competence. I learned to navigate professional relationships with grace — to seek guidance without appearing incompetent, to collaborate without overstepping, and to represent Daraga Community College with pride in every interaction. This domain reminded me that education is a shared responsibility between the school and the community it serves.</p></div>
+      </div>
+      <div class="ppst-footer-row"><a href="ppst-details.html#domain-f" class="ppst-view-btn">View Full Reflection &amp; Evidence <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+    </div>
+
+    <!-- Domain G -->
+    <div class="ppst-domain" data-a="up" data-d="4">
+      <div class="ppst-hd"><div class="ppst-letter">G</div><div><div class="ppst-tag poppins-label">Domain 7</div><div class="ppst-title">Personal Growth and Professional Development</div></div></div>
+      <div class="ppst-body">
+        <div class="ppst-col ppst-img-col"><div class="ppst-sub poppins-label">Experiences</div><div class="ppst-4grid"><div class="ppst-4img"><img src="img/ppst-g1.jpg" alt="G1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 1</small></div></div><div class="ppst-4img"><img src="img/ppst-g2.jpg" alt="G2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 2</small></div></div><div class="ppst-4img"><img src="img/ppst-g3.jpg" alt="G3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 3</small></div></div><div class="ppst-4img"><img src="img/ppst-g4.jpg" alt="G4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="ppst-img-fallback"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><small>Photo 4</small></div></div></div></div>
+        <div class="ppst-col"><div class="ppst-sub poppins-label">Reflections</div><p class="ppst-ref">This domain is the heart of becoming a professional teacher. Reflective practice was not a requirement to complete — it became a habit of mind. I learned that the best teachers are the ones who never stop learning. Every lesson taught me something about my students, my subject, and myself. I entered this internship as a student; I am leaving as a beginning professional — humbled, inspired, and deeply committed to lifelong growth in this noble profession.</p></div>
+      </div>
+      <div class="ppst-footer-row"><a href="ppst-details.html#domain-g" class="ppst-view-btn">View Full Reflection &amp; Evidence <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+    </div>
+
+    <div style="text-align:center;margin-top:2rem;" data-a="up" data-d="4">
+      <a href="ppst-details.html" class="btn btn-fill">View Complete PPST Documentation →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ GALLERY / DOCUMENTATION ══ -->
+<section id="gallery" class="sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey poppins-label" data-a="up">Section 10 · Classroom Moments</p>
+      <h2 class="s-h" data-a="up" data-d="1">Documentation</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+    </div>
+    <div class="gal-slider" data-a="up" data-d="2">
+      <div class="gal-track" id="galTrack">
+        <div class="gal-page">
+          <div class="gi gi-placeholder" style="background:linear-gradient(135deg,var(--p1),var(--p2))"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add Photo</span></div>
+          <div class="gi gi-placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add Photo</span></div>
+          <div class="gi gi-placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add Photo</span></div>
+          <div class="gi gi-placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add Photo</span></div>
+          <div class="gi vid"><div class="play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div><div class="vid-label">Classroom Activity</div></div>
+          <div class="gi vid"><div class="play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div><div class="vid-label">Lesson Demo</div></div>
+        </div>
+        <div class="gal-page">
+          <div class="gi gi-placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add Photo</span></div>
+          <div class="gi gi-placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add Photo</span></div>
+          <div class="gi vid"><div class="play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div><div class="vid-label">Student Presentation</div></div>
+          <div class="gi gi-placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add Photo</span></div>
+          <div class="gi gi-placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add Photo</span></div>
+          <div class="gi gi-placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add Photo</span></div>
+        </div>
+        <div class="gal-page">
+          <div class="gi gi-placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add Photo</span></div>
+          <div class="gi gi-placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add Photo</span></div>
+          <div class="gi gi-placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add Photo</span></div>
+          <div class="gi vid"><div class="play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div><div class="vid-label">Culminating Activity</div></div>
+          <div class="gi gi-placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add Photo</span></div>
+          <div class="gi gi-placeholder"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Add Photo</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="gal-nav">
+      <button class="gal-btn" id="galPrev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="gal-dots" id="galDots">
+        <div class="gdot on" data-i="0"></div><div class="gdot" data-i="1"></div><div class="gdot" data-i="2"></div>
+      </div>
+      <button class="gal-btn" id="galNext"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></button>
+    </div>
+    <p style="text-align:center;margin-top:.8rem;font-size:var(--fs-xs);color:var(--ink3);">Replace photo placeholders with &lt;img src="..."&gt; · Video placeholders with &lt;video src="..."&gt;</p>
+  </div>
+</section>
+
+<!-- ══ OBSERVATION & EVALUATION SHEETS ══ -->
+<section id="obs-eval" class="sec obs-sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey poppins-label" data-a="up">Section 11</p>
+      <h2 class="s-h" data-a="up" data-d="1">Observation &amp; Evaluation Sheets</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+      <p style="font-size:var(--fs-body);color:var(--ink2);max-width:560px;margin:0 auto 2rem;line-height:var(--lh);" data-a="up" data-d="3">Formal observation forms and evaluation ratings from my cooperating teacher and field supervisor throughout the internship period.</p>
+    </div>
+    <div class="obs-grid" data-a="up" data-d="3">
+      <div class="obs-card">
+        <div class="obs-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg></div>
+        <div class="obs-label">Observation Sheet 1</div>
+        <div class="obs-date poppins-label">Week 2 · January 2026</div>
+        <div class="obs-placeholder">
+          <img src="img/obs-1.jpg" alt="Observation Sheet 1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="obs-img-fallback"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><small>Upload observation sheet<br><code>img/obs-1.jpg</code></small></div>
+        </div>
+        <a href="#" class="obs-link">View Document →</a>
+      </div>
+      <div class="obs-card">
+        <div class="obs-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg></div>
+        <div class="obs-label">Observation Sheet 2</div>
+        <div class="obs-date poppins-label">Week 4 · February 2026</div>
+        <div class="obs-placeholder">
+          <img src="img/obs-2.jpg" alt="Observation Sheet 2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="obs-img-fallback"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><small>Upload observation sheet<br><code>img/obs-2.jpg</code></small></div>
+        </div>
+        <a href="#" class="obs-link">View Document →</a>
+      </div>
+      <div class="obs-card">
+        <div class="obs-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div class="obs-label">Evaluation Sheet</div>
+        <div class="obs-date poppins-label">Final Rating · March 2026</div>
+        <div class="obs-placeholder">
+          <img src="img/eval.jpg" alt="Evaluation Sheet" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="obs-img-fallback"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><small>Upload evaluation sheet<br><code>img/eval.jpg</code></small></div>
+        </div>
+        <a href="#" class="obs-link">View Document →</a>
+      </div>
+      <div class="obs-card">
+        <div class="obs-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+        <div class="obs-label">Field Supervisor's Report</div>
+        <div class="obs-date poppins-label">College Supervisor · 2026</div>
+        <div class="obs-placeholder">
+          <img src="img/supervisor-report.jpg" alt="Supervisor Report" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="obs-img-fallback"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><small>Upload supervisor report<br><code>img/supervisor-report.jpg</code></small></div>
+        </div>
+        <a href="#" class="obs-link">View Document →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TEACHING PHILOSOPHY ══ -->
+<section id="philosophy" class="sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey poppins-label" data-a="up">Section 9</p>
+      <h2 class="s-h" data-a="up" data-d="1">My Teaching Philosophy as a Beginner</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+      <p style="font-size:var(--fs-body);color:var(--ink3);font-style:italic;line-height:var(--lh);" data-a="up" data-d="3">As a Beginning Teacher</p>
+    </div>
+    <div class="phil-wrap" data-a="up" data-d="3">
+      <div class="phil-quote">"</div>
+      <div class="phil-content">
+        <p class="phil-p">I believe that every child comes to school with a story — a unique background, a distinct way of seeing the world, and an inherent capacity to grow. As a beginning teacher, my role is not simply to deliver content, but to create the conditions in which every child feels seen, valued, and capable.</p>
+        <p class="phil-p">Teaching, for me, begins with relationships. Before a student can truly learn from me, they must first trust me. I am committed to building that trust through consistency, genuine care, and the conviction that I believe in every learner's potential — even when they do not yet believe in it themselves.</p>
+        <p class="phil-p">I approach every lesson with the question: <em>How will this help my students grow — not just as learners, but as people?</em> I believe in active, meaningful learning — learning that connects to students' lives, that challenges them to think critically, and that empowers them to apply knowledge beyond the walls of the classroom.</p>
+        <p class="phil-p">I also believe that great teachers are lifelong learners. My time as a pre-service teacher at Malobago Elementary School Site 2 from January 19 to March 27, 2026 taught me more than any textbook could. I learned that flexibility, empathy, and reflective practice are as essential as any pedagogical skill. I am still learning — and I always will be.</p>
+        <p class="phil-p">As I begin my professional journey, I carry with me this conviction: <em>Education is the most powerful act of hope we can offer to a child.</em> I am honored to be a part of that work.</p>
+        <div class="phil-sig">— Emelyn S. Ulanday, Beginning Teacher</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEEDBACK ══ -->
+<section id="feedback" class="sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey poppins-label" data-a="up">Cooperating Teacher</p>
+      <h2 class="s-h" data-a="up" data-d="1">Feedback Received</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+    </div>
+    <div class="fb-card" data-a="up" data-d="2">
+      <div class="fb-stars">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="color:var(--p4)"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="color:var(--p4)"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="color:var(--p4)"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="color:var(--p4)"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="color:var(--p4)"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <p class="fb-text">"Emelyn demonstrated exceptional growth and dedication throughout her pre-service teaching. She approaches every lesson with genuine care, creativity, and a deep commitment to her students' learning. Her reflective practice and adaptability are hallmarks of a truly promising educator."</p>
+      <p class="fb-by poppins-label">— Ritchel L. Echemane · Cooperating Teacher · Malobago Elementary School Site 2</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ EXPERIENCE / TIMELINE ══ -->
+<section id="experience" class="sec">
+  <div class="wrap">
+    <p class="s-ey poppins-label" data-a="up">Background</p>
+    <h2 class="s-h" data-a="up" data-d="1">Internship Journey</h2>
+    <div class="s-ln" data-a="zoom" data-d="2"></div>
+    <div class="xtl">
+      <div class="xcard" data-a="up" data-d="1">
+        <div class="xdate poppins-label">January 19 – March 27, 2026 · 360 Hours</div>
+        <div class="xrole">Pre-Service Teacher (Student Teacher)</div>
+        <div class="xorg">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:.3rem"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Malobago Elementary School Site 2 · Daraga, Albay, Philippines
+        </div>
+        <div class="xdesc">Taught multiple subjects to a class of 20 Grade learners. Designed and delivered 10+ K–12-aligned lesson plans, facilitated collaborative activities, administered formative and summative assessments, and submitted weekly reflective journals. Worked closely with Cooperating Teacher Ritchel L. Echemane to continuously improve instruction across all seven PPST domains.</div>
+        <div class="chips">
+          <span class="chip">Lesson Planning</span><span class="chip">Classroom Management</span>
+          <span class="chip">Formative Assessment</span><span class="chip">Student Engagement</span>
+          <span class="chip">Differentiated Instruction</span><span class="chip">Reflective Practice</span>
+          <span class="chip">PPST-Aligned Teaching</span>
+        </div>
+      </div>
+      <div class="xcard" data-a="up" data-d="2">
+        <div class="xdate poppins-label">2021 – Present</div>
+        <div class="xrole">Bachelor of Elementary Education (BEED)</div>
+        <div class="xorg">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:.3rem"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Daraga Community College · Salvacion, Daraga, Albay, 4501
+        </div>
+        <div class="xdesc">Currently in 4th year. Coursework includes curriculum development, educational psychology, child and adolescent development, instructional design, assessment and evaluation, values education, and the Philippine Professional Standards for Teachers (PPST) framework.</div>
+        <div class="chips">
+          <span class="chip">Curriculum Development</span><span class="chip">Educational Psychology</span>
+          <span class="chip">Child Development</span><span class="chip">Values Education</span><span class="chip">Assessment &amp; Evaluation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ OTHER DOCUMENTS ══ -->
+<section id="other-docs" class="sec other-docs-sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey poppins-label" data-a="up">Section 13</p>
+      <h2 class="s-h" data-a="up" data-d="1">Other Documents</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+      <p style="font-size:var(--fs-body);color:var(--ink2);max-width:540px;margin:0 auto 2rem;line-height:var(--lh);" data-a="up" data-d="3">Additional supporting documents, clearances, lesson plans, and supplementary materials related to the teaching internship.</p>
+    </div>
+    <div class="other-grid" data-a="up" data-d="3">
+      <div class="other-card">
+        <div class="other-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+        <div class="other-title">Lesson Plans</div>
+        <div class="other-desc">All Daily Lesson Plans (DLPs) prepared and delivered across Math, Science, English, Araling Panlipunan, MAPEH, and Values Education.</div>
+        <a href="#" class="read-link">View Document →</a>
+      </div>
+      <div class="other-card">
+        <div class="other-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+        <div class="other-title">Endorsement Letter</div>
+        <div class="other-desc">Official endorsement from Daraga Community College to Malobago Elementary School Site 2.</div>
+        <a href="#" class="read-link">View Document →</a>
+      </div>
+      <div class="other-card">
+        <div class="other-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="other-title">Medical Certificate</div>
+        <div class="other-desc">Health clearance submitted prior to the start of the teaching internship.</div>
+        <a href="#" class="read-link">View Document →</a>
+      </div>
+      <div class="other-card">
+        <div class="other-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div class="other-title">Barangay Clearance</div>
+        <div class="other-desc">Community clearance for the internship period.</div>
+        <a href="#" class="read-link">View Document →</a>
+      </div>
+      <div class="other-card">
+        <div class="other-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div class="other-title">Parent's Consent</div>
+        <div class="other-desc">Written consent for participation in internship-related activities.</div>
+        <a href="#" class="read-link">View Document →</a>
+      </div>
+      <div class="other-card">
+        <div class="other-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+        <div class="other-title">Daily Time Record</div>
+        <div class="other-desc">DTR documenting daily attendance and hours rendered during the 360-hour internship.</div>
+        <a href="#" class="read-link">View Document →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inst">
+    <p class="footer-name">Emelyn S. Ulanday</p>
+    <p class="footer-detail">Pre-Service Teacher · Bachelor of Elementary Education (BEED) 4th Year</p>
+    <p class="footer-detail">Daraga Community College · Salvacion, Daraga, Albay, 4501</p>
+    <p class="footer-detail">Teaching Internship @ Malobago Elementary School Site 2 · January 19 – March 27, 2026</p>
+  </div>
+  <p class="footer-copy">© 2026 Emelyn S. Ulanday · Teaching Internship E-Portfolio · School Year 2025–2026</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
