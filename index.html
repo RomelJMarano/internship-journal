@@ -4,334 +4,22 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Emelyn S. Ulanday · Pre-Service Teacher Portfolio</title>
+  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --p1:#FDEEF1; --p2:#FAD7DE; --p3:#F4AEBB; --p4:#E8839A;
-      --p5:#C85C78; --p6:#9B3A54; --p7:#6E2039;
-      --bg:#FFF9FA; --bg2:#FEF3F5; --white:#FFFFFF;
-      --ink:#230F17; --ink2:#5E2E3C; --ink3:#AA7888;
-      --bdr:rgba(232,131,154,0.18);
-      /* hero overlay colors (themeable) */
-      --ho1:rgba(253,238,241,.72);
-      --ho2:rgba(250,215,222,.80);
-      --ho3:rgba(248,200,212,.90);
-      --ho4:rgba(255,249,250,1);
-      --serif:'Playfair Display',Georgia,serif;
-      --sans:'Outfit',system-ui,sans-serif;
-      --ease:cubic-bezier(.4,0,.2,1);
-    }
-    html { scroll-behavior:smooth; }
-    body { font-family:var(--sans); background:var(--bg); color:var(--ink); overflow-x:hidden; }
-
-    /* ══ NAV — original, unchanged ══ */
-    #nav {
-      position:fixed; top:0; left:0; right:0; z-index:999;
-      height:60px; display:flex; align-items:center; justify-content:space-between;
-      padding:0 3rem; transition:all .35s var(--ease);
-    }
-    #nav.on { background:rgba(255,249,250,.97); backdrop-filter:blur(16px); box-shadow:0 1px 0 var(--bdr); }
-    .n-logo { font-family:var(--serif); font-size:1.05rem; font-weight:700; color:var(--p6); text-decoration:none; transition:color .35s; }
-    #nav.on .n-logo { color:var(--p6); }
-    .n-links { display:flex; gap:2rem; list-style:none; }
-    .n-links a {
-      font-size:.68rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
-      color:var(--p6); text-decoration:none; transition:color .2s;
-      text-shadow:0 1px 6px rgba(255,255,255,.8);
-    }
-    #nav.on .n-links a { color:var(--ink2); text-shadow:none; }
-    .n-links a:hover { color:var(--p7); }
-    #nav.on .n-links a:hover { color:var(--p5); }
-
-    /* Customize pill — sits right after the nav links, same visual language */
-    .n-theme-btn {
-      display:inline-flex; align-items:center; gap:.4rem;
-      font-size:.62rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
-      color:var(--p6); background:rgba(255,255,255,.75);
-      border:1px solid rgba(200,92,120,.22); backdrop-filter:blur(8px);
-      padding:.32rem .9rem; border-radius:2rem;
-      cursor:pointer; transition:all .22s var(--ease);
-      text-shadow:0 1px 6px rgba(255,255,255,.8);
-    }
-    .n-theme-btn:hover { background:rgba(255,255,255,.95); border-color:var(--p3); color:var(--p7); }
-    #nav.on .n-theme-btn { background:rgba(255,255,255,.9); text-shadow:none; border-color:rgba(200,92,120,.25); }
-    .n-theme-btn svg { flex-shrink:0; }
-
-    /* ══ THEME PANEL ══ */
-    #themePanel {
-      position:fixed; top:68px; right:1.5rem; z-index:998;
-      width:320px;
-      background:#fff;
-      border:1px solid var(--bdr);
-      border-radius:20px;
-      padding:1.5rem 1.6rem 1.2rem;
-      box-shadow:0 20px 60px rgba(155,58,84,.14), 0 4px 16px rgba(0,0,0,.06);
-      transform:translateY(-10px) scale(.97);
-      opacity:0; pointer-events:none;
-      transition:all .3s var(--ease);
-    }
-    #themePanel.open { transform:translateY(0) scale(1); opacity:1; pointer-events:all; }
-
-    .tp-head {
-      display:flex; align-items:center; justify-content:space-between;
-      margin-bottom:1.1rem;
-    }
-    .tp-title {
-      font-family:var(--serif); font-size:1.05rem; font-weight:700; color:var(--ink);
-    }
-    .tp-close {
-      background:none; border:none; color:var(--ink3); cursor:pointer;
-      font-size:.9rem; line-height:1; padding:.2rem; transition:color .2s;
-    }
-    .tp-close:hover { color:var(--p5); }
-
-    /* Template grid */
-    .tp-sec { font-size:.6rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ink3); margin-bottom:.7rem; }
-    .tp-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; margin-bottom:1.2rem; }
-    .tp-card {
-      border-radius:12px; overflow:hidden; cursor:pointer;
-      border:2px solid transparent; transition:all .22s var(--ease);
-      position:relative;
-    }
-    .tp-card:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,.1); }
-    .tp-card.active { border-color:var(--p5); box-shadow:0 0 0 3px rgba(200,92,120,.15); }
-    .tp-preview {
-      height:52px;
-      display:flex; flex-direction:column;
-    }
-    .tp-nav-stripe { height:14px; display:flex; align-items:center; padding:0 6px; gap:3px; }
-    .tp-nav-dot { width:3px; height:3px; border-radius:50%; background:rgba(255,255,255,.6); }
-    .tp-hero-stripe { flex:1; }
-    .tp-body-stripe { height:16px; display:flex; align-items:center; padding:0 6px; gap:3px; }
-    .tp-body-bar { height:3px; border-radius:2px; background:rgba(0,0,0,.1); }
-    .tp-name {
-      font-size:.6rem; font-weight:600; color:var(--ink2); text-align:center;
-      padding:.35rem .3rem .4rem; background:#fff;
-    }
-    .tp-card.active .tp-name { color:var(--p5); font-weight:700; }
-
-    /* check badge */
-    .tp-card.active::after {
-      content:'✓'; position:absolute; top:.3rem; right:.35rem;
-      font-size:.6rem; font-weight:700; color:#fff;
-      background:var(--p5); width:14px; height:14px; border-radius:50%;
-      display:flex; align-items:center; justify-content:center;
-      line-height:14px; text-align:center;
-    }
-
-    /* ══ HERO ══ */
-    #hero { height:100vh; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; }
-    .hbg {
-      position:absolute; inset:0; z-index:0;
-      background-image:url('https://images.unsplash.com/photo-1562774053-701939374585?w=1800&q=85');
-      background-size:cover; background-position:center 25%;
-      will-change:transform;
-    }
-    .hov {
-      position:absolute; inset:0; z-index:1;
-      background:linear-gradient(to bottom,
-        var(--ho1) 0%, var(--ho2) 40%, var(--ho3) 72%, var(--ho4) 100%);
-      transition:background .5s var(--ease);
-    }
-    .h-box { position:relative; z-index:3; text-align:center; max-width:680px; padding:0 2rem; margin-top:-60px; }
-    .h-pill {
-      display:inline-flex; align-items:center; gap:.5rem;
-      font-size:.62rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase;
-      color:var(--p6); background:rgba(255,255,255,.85);
-      border:1px solid var(--bdr); backdrop-filter:blur(8px);
-      padding:.38rem 1.1rem; border-radius:2rem; margin-bottom:1.6rem;
-    }
-    .h-pill::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--p4); }
-    .h-year { font-family:var(--sans); font-size:.78rem; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--p4); margin-bottom:.6rem; }
-    .h-name { font-family:var(--serif); font-size:clamp(2.6rem,5.5vw,4.8rem); font-weight:700; color:var(--p6); line-height:1.0; letter-spacing:-.02em; margin-bottom:.5rem; }
-    .h-name em { font-style:italic; font-weight:400; color:var(--p5); display:block; font-size:.65em; margin-top:.2rem; }
-    .h-sub { font-family:var(--serif); font-style:italic; font-size:clamp(.95rem,1.8vw,1.2rem); color:var(--p5); margin-bottom:1.2rem; }
-    .h-desc { font-size:.88rem; color:var(--ink2); line-height:1.9; max-width:440px; margin:0 auto 2rem; }
-    .h-btns { display:flex; gap:.85rem; justify-content:center; flex-wrap:wrap; margin-bottom:2.5rem; }
-    .btn { font-size:.67rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:.75rem 1.9rem; border-radius:2rem; text-decoration:none; transition:all .22s var(--ease); cursor:pointer; display:inline-block; }
-    .btn-fill { background:var(--p6); color:#fff; border:1px solid var(--p6); }
-    .btn-fill:hover { background:var(--p7); box-shadow:0 8px 22px rgba(110,32,57,.32); transform:translateY(-2px); }
-    .btn-soft { background:rgba(255,255,255,.85); color:var(--p6); border:1px solid rgba(200,92,120,.3); backdrop-filter:blur(8px); }
-    .btn-soft:hover { background:#fff; transform:translateY(-2px); }
-    .h-stats { display:flex; justify-content:center; gap:0; }
-    .hst { padding:0 1.8rem; text-align:center; border-right:1px solid rgba(200,92,120,.2); }
-    .hst:last-child { border-right:none; }
-    .hst-n { font-family:var(--serif); font-size:1.9rem; font-weight:700; color:var(--p6); display:block; line-height:1; }
-    .hst-l { font-size:.57rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--p4); }
-    .h-student { position:absolute; bottom:0; right:6%; z-index:4; width:260px; }
-    .h-student img { width:100%; display:block; -webkit-mask-image:linear-gradient(to bottom,black 70%,transparent 100%); mask-image:linear-gradient(to bottom,black 70%,transparent 100%); }
-    .h-scroll { position:absolute; bottom:1.6rem; left:50%; transform:translateX(-50%); z-index:5; display:flex; flex-direction:column; align-items:center; gap:.3rem; color:var(--p5); font-size:.57rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; opacity:.7; animation:sbb 2.4s ease-in-out infinite; }
-    @keyframes sbb { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(7px)} }
-
-    /* ══ SHARED ══ */
-    .sec { padding:6rem 2rem; }
-    .wrap { max-width:1060px; margin:0 auto; }
-    .s-ey { font-size:.62rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--p5); margin-bottom:.5rem; }
-    .s-h { font-family:var(--serif); font-size:clamp(2rem,3vw,2.8rem); font-weight:700; color:var(--ink); line-height:1.15; margin-bottom:.6rem; }
-    .s-ln { width:36px; height:2px; background:var(--p3); border-radius:2px; margin-bottom:3rem; }
-    .s-c { text-align:center; } .s-c .s-ln { margin-left:auto; margin-right:auto; }
-
-    /* ══ ABOUT ══ */
-    #about { background:#fff; }
-    .bento { display:grid; grid-template-columns:repeat(12,1fr); grid-auto-rows:200px; gap:1rem; }
-    .b { border-radius:20px; overflow:hidden; position:relative; }
-    .b img { width:100%; height:100%; object-fit:cover; }
-    .b1 { grid-column:span 5; grid-row:span 2; }
-    .b2 { grid-column:span 7; grid-row:span 1; background:linear-gradient(135deg,var(--p1),#fff); display:flex; flex-direction:column; justify-content:center; padding:2rem 2.2rem; }
-    .b3 { grid-column:span 4; grid-row:span 1; background:var(--p6); display:flex; flex-direction:column; justify-content:center; padding:1.5rem; }
-    .b4 { grid-column:span 3; grid-row:span 1; background:var(--p2); display:flex; flex-direction:column; justify-content:center; padding:1.5rem; }
-    .b5 { grid-column:span 7; grid-row:span 1; background:linear-gradient(135deg,#fff,var(--p1)); display:flex; flex-direction:column; justify-content:center; padding:2rem 2.2rem; border:1px solid var(--bdr); }
-    .b-label { font-size:.6rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-bottom:.4rem; }
-    .b-title { font-family:var(--serif); font-size:1.4rem; font-weight:700; line-height:1.2; }
-    .b-text { font-size:.85rem; line-height:1.85; margin-top:.5rem; }
-    .b-num { font-family:var(--serif); font-size:3rem; font-weight:700; line-height:1; }
-    .light .b-label{color:var(--p4)}.light .b-title{color:var(--ink)}.light .b-text{color:var(--ink2)}
-    .dark .b-label{color:rgba(255,255,255,.6)}.dark .b-title{color:#fff}.dark .b-text{color:rgba(255,255,255,.75)}.dark .b-num{color:#fff}
-    .soft .b-label{color:var(--p5)}.soft .b-num{color:var(--p6)}.soft .b-text{color:var(--ink2);font-size:.78rem}
-
-    /* ══ EXPERIENCE ══ */
-    #experience { background:var(--bg2); }
-    .xtl { position:relative; padding-left:2rem; display:flex; flex-direction:column; gap:0; }
-    .xtl::before { content:''; position:absolute; left:0; top:24px; bottom:24px; width:2px; background:linear-gradient(to bottom,var(--p3),transparent); border-radius:1px; }
-    .xcard { position:relative; background:#fff; border:1px solid var(--bdr); border-radius:18px; padding:2rem 2.2rem; margin-bottom:1.2rem; transition:transform .3s var(--ease),box-shadow .3s var(--ease); }
-    .xcard:hover { transform:translateX(6px); box-shadow:0 14px 40px rgba(200,92,120,.13); }
-    .xcard::before { content:''; position:absolute; left:-2.55rem; top:1.8rem; width:12px; height:12px; border-radius:50%; background:var(--p4); border:3px solid #fff; box-shadow:0 0 0 2px var(--p4); }
-    .xdate { font-size:.62rem; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--p5); margin-bottom:.25rem; }
-    .xrole { font-family:var(--serif); font-size:1.25rem; font-weight:700; color:var(--ink); margin-bottom:.15rem; }
-    .xorg { font-size:.8rem; color:var(--ink3); margin-bottom:.7rem; }
-    .xdesc { font-size:.88rem; color:var(--ink2); line-height:1.85; margin-bottom:.9rem; }
-    .chips { display:flex; flex-wrap:wrap; gap:.4rem; }
-    .chip { font-size:.62rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; padding:.26rem .75rem; border-radius:2rem; background:var(--p1); color:var(--p6); }
-
-    /* ══ LESSONS ══ */
-    #lessons { background:#fff; }
-    .lg { display:grid; grid-template-columns:repeat(5,1fr); gap:1.2rem; }
-    .lc { background:#fff; border:1px solid var(--bdr); border-radius:16px; overflow:hidden; transition:transform .3s var(--ease),box-shadow .3s var(--ease); }
-    .lc:hover { transform:translateY(-4px); box-shadow:0 14px 36px rgba(200,92,120,.14); }
-    .lc-top { height:110px; overflow:hidden; position:relative; }
-    .lc-top img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .45s var(--ease); }
-    .lc:hover .lc-top img { transform:scale(1.07); }
-    .lc-top::after { content:''; position:absolute; inset:0; background:linear-gradient(to bottom,rgba(155,58,84,0.18) 0%,rgba(155,58,84,0.38) 100%); pointer-events:none; }
-    .lc-body { padding:1rem 1.1rem; }
-    .lc-meta { font-size:.58rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--ink3); margin-bottom:.25rem; }
-    .lc-title { font-family:var(--serif); font-size:.98rem; font-weight:700; color:var(--ink); margin-bottom:.35rem; line-height:1.25; }
-    .lc-desc { font-size:.76rem; color:var(--ink2); line-height:1.7; margin-bottom:.75rem; }
-    .lc-link { font-size:.6rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--p5); text-decoration:none; }
-    .lc-link:hover { color:var(--p7); }
-
-    /* ══ GALLERY ══ */
-    #gallery { background:var(--bg2); }
-    .gal-slider { position:relative; overflow:hidden; border-radius:20px; }
-    .gal-track { display:flex; transition:transform .5s var(--ease); }
-    .gal-page { min-width:100%; display:grid; grid-template-columns:repeat(3,1fr); grid-auto-rows:200px; gap:.8rem; flex-shrink:0; }
-    .gi { border-radius:14px; overflow:hidden; background:linear-gradient(135deg,var(--p1),var(--p2)); display:flex; align-items:center; justify-content:center; font-size:.65rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--p6); position:relative; cursor:pointer; transition:opacity .2s; }
-    .gi:hover { opacity:.88; }
-    .gi img { width:100%; height:100%; object-fit:cover; display:block; }
-    .gi.vid { background:#1a0a10; }
-    .gi.vid .play-btn { position:absolute; width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,.22); backdrop-filter:blur(4px); border:2px solid rgba(255,255,255,.6); display:flex; align-items:center; justify-content:center; }
-    .gi.vid .play-btn svg { margin-left:3px; }
-    .gi.vid .vid-label { position:absolute; bottom:.7rem; left:.8rem; font-size:.6rem; font-weight:600; color:rgba(255,255,255,.8); letter-spacing:.08em; text-transform:uppercase; }
-    .gi:nth-child(1){grid-column:span 2;grid-row:span 2}.gi:nth-child(2){grid-column:span 1}.gi:nth-child(3){grid-column:span 1}
-    .gal-page:nth-child(2) .gi:nth-child(1){grid-column:span 1;grid-row:span 1}
-    .gal-page:nth-child(2) .gi:nth-child(4){grid-column:span 2;grid-row:span 2}
-    .gal-nav { display:flex; align-items:center; justify-content:center; gap:1rem; margin-top:1.2rem; }
-    .gal-btn { width:40px; height:40px; border-radius:50%; background:#fff; border:1px solid var(--bdr); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .22s; color:var(--p5); }
-    .gal-btn:hover { background:var(--p5); color:#fff; border-color:var(--p5); }
-    .gal-dots { display:flex; gap:.5rem; }
-    .gdot { width:8px; height:8px; border-radius:50%; background:var(--p2); cursor:pointer; transition:all .22s; }
-    .gdot.on { background:var(--p5); width:22px; border-radius:4px; }
-
-    /* ══ REFLECTIONS ══ */
-    #reflection { background:#fff; }
-    .rg { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
-    .rc { border-radius:18px; padding:2rem; background:var(--bg2); border:1px solid var(--bdr); transition:transform .3s var(--ease),box-shadow .3s var(--ease); position:relative; overflow:hidden; }
-    .rc:hover { transform:translateY(-4px); box-shadow:0 12px 32px rgba(200,92,120,.1); }
-    .rc::before { content:attr(data-wk); position:absolute; top:-.5rem; right:1rem; font-family:var(--serif); font-size:6rem; font-weight:700; color:var(--p2); opacity:.55; line-height:1; pointer-events:none; }
-    .rc-lbl { font-size:.62rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--p5); margin-bottom:1.2rem; display:flex; align-items:center; gap:.5rem; }
-    .rc-lbl::after { content:''; flex:1; height:1px; background:var(--bdr); }
-    .rc-text { font-size:.9rem; color:var(--ink2); line-height:1.9; font-style:italic; font-family:var(--serif); }
-
-    /* ══ SKILLS ══ */
-    #skills { background:var(--bg2); }
-    .sk-g { display:grid; grid-template-columns:5fr 6fr; gap:5rem; align-items:center; }
-    .sk-intro p { font-size:.9rem; color:var(--ink2); line-height:1.9; margin-bottom:1rem; }
-    .sk-list { display:flex; flex-direction:column; gap:1.3rem; }
-    .sk-top { display:flex; justify-content:space-between; margin-bottom:.45rem; }
-    .sk-name { font-size:.84rem; font-weight:600; color:var(--ink); }
-    .sk-pct { font-size:.75rem; font-weight:700; color:var(--p5); }
-    .sk-track { height:7px; background:var(--p2); border-radius:4px; overflow:hidden; }
-    .sk-fill { height:100%; border-radius:4px; width:0; background:linear-gradient(to right,var(--p4),var(--p5)); transition:width 1.2s cubic-bezier(.4,0,.2,1); }
-
-    /* ══ FEEDBACK ══ */
-    #feedback { background:#fff; }
-    .fb-card { max-width:780px; margin:0 auto; background:linear-gradient(135deg,var(--p1) 0%,#fff 100%); border:1px solid var(--bdr); border-radius:24px; padding:3.5rem 4rem; text-align:center; }
-    .fb-stars { font-size:1.1rem; margin-bottom:1.4rem; letter-spacing:.2rem; }
-    .fb-text { font-family:var(--serif); font-size:1.18rem; font-style:italic; color:var(--ink2); line-height:1.85; margin-bottom:1.4rem; max-width:580px; margin-left:auto; margin-right:auto; }
-    .fb-by { font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--p5); }
-
-    /* ══ CONTACT ══ */
-    #contact { background:var(--bg2); }
-    .cg { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; }
-    .c-socials { display:flex; flex-direction:column; gap:.75rem; margin-top:2rem; }
-    .csoc { display:flex; align-items:center; gap:1rem; background:#fff; border:1px solid var(--bdr); border-radius:14px; padding:.9rem 1.2rem; text-decoration:none; transition:all .22s var(--ease); }
-    .csoc:hover { background:var(--p1); border-color:var(--p3); transform:translateX(5px); }
-    .csoc-ico { width:36px; height:36px; background:linear-gradient(135deg,var(--p1),var(--p2)); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-    .csoc-t { font-size:.82rem; font-weight:600; color:var(--ink2); }
-    .csoc-v { font-size:.7rem; color:var(--ink3); }
-    .cf { display:flex; flex-direction:column; gap:.9rem; }
-    .cfr { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
-    .cfi { font-family:var(--sans); font-size:.86rem; color:var(--ink); background:#fff; border:1px solid var(--bdr); border-radius:12px; padding:.82rem 1.1rem; outline:none; width:100%; transition:border .2s; }
-    .cfi:focus { border-color:var(--p4); }
-    textarea.cfi { resize:vertical; min-height:120px; }
-    .cfbtn { background:linear-gradient(135deg,var(--p4),var(--p6)); color:#fff; border:none; border-radius:12px; padding:.9rem; font-family:var(--sans); font-size:.78rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; transition:opacity .2s,transform .2s; }
-    .cfbtn:hover { opacity:.88; transform:translateY(-2px); }
-
-    /* ══ FOOTER ══ */
-    footer { background:var(--p6); padding:2.2rem 2rem; text-align:center; }
-    footer p { font-size:.72rem; letter-spacing:.05em; color:rgba(255,255,255,.45); }
-    footer strong { color:var(--p2); font-weight:500; }
-
-    /* ══ ANIMATIONS ══ */
-    [data-a] { opacity:0; transition:opacity .65s var(--ease),transform .65s var(--ease); }
-    [data-a="up"]   {transform:translateY(30px)}
-    [data-a="left"] {transform:translateX(-30px)}
-    [data-a="right"]{transform:translateX(30px)}
-    [data-a="zoom"] {transform:scale(.94)}
-    [data-a].vis { opacity:1; transform:none; }
-    [data-d="1"]{transition-delay:.1s}[data-d="2"]{transition-delay:.2s}[data-d="3"]{transition-delay:.3s}[data-d="4"]{transition-delay:.4s}[data-d="5"]{transition-delay:.5s}
-
-    /* ══ RESPONSIVE ══ */
-    @media(max-width:860px){
-      .h-student{width:150px;right:2%}
-      .bento{grid-template-columns:1fr 1fr;grid-auto-rows:160px}
-      .b1,.b2,.b3,.b4,.b5{grid-column:span 2;grid-row:span 1}
-      .lg{grid-template-columns:repeat(2,1fr)}
-      .gal-page{grid-template-columns:1fr 1fr}
-      .gi:nth-child(1){grid-column:span 2}
-      .rg,.sk-g,.cg{grid-template-columns:1fr;gap:2rem}
-      #nav{padding:0 1.25rem}
-      .n-links{display:none}
-      .n-theme-btn span{display:none}
-      .sec{padding:4rem 1.25rem}
-      .fb-card{padding:2rem}
-      .cfr{grid-template-columns:1fr}
-      #themePanel{right:.75rem;width:290px}
-    }
-  </style>
 </head>
 <body>
 
-<!-- ══ NAV — original, with Themes button added ══ -->
+<!-- ══ NAV ══ -->
 <nav id="nav">
   <a href="#hero" class="n-logo">Emelyn S. Ulanday</a>
   <div style="display:flex;align-items:center;gap:2rem">
     <ul class="n-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#experience">Experience</a></li>
+      <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#acknowledgment">Acknowledgment</a></li>
+      <li><a href="#ppst">PPST Reflections</a></li>
       <li><a href="#lessons">Lessons</a></li>
       <li><a href="#gallery">Gallery</a></li>
-      <li><a href="#reflection">Reflections</a></li>
+      <li><a href="#philosophy">Philosophy</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <button class="n-theme-btn" id="themeToggle">
@@ -350,109 +38,474 @@
     <button class="tp-close" id="themeClose">✕</button>
   </div>
   <div class="tp-sec">Choose a color theme</div>
-  <div class="tp-grid" id="tpGrid">
-    <!-- cards injected by JS -->
-  </div>
+  <div class="tp-grid" id="tpGrid"></div>
 </div>
 
-<!-- HERO -->
+<!-- ══ HERO ══ -->
 <section id="hero">
   <div class="hbg" id="hbg"></div>
   <div class="hov" id="hov"></div>
   <div class="h-box">
-    <div class="h-pill">Daraga Community College · BEED 4th Year</div>
-    <div class="h-year">2025 – 2026</div>
+
+    <!-- Institutional Header -->
+    <div class="inst-header">
+      <div class="inst-logo-wrap">
+        <div class="inst-logo inst-logo-left">
+          <img src="img/dcomc-logo.png" alt="Daraga Community College Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="logo-placeholder">🏫</div>
+        </div>
+        <div class="inst-text">
+          <p class="inst-line inst-republic">Republic of the Philippines</p>
+          <p class="inst-line inst-muni">Municipality of Daraga</p>
+          <p class="inst-line inst-school">Daraga Community College</p>
+          <p class="inst-line inst-address">Salvacion, Daraga, Albay, 4501</p>
+        </div>
+        <div class="inst-logo inst-logo-right">
+          <img src="img/school-logo.png" alt="School Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="logo-placeholder">🎓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="inst-divider"></div>
+
+    <div class="h-pill">Teaching Internship Portfolio · BEED 4th Year</div>
+    <div class="h-year">School Year 2025 – 2026</div>
     <h1 class="h-name">My Teaching<em>Internship Journey</em></h1>
     <p class="h-sub">Emelyn S. Ulanday · Pre-Service Teacher</p>
-    <p class="h-desc">A passionate pre-service teacher from Daraga Community College, dedicated to creating meaningful and inclusive learning experiences for every child.</p>
+    <p class="h-desc">A passionate pre-service teacher from Daraga Community College, dedicated to creating meaningful and inclusive learning experiences rooted in the PPST domains.</p>
     <div class="h-btns">
-      <a href="#about" class="btn btn-fill">Explore Portfolio</a>
+      <a href="#introduction" class="btn btn-fill">Explore Portfolio</a>
       <a href="#contact" class="btn btn-soft">Get in Touch</a>
     </div>
     <div class="h-stats">
-      <div class="hst"><span class="hst-n">3</span><span class="hst-l">Months</span></div>
+      <div class="hst"><span class="hst-n">360</span><span class="hst-l">Hours</span></div>
       <div class="hst"><span class="hst-n">10+</span><span class="hst-l">Lessons</span></div>
       <div class="hst"><span class="hst-n">20</span><span class="hst-l">Students</span></div>
-      <div class="hst"><span class="hst-n">BEED</span><span class="hst-l">4th Year</span></div>
+      <div class="hst"><span class="hst-n">7</span><span class="hst-l">PPST Domains</span></div>
     </div>
   </div>
-  <div class="h-student"></div>
   <div class="h-scroll">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     scroll
   </div>
 </section>
 
-<!-- ABOUT -->
-<section id="about" class="sec">
+<!-- ══ INTRODUCTION ══ -->
+<section id="introduction" class="sec">
   <div class="wrap">
     <div class="s-c" style="margin-bottom:2.5rem">
-      <p class="s-ey" data-a="up">About Me</p>
-      <h2 class="s-h" data-a="up" data-d="1">An educator driven by purpose</h2>
+      <p class="s-ey" data-a="up">Section 1</p>
+      <h2 class="s-h" data-a="up" data-d="1">Introduction</h2>
       <div class="s-ln" data-a="zoom" data-d="2"></div>
     </div>
     <div class="bento" data-a="up" data-d="2">
-      <div class="b b1"><img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&q=80" alt="Classroom"/></div>
+      <div class="b b1">
+        <div class="photo-placeholder">
+          <img src="img/profile.jpg" alt="Emelyn S. Ulanday" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <div class="pp-fallback">
+            <span>📷</span>
+            <small>Professional Photo</small>
+          </div>
+        </div>
+      </div>
       <div class="b b2 light">
         <div class="b-label">Who I Am</div>
         <div class="b-title">Emelyn S. Ulanday</div>
-        <div class="b-text">4th-year BEED student at Daraga Community College, Daraga, Albay. I spent three transformative months as a pre-service teacher, working with young learners who challenged and inspired me every day.</div>
+        <div class="b-text">4th-year Bachelor of Elementary Education (BEED) student at Daraga Community College, Salvacion, Daraga, Albay. I completed my 360-hour teaching internship at Malobago Elementary School Site 2, where I worked with 20 young learners and discovered the true meaning of purposeful teaching.</div>
       </div>
       <div class="b b3 dark">
-        <div class="b-label">Practice Teaching</div>
-        <div class="b-num">3</div>
-        <div class="b-text">Months of hands-on classroom experience</div>
+        <div class="b-label">Internship Period</div>
+        <div class="b-num">360</div>
+        <div class="b-text">Hours of Pre-Service Teaching · Aug – Nov 2024</div>
       </div>
       <div class="b b4 soft">
-        <div class="b-label">Students</div>
-        <div class="b-num" style="color:var(--p6)">20</div>
-        <div class="b-text" style="color:var(--ink2);font-size:.75rem">Learners mentored</div>
+        <div class="b-label">Assigned School</div>
+        <div class="b-num" style="font-size:1rem;line-height:1.4;color:var(--p6)">Malobago ES Site 2</div>
+        <div class="b-text" style="color:var(--ink2);font-size:.75rem">Daraga, Albay, Philippines</div>
       </div>
       <div class="b b5 light">
-        <div class="b-label">✨ Teaching Philosophy</div>
-        <div class="b-text" style="font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--ink2);">"Education is about building relationships, fostering curiosity, and empowering students to become lifelong learners. Every lesson I design starts with: How will this help my students grow as thinkers and as people?"</div>
+        <div class="b-label">✨ Purpose of This Portfolio</div>
+        <div class="b-text" style="font-family:var(--serif);font-style:italic;font-size:.92rem;color:var(--ink2);">This e-portfolio documents my growth and developmental experiences as a pre-service teacher across all seven domains of the Philippine Professional Standards for Teachers (PPST). It captures not only my lessons and outputs, but the reflections, challenges, and breakthroughs that shaped me into the educator I am becoming.</div>
+      </div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="info-cards" data-a="up" data-d="3">
+      <div class="ic">
+        <div class="ic-ico">🎓</div>
+        <div class="ic-label">Program</div>
+        <div class="ic-val">Bachelor of Elementary Education (BEED)</div>
+      </div>
+      <div class="ic">
+        <div class="ic-ico">🏫</div>
+        <div class="ic-label">Institution</div>
+        <div class="ic-val">Daraga Community College</div>
+      </div>
+      <div class="ic">
+        <div class="ic-ico">📍</div>
+        <div class="ic-label">Practice School</div>
+        <div class="ic-val">Malobago Elementary School Site 2</div>
+      </div>
+      <div class="ic">
+        <div class="ic-ico">📅</div>
+        <div class="ic-label">School Year</div>
+        <div class="ic-val">2025 – 2026</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- EXPERIENCE -->
-<section id="experience" class="sec">
+<!-- ══ ACKNOWLEDGMENT ══ -->
+<section id="acknowledgment" class="sec ack-sec">
   <div class="wrap">
-    <p class="s-ey" data-a="up">Experience</p>
-    <h2 class="s-h" data-a="up" data-d="1">Practice Teaching Journey</h2>
-    <div class="s-ln" data-a="zoom" data-d="2"></div>
-    <div class="xtl">
-      <div class="xcard" data-a="up" data-d="1">
-        <div class="xdate">Aug – Nov 2024</div>
-        <div class="xrole">Pre-Service Teacher (Student Teacher)</div>
-        <div class="xorg">📍 Malobago Elementary School Site 2 · Daraga, Albay, Philippines</div>
-        <div class="xdesc">Taught multiple subjects to a class of 20 Grade [X] learners. Designed and delivered 10+ K–12-aligned lesson plans, facilitated collaborative activities, administered quizzes and formative assessments, and submitted weekly reflective journals. Worked closely with the cooperating teacher to continuously improve instruction.</div>
-        <div class="chips">
-          <span class="chip">Lesson Planning</span><span class="chip">Classroom Management</span>
-          <span class="chip">Formative Assessment</span><span class="chip">Student Engagement</span>
-          <span class="chip">Differentiated Instruction</span><span class="chip">Reflective Practice</span>
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey" data-a="up">Section 2</p>
+      <h2 class="s-h" data-a="up" data-d="1">Acknowledgment</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+    </div>
+    <div class="ack-card" data-a="up" data-d="2">
+      <div class="ack-quote">"</div>
+      <p class="ack-text">
+        I extend my deepest gratitude to all those who made this teaching internship a transformative and meaningful experience.
+      </p>
+      <p class="ack-text">
+        To my <strong>cooperating teacher, Ritchel L. Echemane</strong>, thank you for your unwavering patience, guidance, and wisdom. You modeled what it truly means to be a dedicated and compassionate educator. Your mentorship was my greatest classroom.
+      </p>
+      <p class="ack-text">
+        To the <strong>administration and staff of Malobago Elementary School Site 2</strong>, thank you for welcoming me into your community with warmth and professionalism. Your support created a safe space for me to grow.
+      </p>
+      <p class="ack-text">
+        To my <strong>professors and internship coordinator at Daraga Community College</strong>, thank you for the rigorous preparation, the constructive feedback, and the belief you placed in each one of us pre-service teachers.
+      </p>
+      <p class="ack-text">
+        To my <strong>family and friends</strong>, your encouragement, prayers, and love carried me through every challenging day in the classroom.
+      </p>
+      <p class="ack-text">
+        And to my <strong>20 wonderful students</strong> — you were not just my learners; you were my greatest teachers. Every smile, every question, and every moment of understanding reminded me why I chose this path.
+      </p>
+      <p class="ack-sig">— Emelyn S. Ulanday</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CERTIFICATE ══ -->
+<section id="certificate" class="sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey" data-a="up">Section 3</p>
+      <h2 class="s-h" data-a="up" data-d="1">Certificate of Completion</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+      <p style="font-size:.88rem;color:var(--ink2);max-width:520px;margin:0 auto 2rem;" data-a="up" data-d="3">360 Hours of Pre-Service Teaching — Teaching Internship</p>
+    </div>
+    <div class="cert-wrap" data-a="up" data-d="3">
+      <div class="cert-placeholder">
+        <div class="cert-icon">🎓</div>
+        <div class="cert-title">Certificate of Completion</div>
+        <div class="cert-sub">Upload your certificate here as a PDF or image</div>
+        <div class="cert-hint">Replace this placeholder with:<br><code>&lt;img src="img/certificate.jpg" alt="Certificate"&gt;</code><br>or embed a PDF using an &lt;iframe&gt;</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROFESSIONAL READINGS ══ -->
+<section id="readings" class="sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey" data-a="up">Section 4</p>
+      <h2 class="s-h" data-a="up" data-d="1">Professional Readings</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+      <p style="font-size:.88rem;color:var(--ink2);max-width:560px;margin:0 auto 2rem;" data-a="up" data-d="3">Selected readings that shaped my understanding of pedagogy, child development, and professional teaching practice.</p>
+    </div>
+    <div class="read-grid" data-a="up" data-d="3">
+      <div class="read-card">
+        <div class="read-num">01</div>
+        <div class="read-body">
+          <div class="read-title">Philippine Professional Standards for Teachers (PPST)</div>
+          <div class="read-src">DepEd Order No. 42, s. 2017 · Department of Education</div>
+          <div class="read-note">The foundational framework guiding my internship. It defined the competencies I aimed to develop across seven domains and helped me set measurable goals for my teaching practice.</div>
+          <a href="https://www.deped.gov.ph" target="_blank" class="read-link">View Resource →</a>
         </div>
       </div>
-      <div class="xcard" data-a="up" data-d="2">
-        <div class="xdate">2021 – Present</div>
-        <div class="xrole">Bachelor of Elementary Education (BEED)</div>
-        <div class="xorg">📍 Daraga Community College · Daraga, Albay, Philippines</div>
-        <div class="xdesc">Currently in 4th year. Coursework includes curriculum development, educational psychology, child and adolescent development, instructional design, assessment and evaluation, and values education.</div>
-        <div class="chips">
-          <span class="chip">Curriculum Development</span><span class="chip">Educational Psychology</span>
-          <span class="chip">Child Development</span><span class="chip">Values Education</span><span class="chip">Assessment &amp; Evaluation</span>
+      <div class="read-card">
+        <div class="read-num">02</div>
+        <div class="read-body">
+          <div class="read-title">K–12 Curriculum Guide for Elementary Grades</div>
+          <div class="read-src">Department of Education Philippines</div>
+          <div class="read-note">Essential reference for aligning my lesson plans with the K–12 curriculum framework. Guided my understanding of competencies, learning objectives, and subject-area progressions.</div>
+          <a href="https://www.deped.gov.ph" target="_blank" class="read-link">View Resource →</a>
+        </div>
+      </div>
+      <div class="read-card">
+        <div class="read-num">03</div>
+        <div class="read-body">
+          <div class="read-title">Child and Adolescent Development</div>
+          <div class="read-src">Recommended Textbook · BEED Curriculum</div>
+          <div class="read-note">Deepened my understanding of developmental stages, learning readiness, and the social-emotional needs of elementary learners — helping me design more responsive and inclusive lessons.</div>
+          <a href="#" class="read-link">View Resource →</a>
+        </div>
+      </div>
+      <div class="read-card">
+        <div class="read-num">04</div>
+        <div class="read-body">
+          <div class="read-title">Assessment for Learning: Putting It Into Practice</div>
+          <div class="read-src">Black & Wiliam · Educational Research</div>
+          <div class="read-note">Informed my use of formative assessment strategies — exit tickets, observation, questioning — and helped me understand how feedback drives student improvement and engagement.</div>
+          <a href="#" class="read-link">View Resource →</a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- LESSONS -->
+<!-- ══ PPST REFLECTIONS ══ -->
+<section id="ppst" class="sec">
+  <div class="wrap">
+    <div class="s-c" style="margin-bottom:2.5rem">
+      <p class="s-ey" data-a="up">Section 5</p>
+      <h2 class="s-h" data-a="up" data-d="1">PPST Domain Reflections</h2>
+      <div class="s-ln" data-a="zoom" data-d="2"></div>
+      <p style="font-size:.88rem;color:var(--ink2);max-width:600px;margin:0 auto 2rem;" data-a="up" data-d="3">Reflections on my developmental experiences across the seven domains of the Philippine Professional Standards for Teachers. Click <strong>View Full Reflection</strong> on any domain to see detailed evidence, numbered experiences, and embedded documents.</p>
+    </div>
+
+    <!-- Domain A -->
+    <div class="ppst-domain" data-a="up" data-d="1">
+      <div class="ppst-hd">
+        <div class="ppst-letter">A</div>
+        <div>
+          <div class="ppst-tag">Domain 1</div>
+          <div class="ppst-title">Content Knowledge and Pedagogy</div>
+        </div>
+      </div>
+      <div class="ppst-body">
+        <div class="ppst-col">
+          <div class="ppst-sub">Experiences</div>
+          <ul class="ppst-list">
+            <li>Designed and delivered 10+ lesson plans aligned with the K–12 curriculum across Math, Science, English, Araling Panlipunan, MAPEH, and Values Education.</li>
+            <li>Applied the Concrete-Pictorial-Abstract (CPA) approach in teaching Mathematics to make abstract concepts tangible for young learners.</li>
+            <li>Used inquiry-based strategies in Science lessons (e.g., The Water Cycle) to encourage student-led exploration and discovery.</li>
+            <li>Incorporated interactive grammar games and role-play activities to make language lessons engaging and contextual.</li>
+          </ul>
+        </div>
+        <div class="ppst-col">
+          <div class="ppst-sub">Reflections</div>
+          <p class="ppst-ref">Teaching content effectively required me to deeply understand the material first — I could not simply follow the textbook. I learned to anticipate student misconceptions, especially in Math, and to have multiple explanations ready. I realized that pedagogy is not a one-size-fits-all approach: the same concept might need a different entry point depending on the learner. This domain pushed me to become not just a teacher of subjects, but a teacher of students.</p>
+        </div>
+      </div>
+      <div class="ppst-footer-row">
+        <a href="ppst-details.html#domain-a" class="ppst-view-btn">
+          View Full Reflection & Evidence
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Domain B -->
+    <div class="ppst-domain" data-a="up" data-d="1">
+      <div class="ppst-hd">
+        <div class="ppst-letter">B</div>
+        <div>
+          <div class="ppst-tag">Domain 2</div>
+          <div class="ppst-title">Learning Environment</div>
+        </div>
+      </div>
+      <div class="ppst-body">
+        <div class="ppst-col">
+          <div class="ppst-sub">Experiences</div>
+          <ul class="ppst-list">
+            <li>Arranged classroom seating to promote collaborative learning and ease of movement during group activities.</li>
+            <li>Established classroom routines (entry, transitions, dismissal) that minimized disruptions and maximized learning time.</li>
+            <li>Created a print-rich environment with word walls, learning charts, and student-produced displays.</li>
+            <li>Addressed behavioral concerns using positive reinforcement — praise, sticker charts, and class rewards rather than punitive measures.</li>
+          </ul>
+        </div>
+        <div class="ppst-col">
+          <div class="ppst-sub">Reflections</div>
+          <p class="ppst-ref">I underestimated how much the physical and emotional environment shapes learning. In my first weeks, I focused on my lesson content and often overlooked transitions — and that is where most disruptions happened. Observing my cooperating teacher showed me that a well-managed classroom is built over time through consistent routines and genuine relationships. By Week 6, our classroom had a rhythm, and I felt the difference in student focus and participation.</p>
+        </div>
+      </div>
+      <div class="ppst-footer-row">
+        <a href="ppst-details.html#domain-b" class="ppst-view-btn">
+          View Full Reflection & Evidence
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Domain C -->
+    <div class="ppst-domain" data-a="up" data-d="2">
+      <div class="ppst-hd">
+        <div class="ppst-letter">C</div>
+        <div>
+          <div class="ppst-tag">Domain 3</div>
+          <div class="ppst-title">Diversity of Learners</div>
+        </div>
+      </div>
+      <div class="ppst-body">
+        <div class="ppst-col">
+          <div class="ppst-sub">Experiences</div>
+          <ul class="ppst-list">
+            <li>Identified learners with varying ability levels and adapted instruction through differentiated tasks and tiered activities.</li>
+            <li>Provided additional scaffolding (visual aids, manipulatives, peer support) for struggling learners during Math and English lessons.</li>
+            <li>Used flexible grouping strategies — pairing advanced learners with those needing support in collaborative tasks.</li>
+            <li>Incorporated culturally relevant examples and local contexts (community helpers, folk dances) to make content relatable to all learners.</li>
+          </ul>
+        </div>
+        <div class="ppst-col">
+          <div class="ppst-sub">Reflections</div>
+          <p class="ppst-ref">Every child in my class of 20 was unique — different learning speeds, different home situations, different strengths. I had to learn to see each student as an individual, not as "the class." Differentiation was the hardest skill to develop, but also the most rewarding. When a struggling student finally grasped a concept through a different approach I had tried, that moment of understanding made every extra hour of planning worthwhile.</p>
+        </div>
+      </div>
+      <div class="ppst-footer-row">
+        <a href="ppst-details.html#domain-c" class="ppst-view-btn">
+          View Full Reflection & Evidence
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Domain D -->
+    <div class="ppst-domain" data-a="up" data-d="2">
+      <div class="ppst-hd">
+        <div class="ppst-letter">D</div>
+        <div>
+          <div class="ppst-tag">Domain 4</div>
+          <div class="ppst-title">Curriculum and Planning</div>
+        </div>
+      </div>
+      <div class="ppst-body">
+        <div class="ppst-col">
+          <div class="ppst-sub">Experiences</div>
+          <ul class="ppst-list">
+            <li>Prepared detailed Daily Lesson Plans (DLPs) for each teaching day, aligned to the DepEd K–12 curriculum guides and most essential learning competencies (MELCs).</li>
+            <li>Sequenced lessons to build on prior knowledge — ensuring conceptual continuity across weeks.</li>
+            <li>Integrated cross-curricular connections (e.g., linking Math patterns to Art and Music in MAPEH lessons).</li>
+            <li>Submitted weekly lesson plans for review and incorporated feedback from the cooperating teacher into subsequent plans.</li>
+          </ul>
+        </div>
+        <div class="ppst-col">
+          <div class="ppst-sub">Reflections</div>
+          <p class="ppst-ref">Planning a lesson is one thing — planning a curriculum is another. I learned to think beyond the single lesson and consider where students are coming from and where they need to go. Time management within lessons was a consistent challenge; I often planned too much content and had to learn to prioritize depth over breadth. My cooperating teacher's advice — "plan for the learner, not for the subject" — became my guiding principle.</p>
+        </div>
+      </div>
+      <div class="ppst-footer-row">
+        <a href="ppst-details.html#domain-d" class="ppst-view-btn">
+          View Full Reflection & Evidence
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Domain E -->
+    <div class="ppst-domain" data-a="up" data-d="3">
+      <div class="ppst-hd">
+        <div class="ppst-letter">E</div>
+        <div>
+          <div class="ppst-tag">Domain 5</div>
+          <div class="ppst-title">Assessment and Reporting</div>
+        </div>
+      </div>
+      <div class="ppst-body">
+        <div class="ppst-col">
+          <div class="ppst-sub">Experiences</div>
+          <ul class="ppst-list">
+            <li>Administered formative assessments (oral questioning, exit tickets, seatwork, short quizzes) to monitor student understanding throughout each lesson.</li>
+            <li>Prepared and administered summative assessments aligned to competencies covered during the internship period.</li>
+            <li>Recorded and analyzed student performance data to identify learning gaps and adjust subsequent instruction.</li>
+            <li>Communicated student progress to the cooperating teacher and participated in feedback sessions with learners.</li>
+          </ul>
+        </div>
+        <div class="ppst-col">
+          <div class="ppst-sub">Reflections</div>
+          <p class="ppst-ref">Assessment transformed from something I did to students into something I did for students. I learned that the real purpose of assessment is not to grade, but to understand. Watching students' faces during oral questioning told me more about their comprehension than any written test. I also struggled at first with providing meaningful written feedback — I defaulted to "Good job!" — but learned to make feedback specific, actionable, and kind.</p>
+        </div>
+      </div>
+      <div class="ppst-footer-row">
+        <a href="ppst-details.html#domain-e" class="ppst-view-btn">
+          View Full Reflection & Evidence
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Domain F -->
+    <div class="ppst-domain" data-a="up" data-d="3">
+      <div class="ppst-hd">
+        <div class="ppst-letter">F</div>
+        <div>
+          <div class="ppst-tag">Domain 6</div>
+          <div class="ppst-title">Community Linkages and Professional Engagement</div>
+        </div>
+      </div>
+      <div class="ppst-body">
+        <div class="ppst-col">
+          <div class="ppst-sub">Experiences</div>
+          <ul class="ppst-list">
+            <li>Participated in school-wide activities and flag ceremonies, integrating as a professional member of the school community.</li>
+            <li>Maintained respectful and professional communication with school administrators, fellow teachers, and non-teaching staff.</li>
+            <li>Engaged with parents informally during dismissal time to share student updates and build home-school partnerships.</li>
+            <li>Attended school meetings and submitted all required internship documents (lesson plans, journals, reports) promptly and professionally.</li>
+          </ul>
+        </div>
+        <div class="ppst-col">
+          <div class="ppst-sub">Reflections</div>
+          <p class="ppst-ref">Teaching does not happen in isolation. The school is a community, and being a professional member of that community required more than just classroom competence. I learned to navigate professional relationships with grace — to seek guidance without appearing incompetent, to collaborate without overstepping, and to represent Daraga Community College with pride in every interaction. This domain reminded me that education is a shared responsibility between the school and the community it serves.</p>
+        </div>
+      </div>
+      <div class="ppst-footer-row">
+        <a href="ppst-details.html#domain-f" class="ppst-view-btn">
+          View Full Reflection & Evidence
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Domain G -->
+    <div class="ppst-domain" data-a="up" data-d="4">
+      <div class="ppst-hd">
+        <div class="ppst-letter">G</div>
+        <div>
+          <div class="ppst-tag">Domain 7</div>
+          <div class="ppst-title">Personal Growth and Professional Development</div>
+        </div>
+      </div>
+      <div class="ppst-body">
+        <div class="ppst-col">
+          <div class="ppst-sub">Experiences</div>
+          <ul class="ppst-list">
+            <li>Maintained a weekly reflective journal documenting teaching experiences, challenges, and insights throughout the 360-hour internship.</li>
+            <li>Sought and applied feedback from the cooperating teacher and field supervisor to continuously improve instructional practice.</li>
+            <li>Engaged in self-assessment after each teaching day — identifying what worked, what did not, and why.</li>
+            <li>Read professional literature on effective pedagogy, child development, and assessment to supplement practical experience.</li>
+          </ul>
+        </div>
+        <div class="ppst-col">
+          <div class="ppst-sub">Reflections</div>
+          <p class="ppst-ref">This domain is the heart of becoming a professional teacher. Reflective practice was not a requirement to complete — it became a habit of mind. I learned that the best teachers are the ones who never stop learning. Every lesson taught me something about my students, my subject, and myself. I entered this internship as a student; I am leaving as a beginning professional — humbled, inspired, and deeply committed to lifelong growth in this noble profession.</p>
+        </div>
+      </div>
+      <div class="ppst-footer-row">
+        <a href="ppst-details.html#domain-g" class="ppst-view-btn">
+          View Full Reflection & Evidence
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Quick link to full page -->
+    <div style="text-align:center;margin-top:2rem;" data-a="up" data-d="4">
+      <a href="ppst-details.html" class="btn btn-fill">View Complete PPST Documentation →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ LESSONS ══ -->
 <section id="lessons" class="sec">
   <div class="wrap">
     <div class="s-c" style="margin-bottom:2.5rem">
-      <p class="s-ey" data-a="up">Sample Work</p>
+      <p class="s-ey" data-a="up">Section 6 · Sample Work</p>
       <h2 class="s-h" data-a="up" data-d="1">Lesson Plans</h2>
       <div class="s-ln" data-a="zoom" data-d="2"></div>
     </div>
@@ -471,7 +524,7 @@
   </div>
 </section>
 
-<!-- GALLERY -->
+<!-- ══ GALLERY ══ -->
 <section id="gallery" class="sec">
   <div class="wrap">
     <div class="s-c" style="margin-bottom:2.5rem">
@@ -510,48 +563,42 @@
   </div>
 </section>
 
-<!-- REFLECTIONS -->
-<section id="reflection" class="sec">
+<!-- ══ TEACHING PHILOSOPHY ══ -->
+<section id="philosophy" class="sec">
   <div class="wrap">
     <div class="s-c" style="margin-bottom:2.5rem">
-      <p class="s-ey" data-a="up">Growth &amp; Learning</p>
-      <h2 class="s-h" data-a="up" data-d="1">Reflections</h2>
+      <p class="s-ey" data-a="up">Section 7</p>
+      <h2 class="s-h" data-a="up" data-d="1">Teaching Philosophy</h2>
       <div class="s-ln" data-a="zoom" data-d="2"></div>
+      <p style="font-size:.85rem;color:var(--ink3);font-style:italic;" data-a="up" data-d="3">As a Beginning Teacher</p>
     </div>
-    <div class="rg">
-      <div class="rc" data-wk="01" data-a="up" data-d="1">
-        <div class="rc-lbl">Week 1 · Getting Started</div>
-        <p class="rc-text">My first week was nerve-wracking and exciting all at once. I learned quickly that no lesson plan survives first contact with students — flexibility is a teacher's most important tool.</p>
-      </div>
-      <div class="rc" data-wk="04" data-a="up" data-d="2">
-        <div class="rc-lbl">Week 4 · Challenges</div>
-        <p class="rc-text">Managing a class of 20 students was a real challenge. Watching my cooperating teacher showed me that true discipline is built on genuine respect and care — not just rules.</p>
-      </div>
-      <div class="rc" data-wk="12" data-a="up" data-d="3">
-        <div class="rc-lbl">Week 12 · Looking Back</div>
-        <p class="rc-text">By the final week, our classroom had become a real community. I felt my own growth clearly and knew — with absolute certainty — that teaching is my calling.</p>
+    <div class="phil-wrap" data-a="up" data-d="3">
+      <div class="phil-quote">"</div>
+      <div class="phil-content">
+        <p class="phil-p">I believe that every child comes to school with a story — a unique background, a distinct way of seeing the world, and an inherent capacity to grow. As a beginning teacher, my role is not simply to deliver content, but to create the conditions in which every child feels seen, valued, and capable.</p>
+        <p class="phil-p">Teaching, for me, begins with relationships. Before a student can truly learn from me, they must first trust me. I am committed to building that trust through consistency, genuine care, and the conviction that I believe in every learner's potential — even when they do not yet believe in it themselves.</p>
+        <p class="phil-p">I approach every lesson with the question: <em>How will this help my students grow — not just as learners, but as people?</em> I believe in active, meaningful learning — learning that connects to students' lives, that challenges them to think critically, and that empowers them to apply knowledge beyond the walls of the classroom.</p>
+        <p class="phil-p">I also believe that great teachers are lifelong learners. My three months as a pre-service teacher at Malobago Elementary School Site 2 taught me more than any textbook could. I learned that flexibility, empathy, and reflective practice are as essential as any pedagogical skill. I am still learning — and I always will be.</p>
+        <p class="phil-p">As I begin my professional journey, I carry with me this conviction: <em>Education is the most powerful act of hope we can offer to a child.</em> I am honored to be a part of that work.</p>
+        <div class="phil-sig">— Emelyn S. Ulanday, Beginning Teacher</div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- SKILLS -->
-<section id="skills" class="sec">
-  <div class="wrap">
-    <div class="sk-g">
-      <div data-a="left">
+    <!-- PPST Skills -->
+    <div class="sk-g" data-a="up" data-d="4" style="margin-top:4rem">
+      <div>
         <p class="s-ey">Competencies</p>
         <h2 class="s-h">Teaching Skills</h2>
         <div class="s-ln"></div>
         <div class="sk-intro">
-          <p>Through three months of hands-on pre-service teaching with 20 students, I developed and refined core competencies essential to becoming an effective elementary educator.</p>
+          <p>Through 360 hours of pre-service teaching with 20 students, I developed and refined core competencies aligned with the PPST framework.</p>
           <p>Each skill was sharpened through real classroom experience, daily reflection, and consistent feedback from my cooperating teacher and field supervisor.</p>
         </div>
       </div>
-      <div class="sk-list" data-a="right" data-d="1" id="skgrid">
-        <div class="sk-row"><div class="sk-top"><span class="sk-name">Lesson Planning</span><span class="sk-pct">92%</span></div><div class="sk-track"><div class="sk-fill" data-w="92"></div></div></div>
+      <div class="sk-list" id="skgrid">
+        <div class="sk-row"><div class="sk-top"><span class="sk-name">Lesson Planning &amp; Curriculum Alignment</span><span class="sk-pct">92%</span></div><div class="sk-track"><div class="sk-fill" data-w="92"></div></div></div>
         <div class="sk-row"><div class="sk-top"><span class="sk-name">Classroom Management</span><span class="sk-pct">85%</span></div><div class="sk-track"><div class="sk-fill" data-w="85"></div></div></div>
-        <div class="sk-row"><div class="sk-top"><span class="sk-name">Student Engagement</span><span class="sk-pct">88%</span></div><div class="sk-track"><div class="sk-fill" data-w="88"></div></div></div>
+        <div class="sk-row"><div class="sk-top"><span class="sk-name">Student Engagement &amp; Diversity</span><span class="sk-pct">88%</span></div><div class="sk-track"><div class="sk-fill" data-w="88"></div></div></div>
         <div class="sk-row"><div class="sk-top"><span class="sk-name">Formative Assessment</span><span class="sk-pct">80%</span></div><div class="sk-track"><div class="sk-fill" data-w="80"></div></div></div>
         <div class="sk-row"><div class="sk-top"><span class="sk-name">Differentiated Instruction</span><span class="sk-pct">78%</span></div><div class="sk-track"><div class="sk-fill" data-w="78"></div></div></div>
         <div class="sk-row"><div class="sk-top"><span class="sk-name">Reflective Practice</span><span class="sk-pct">90%</span></div><div class="sk-track"><div class="sk-fill" data-w="90"></div></div></div>
@@ -560,23 +607,56 @@
   </div>
 </section>
 
-<!-- FEEDBACK -->
+<!-- ══ FEEDBACK ══ -->
 <section id="feedback" class="sec">
   <div class="wrap">
     <div class="s-c" style="margin-bottom:2.5rem">
       <p class="s-ey" data-a="up">Cooperating Teacher</p>
-      <h2 class="s-h" data-a="up" data-d="1">Feedback</h2>
+      <h2 class="s-h" data-a="up" data-d="1">Feedback Received</h2>
       <div class="s-ln" data-a="zoom" data-d="2"></div>
     </div>
     <div class="fb-card" data-a="up" data-d="2">
-      <div class="fb-stars">🌸 🌸 🌸 🌸 🌸</div>
+      <div class="fb-stars">⭐ ⭐ ⭐ ⭐ ⭐</div>
       <p class="fb-text">"Emelyn demonstrated exceptional growth and dedication throughout her pre-service teaching. She approaches every lesson with genuine care, creativity, and a deep commitment to her students' learning. Her reflective practice and adaptability are hallmarks of a truly promising educator."</p>
-      <p class="fb-by">— Ritchel L. Echemane · Malobago Elementary School Site 2</p>
+      <p class="fb-by">— Ritchel L. Echemane · Cooperating Teacher · Malobago Elementary School Site 2</p>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
+<!-- ══ EXPERIENCE / TIMELINE ══ -->
+<section id="experience" class="sec">
+  <div class="wrap">
+    <p class="s-ey" data-a="up">Background</p>
+    <h2 class="s-h" data-a="up" data-d="1">Internship Journey</h2>
+    <div class="s-ln" data-a="zoom" data-d="2"></div>
+    <div class="xtl">
+      <div class="xcard" data-a="up" data-d="1">
+        <div class="xdate">Aug – Nov 2024 · 360 Hours</div>
+        <div class="xrole">Pre-Service Teacher (Student Teacher)</div>
+        <div class="xorg">📍 Malobago Elementary School Site 2 · Daraga, Albay, Philippines</div>
+        <div class="xdesc">Taught multiple subjects to a class of 20 Grade [X] learners. Designed and delivered 10+ K–12-aligned lesson plans, facilitated collaborative activities, administered formative and summative assessments, and submitted weekly reflective journals. Worked closely with Cooperating Teacher Ritchel L. Echemane to continuously improve instruction across all seven PPST domains.</div>
+        <div class="chips">
+          <span class="chip">Lesson Planning</span><span class="chip">Classroom Management</span>
+          <span class="chip">Formative Assessment</span><span class="chip">Student Engagement</span>
+          <span class="chip">Differentiated Instruction</span><span class="chip">Reflective Practice</span>
+          <span class="chip">PPST-Aligned Teaching</span>
+        </div>
+      </div>
+      <div class="xcard" data-a="up" data-d="2">
+        <div class="xdate">2021 – Present</div>
+        <div class="xrole">Bachelor of Elementary Education (BEED)</div>
+        <div class="xorg">📍 Daraga Community College · Salvacion, Daraga, Albay, 4501</div>
+        <div class="xdesc">Currently in 4th year. Coursework includes curriculum development, educational psychology, child and adolescent development, instructional design, assessment and evaluation, values education, and the Philippine Professional Standards for Teachers (PPST) framework.</div>
+        <div class="chips">
+          <span class="chip">Curriculum Development</span><span class="chip">Educational Psychology</span>
+          <span class="chip">Child Development</span><span class="chip">Values Education</span><span class="chip">Assessment &amp; Evaluation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
 <section id="contact" class="sec">
   <div class="wrap">
     <div class="cg">
@@ -584,18 +664,18 @@
         <p class="s-ey">Get in Touch</p>
         <h2 class="s-h">Let's connect</h2>
         <div class="s-ln"></div>
-        <p style="font-size:.9rem;color:var(--ink2);line-height:1.9;">Thank you for visiting my portfolio. I'd love to hear from professors, mentors, and fellow educators. Feel free to reach out!</p>
+        <p style="font-size:.9rem;color:var(--ink2);line-height:1.9;">Thank you for visiting my teaching internship e-portfolio. I'd love to hear from professors, cooperating teachers, mentors, and fellow educators. Feel free to reach out!</p>
         <div class="c-socials">
           <a href="mailto:your@email.com" class="csoc">
-            <div class="csoc-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C85C78" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
+            <div class="csoc-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--p5)" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div>
             <div><div class="csoc-t">Email</div><div class="csoc-v">your@email.com</div></div>
           </a>
           <a href="https://facebook.com" class="csoc" target="_blank">
-            <div class="csoc-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C85C78" stroke-width="1.8"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div>
+            <div class="csoc-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--p5)" stroke-width="1.8"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div>
             <div><div class="csoc-t">Facebook</div><div class="csoc-v">@yourprofile</div></div>
           </a>
           <a href="https://linkedin.com" class="csoc" target="_blank">
-            <div class="csoc-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C85C78" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="8" y1="11" x2="8" y2="16"/><line x1="8" y1="8" x2="8" y2="8.5"/><line x1="12" y1="16" x2="12" y2="11"/><path d="M12 13a2 2 0 0 1 4 0v3"/></svg></div>
+            <div class="csoc-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--p5)" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="8" y1="11" x2="8" y2="16"/><line x1="8" y1="8" x2="8" y2="8.5"/><line x1="12" y1="16" x2="12" y2="11"/><path d="M12 13a2 2 0 0 1 4 0v3"/></svg></div>
             <div><div class="csoc-t">LinkedIn</div><div class="csoc-v">@yourprofile</div></div>
           </a>
         </div>
@@ -616,225 +696,15 @@
 </section>
 
 <footer>
-  <p>© 2025 <strong>Emelyn S. Ulanday</strong> &nbsp;·&nbsp; Pre-Service Teacher Portfolio &nbsp;·&nbsp; Daraga Community College, Albay</p>
+  <div class="footer-inst">
+    <p class="footer-name"><strong>Emelyn S. Ulanday</strong></p>
+    <p class="footer-detail">Pre-Service Teacher · Bachelor of Elementary Education (BEED) 4th Year</p>
+    <p class="footer-detail">Daraga Community College · Salvacion, Daraga, Albay, 4501</p>
+    <p class="footer-detail">Teaching Internship @ Malobago Elementary School Site 2 · Aug – Nov 2024</p>
+  </div>
+  <p class="footer-copy">© 2025 Emelyn S. Ulanday · Teaching Internship E-Portfolio · School Year 2025–2026</p>
 </footer>
 
-<script>
-/* ── Nav scroll ── */
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => nav.classList.toggle('on', scrollY > 50), { passive:true });
-
-/* ── Parallax ── */
-const hbg = document.getElementById('hbg');
-window.addEventListener('scroll', () => {
-  if (scrollY < innerHeight) hbg.style.transform = `translateY(${scrollY * 0.28}px)`;
-}, { passive:true });
-
-/* ── Scroll reveal ── */
-const io = new IntersectionObserver(entries =>
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } }),
-  { threshold:0.08 }
-);
-document.querySelectorAll('[data-a]').forEach(el => io.observe(el));
-
-/* ── Skill bars ── */
-const skio = new IntersectionObserver(entries =>
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.querySelectorAll('.sk-fill').forEach(b => b.style.width = b.dataset.w + '%');
-      skio.unobserve(e.target);
-    }
-  }), { threshold:0.3 }
-);
-const sg = document.getElementById('skgrid');
-if (sg) skio.observe(sg);
-
-/* ── Gallery slider ── */
-let cur = 0; const total = 3;
-const track = document.getElementById('galTrack');
-const dots  = document.querySelectorAll('.gdot');
-function goTo(n) {
-  cur = (n + total) % total;
-  track.style.transform = `translateX(-${cur * 100}%)`;
-  dots.forEach((d,i) => d.classList.toggle('on', i === cur));
-}
-document.getElementById('galNext').addEventListener('click', () => goTo(cur+1));
-document.getElementById('galPrev').addEventListener('click', () => goTo(cur-1));
-dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.i)));
-setInterval(() => goTo(cur+1), 5000);
-let touchX = 0;
-track.addEventListener('touchstart', e => touchX = e.touches[0].clientX, { passive:true });
-track.addEventListener('touchend',   e => {
-  const diff = touchX - e.changedTouches[0].clientX;
-  if (Math.abs(diff) > 50) goTo(diff > 0 ? cur+1 : cur-1);
-}, { passive:true });
-
-/* ══════════════════════════════════════════
-   PAGE-WIDE THEME SYSTEM
-══════════════════════════════════════════ */
-const root = document.documentElement;
-
-/* Each theme defines ALL CSS variables that affect color across the page */
-const THEMES = [
-  {
-    id:'blush-pink', name:'Blush Pink',
-    nav:'#9B3A54', // nav color swatch
-    hero:['rgba(253,238,241,.72)','rgba(250,215,222,.80)','rgba(248,200,212,.90)','rgba(255,249,250,1)'],
-    vars:{
-      '--p1':'#FDEEF1','--p2':'#FAD7DE','--p3':'#F4AEBB','--p4':'#E8839A',
-      '--p5':'#C85C78','--p6':'#9B3A54','--p7':'#6E2039',
-      '--bg':'#FFF9FA','--bg2':'#FEF3F5',
-      '--ink':'#230F17','--ink2':'#5E2E3C','--ink3':'#AA7888',
-      '--bdr':'rgba(232,131,154,0.18)',
-    }
-  },
-  {
-    id:'gold-cream', name:'Gold & Cream',
-    nav:'#8B6914',
-    hero:['rgba(255,248,230,.75)','rgba(255,237,180,.82)','rgba(255,224,140,.88)','rgba(255,252,240,1)'],
-    vars:{
-      '--p1':'#FFF8E6','--p2':'#FDECC8','--p3':'#F8D68A','--p4':'#E8B84B',
-      '--p5':'#C49020','--p6':'#8B6914','--p7':'#5C440A',
-      '--bg':'#FFFDF5','--bg2':'#FFF9E8',
-      '--ink':'#2A1F05','--ink2':'#5A4510','--ink3':'#9A8050',
-      '--bdr':'rgba(232,184,75,0.2)',
-    }
-  },
-  {
-    id:'rose-gold', name:'Rose Gold',
-    nav:'#8B4A5C',
-    hero:['rgba(255,235,238,.74)','rgba(255,210,218,.82)','rgba(245,180,192,.90)','rgba(255,245,247,1)'],
-    vars:{
-      '--p1':'#FFEBEE','--p2':'#FFD2DA','--p3':'#F5B4C0','--p4':'#E88498',
-      '--p5':'#C8566C','--p6':'#8B4A5C','--p7':'#5E2E3C',
-      '--bg':'#FFF7F8','--bg2':'#FFEFF2',
-      '--ink':'#2A0F14','--ink2':'#5E2A34','--ink3':'#AA7888',
-      '--bdr':'rgba(232,132,152,0.18)',
-    }
-  },
-  {
-    id:'sky-blue', name:'Sky & Lilac',
-    nav:'#4A5E8B',
-    hero:['rgba(230,238,255,.74)','rgba(208,220,255,.82)','rgba(190,205,250,.90)','rgba(245,248,255,1)'],
-    vars:{
-      '--p1':'#E8EEFF','--p2':'#D0DCFF','--p3':'#A8BCFF','--p4':'#7898F0',
-      '--p5':'#4A6CD4','--p6':'#2A4A9B','--p7':'#162E6E',
-      '--bg':'#F5F8FF','--bg2':'#EEF3FF',
-      '--ink':'#0A1230','--ink2':'#2A3860','--ink3':'#7080AA',
-      '--bdr':'rgba(120,152,240,0.18)',
-    }
-  },
-  {
-    id:'sage-green', name:'Sage & Mint',
-    nav:'#3A6B4A',
-    hero:['rgba(230,245,234,.74)','rgba(200,235,210,.82)','rgba(170,218,185,.90)','rgba(240,250,243,1)'],
-    vars:{
-      '--p1':'#E8F5EC','--p2':'#C8EBD2','--p3':'#96D4A8','--p4':'#5CB87A',
-      '--p5':'#2E9456','--p6':'#1E6B3A','--p7':'#0F4224',
-      '--bg':'#F4FBF6','--bg2':'#EAF6EE',
-      '--ink':'#0A200F','--ink2':'#1E4A28','--ink3':'#6A9878',
-      '--bdr':'rgba(92,184,122,0.18)',
-    }
-  },
-  {
-    id:'lavender', name:'Lavender',
-    nav:'#5E3A8B',
-    hero:['rgba(243,236,255,.74)','rgba(230,215,255,.82)','rgba(210,188,252,.90)','rgba(250,246,255,1)'],
-    vars:{
-      '--p1':'#F3ECFF','--p2':'#E6D7FF','--p3':'#C8AAFF','--p4':'#A07AEE',
-      '--p5':'#7848D4','--p6':'#5030A0','--p7':'#32186E',
-      '--bg':'#FAF7FF','--bg2':'#F4EEFF',
-      '--ink':'#1A0830','--ink2':'#3A1860','--ink3':'#8870AA',
-      '--bdr':'rgba(160,122,238,0.18)',
-    }
-  },
-  {
-    id:'peach-coral', name:'Peach Coral',
-    nav:'#8B4A2A',
-    hero:['rgba(255,240,232,.74)','rgba(255,220,198,.82)','rgba(255,195,165,.90)','rgba(255,248,244,1)'],
-    vars:{
-      '--p1':'#FFF0E8','--p2':'#FFDCC6','--p3':'#FFBB96','--p4':'#F0906A',
-      '--p5':'#D4623A','--p6':'#9B3E1E','--p7':'#6E2010',
-      '--bg':'#FFF9F6','--bg2':'#FFF3EC',
-      '--ink':'#2A1208','--ink2':'#5E2C18','--ink3':'#AA7865',
-      '--bdr':'rgba(240,144,106,0.18)',
-    }
-  },
-  {
-    id:'midnight', name:'Midnight Rose',
-    nav:'#C84878',
-    hero:['rgba(30,10,20,.82)','rgba(60,15,30,.88)','rgba(80,20,40,.92)','rgba(15,5,10,1)'],
-    vars:{
-      '--p1':'#3A1525','--p2':'#4E1E30','--p3':'#8B3A5A','--p4':'#C45A80',
-      '--p5':'#E87AA0','--p6':'#F4A0BC','--p7':'#FDD0E0',
-      '--bg':'#0F0508','--bg2':'#1A0810',
-      '--ink':'#FDE8F0','--ink2':'#F0C0D4','--ink3':'#C890A8',
-      '--bdr':'rgba(196,90,128,0.25)',
-    }
-  },
-  {
-    id:'ocean', name:'Ocean Breeze',
-    nav:'#1A5A7A',
-    hero:['rgba(220,240,250,.74)','rgba(180,220,242,.82)','rgba(140,200,232,.90)','rgba(235,248,255,1)'],
-    vars:{
-      '--p1':'#DCF0FA','--p2':'#B4DCF2','--p3':'#78BEE0','--p4':'#3A9AC8',
-      '--p5':'#1A78A8','--p6':'#0E5278','--p7':'#063248',
-      '--bg':'#F0FAFF','--bg2':'#E4F4FC',
-      '--ink':'#051828','--ink2':'#1A3E54','--ink3':'#6898B0',
-      '--bdr':'rgba(58,154,200,0.18)',
-    }
-  },
-];
-
-/* Build preview cards */
-const grid = document.getElementById('tpGrid');
-THEMES.forEach((t, idx) => {
-  const ho = t.hero;
-  const card = document.createElement('div');
-  card.className = 'tp-card' + (idx === 0 ? ' active' : '');
-  card.dataset.id = t.id;
-  card.innerHTML = `
-    <div class="tp-preview">
-      <div class="tp-nav-stripe" style="background:${t.nav}">
-        <div class="tp-nav-dot"></div><div class="tp-nav-dot"></div><div class="tp-nav-dot"></div>
-      </div>
-      <div class="tp-hero-stripe" style="background:linear-gradient(to bottom,${ho[0]},${ho[1]},${ho[2]},${ho[3]})"></div>
-      <div class="tp-body-stripe" style="background:${t.vars['--bg2'] || '#f5f5f5'}">
-        <div class="tp-body-bar" style="width:40%;background:${t.vars['--p3']}"></div>
-        <div class="tp-body-bar" style="width:25%;background:${t.vars['--p2']}"></div>
-      </div>
-    </div>
-    <div class="tp-name">${t.name}</div>`;
-  card.addEventListener('click', () => applyTheme(t.id));
-  grid.appendChild(card);
-});
-
-function applyTheme(id) {
-  const t = THEMES.find(x => x.id === id);
-  if (!t) return;
-
-  // Apply all CSS vars
-  Object.entries(t.vars).forEach(([k,v]) => root.style.setProperty(k, v));
-
-  // Hero overlay gradient (smooth transition via CSS)
-  const ho = t.hero;
-  const hov = document.getElementById('hov');
-  hov.style.background = `linear-gradient(to bottom,${ho[0]} 0%,${ho[1]} 40%,${ho[2]} 72%,${ho[3]} 100%)`;
-
-  // Mark active card
-  document.querySelectorAll('.tp-card').forEach(c => c.classList.toggle('active', c.dataset.id === id));
-}
-
-/* Panel toggle */
-const themePanel  = document.getElementById('themePanel');
-const themeToggle = document.getElementById('themeToggle');
-const themeClose  = document.getElementById('themeClose');
-
-themeToggle.addEventListener('click', e => { e.stopPropagation(); themePanel.classList.toggle('open'); });
-themeClose.addEventListener('click',  () => themePanel.classList.remove('open'));
-document.addEventListener('click',    e => {
-  if (!themePanel.contains(e.target) && e.target !== themeToggle) themePanel.classList.remove('open');
-});
-</script>
+<script src="script.js"></script>
 </body>
 </html>
