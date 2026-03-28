@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PPST Domain Reflections · Emelyn S. Ulanday</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      /* Professional Navy theme (default) */
+      --p1:#E8EEF6; --p2:#C8D6EB; --p3:#94AECF; --p4:#5A82B4;
+      --p5:#2D5F9A; --p6:#1A3E6E; --p7:#0D2245;
+      --bg:#F4F7FB; --bg2:#EBF0F8; --white:#FFFFFF;
+      --ink:#0D1B2E; --ink2:#2A3F5C; --ink3:#6A85A8;
+      --bdr:rgba(90,130,180,0.16);
+      --serif:'Playfair Display',Georgia,serif;
+      --sans:'Outfit',system-ui,sans-serif;
+      --ease:cubic-bezier(.4,0,.2,1);
+    }
+    html { scroll-behavior:smooth; }
+    body { font-family:var(--sans); background:var(--bg); color:var(--ink); overflow-x:hidden; }
+
+    /* ── NAV ── */
+    #nav {
+      position:fixed; top:0; left:0; right:0; z-index:999;
+      height:58px; display:flex; align-items:center; justify-content:space-between;
+      padding:0 3rem; background:rgba(244,247,251,.97); backdrop-filter:blur(16px);
+      box-shadow:0 1px 0 var(--bdr);
+    }
+    .n-logo {
+      font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--p6);
+      text-decoration:none; display:flex; align-items:center; gap:.6rem;
+    }
+    .n-logo-back {
+      font-size:.62rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--p5); background:var(--p1); padding:.28rem .75rem; border-radius:2rem;
+      text-decoration:none; transition:all .2s;
+    }
+    .n-logo-back:hover { background:var(--p5); color:#fff; }
+    .n-right { display:flex; align-items:center; gap:1.4rem; }
+    .n-jump {
+      font-size:.6rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--ink3); text-decoration:none; transition:color .2s;
+    }
+    .n-jump:hover { color:var(--p5); }
+
+    /* ── HERO BAND ── */
+    .ppst-hero {
+      background:linear-gradient(135deg,var(--p6) 0%,var(--p5) 60%,var(--p4) 100%);
+      padding:7rem 2rem 4rem; text-align:center; position:relative; overflow:hidden;
+    }
+    .ppst-hero::before {
+      content:''; position:absolute; inset:0;
+      background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .ph-pill {
+      display:inline-flex; align-items:center; gap:.4rem;
+      font-size:.6rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase;
+      color:rgba(255,255,255,.75); background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.2); padding:.32rem 1rem; border-radius:2rem; margin-bottom:1.1rem;
+    }
+    .ph-pill::before { content:''; width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.6); }
+    .ph-title {
+      font-family:var(--serif); font-size:clamp(2rem,4vw,3.2rem); font-weight:700;
+      color:#fff; line-height:1.1; margin-bottom:.6rem;
+    }
+    .ph-title em { font-style:italic; font-weight:400; opacity:.85; display:block; font-size:.6em; margin-top:.3rem; }
+    .ph-sub { font-size:.88rem; color:rgba(255,255,255,.65); line-height:1.8; max-width:540px; margin:0 auto 2rem; }
+    .ph-stats {
+      display:inline-flex; gap:0;
+      background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.18);
+      backdrop-filter:blur(8px); border-radius:16px; overflow:hidden;
+    }
+    .phst { padding:.9rem 1.8rem; text-align:center; border-right:1px solid rgba(255,255,255,.15); }
+    .phst:last-child { border-right:none; }
+    .phst-n { font-family:var(--serif); font-size:1.5rem; font-weight:700; color:#fff; display:block; }
+    .phst-l { font-size:.55rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.55); }
+
+    /* ── STICKY DOMAIN NAV ── */
+    .dom-nav {
+      position:sticky; top:58px; z-index:90;
+      background:rgba(244,247,251,.97); backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--bdr);
+      display:flex; align-items:center; justify-content:center;
+      gap:.3rem; padding:.6rem 2rem; overflow-x:auto;
+    }
+    .dom-pill {
+      font-size:.6rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--ink3); background:transparent; border:1px solid var(--bdr);
+      padding:.3rem .85rem; border-radius:2rem; text-decoration:none;
+      white-space:nowrap; transition:all .2s; cursor:pointer;
+    }
+    .dom-pill:hover, .dom-pill.active { background:var(--p5); color:#fff; border-color:var(--p5); }
+
+    /* ── MAIN CONTENT ── */
+    .ppst-main { max-width:1080px; margin:0 auto; padding:4rem 2rem 6rem; }
+
+    /* ── DOMAIN SECTION ── */
+    .domain-sec {
+      margin-bottom:4rem; scroll-margin-top:120px;
+    }
+    .domain-header {
+      display:flex; align-items:center; gap:1.2rem;
+      margin-bottom:2rem; padding-bottom:1.5rem;
+      border-bottom:2px solid var(--p1);
+    }
+    .domain-badge {
+      width:56px; height:56px; border-radius:16px; flex-shrink:0;
+      background:linear-gradient(135deg,var(--p4),var(--p6));
+      color:#fff; font-family:var(--serif); font-size:1.5rem; font-weight:700;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 6px 20px rgba(45,95,154,.28);
+    }
+    .domain-meta { flex:1; }
+    .domain-num {
+      font-size:.6rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--p5); margin-bottom:.2rem;
+    }
+    .domain-title {
+      font-family:var(--serif); font-size:1.5rem; font-weight:700; color:var(--ink); line-height:1.2;
+    }
+    .domain-desc {
+      font-size:.85rem; color:var(--ink3); margin-top:.3rem; line-height:1.6;
+    }
+    .domain-status {
+      font-size:.62rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      color:#2D9A56; background:#E8F5ED; border:1px solid rgba(45,154,86,.2);
+      padding:.3rem .85rem; border-radius:2rem; flex-shrink:0;
+    }
+
+    /* Two-col layout */
+    .domain-body { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:1.5rem; }
+    .domain-card {
+      background:#fff; border:1px solid var(--bdr); border-radius:18px;
+      padding:1.8rem 2rem; transition:box-shadow .3s var(--ease);
+    }
+    .domain-card:hover { box-shadow:0 8px 28px rgba(45,95,154,.09); }
+    .dc-label {
+      font-size:.6rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--p5); margin-bottom:1rem; display:flex; align-items:center; gap:.5rem;
+    }
+    .dc-label::before { content:''; width:18px; height:2px; background:var(--p3); border-radius:1px; }
+
+    /* Numbered list */
+    .exp-list { list-style:none; counter-reset:exp; display:flex; flex-direction:column; gap:.8rem; }
+    .exp-list li {
+      counter-increment:exp; display:flex; gap:.75rem;
+      font-size:.87rem; color:var(--ink2); line-height:1.75;
+    }
+    .exp-list li::before {
+      content:counter(exp, decimal-leading-zero);
+      flex-shrink:0; width:22px; height:22px; border-radius:6px;
+      background:var(--p1); color:var(--p5);
+      font-size:.58rem; font-weight:700; display:flex; align-items:center; justify-content:center;
+      margin-top:2px; letter-spacing:.04em;
+    }
+
+    /* Reflection block */
+    .reflection-wrap { background:linear-gradient(135deg,var(--p1),#fff); border-radius:14px; padding:1.5rem; }
+    .reflection-text {
+      font-family:var(--serif); font-style:italic; font-size:.92rem; color:var(--ink2);
+      line-height:1.95;
+    }
+    .reflection-text + .reflection-text { margin-top:.9rem; }
+
+    /* Key Insight */
+    .key-insight {
+      background:linear-gradient(135deg,var(--p6),var(--p5));
+      border-radius:14px; padding:1.4rem 1.8rem;
+      margin-top:1.5rem;
+      display:flex; align-items:flex-start; gap:1rem;
+    }
+    .ki-icon { font-size:1.4rem; flex-shrink:0; margin-top:.1rem; }
+    .ki-label { font-size:.58rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.6); margin-bottom:.3rem; }
+    .ki-text { font-size:.88rem; color:#fff; line-height:1.75; }
+    .ki-text em { font-style:italic; opacity:.9; }
+
+    /* Competencies / bullets */
+    .comp-list { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; }
+    .comp-tag {
+      font-size:.62rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase;
+      padding:.26rem .75rem; border-radius:2rem;
+      background:var(--p1); color:var(--p6);
+      border:1px solid var(--bdr);
+    }
+
+    /* Evidence / embed area */
+    .evidence-row {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:1.5rem;
+    }
+    .evidence-card {
+      background:#fff; border:2px dashed var(--bdr); border-radius:16px;
+      padding:1.5rem 1.2rem; text-align:center;
+      transition:border-color .2s, background .2s;
+    }
+    .evidence-card:hover { border-color:var(--p3); background:var(--p1); }
+    .ev-icon { font-size:1.8rem; margin-bottom:.6rem; }
+    .ev-type {
+      font-size:.58rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--p5); margin-bottom:.3rem;
+    }
+    .ev-label { font-size:.78rem; font-weight:600; color:var(--ink2); margin-bottom:.5rem; line-height:1.3; }
+    .ev-hint { font-size:.68rem; color:var(--ink3); line-height:1.5; margin-bottom:.8rem; }
+    .ev-btn {
+      font-size:.6rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--p5); background:var(--p1); border:1px solid var(--bdr);
+      padding:.28rem .75rem; border-radius:2rem; cursor:pointer; text-decoration:none;
+      display:inline-block; transition:all .2s;
+    }
+    .ev-btn:hover { background:var(--p5); color:#fff; border-color:var(--p5); }
+
+    /* Video reflection embed */
+    .video-wrap {
+      background:#fff; border:1px solid var(--bdr); border-radius:18px;
+      padding:1.8rem 2rem; margin-top:1.5rem;
+    }
+    .video-header { display:flex; align-items:center; gap:.6rem; margin-bottom:1.2rem; }
+    .vh-dot { width:8px; height:8px; border-radius:50%; background:var(--p4); }
+    .vh-title { font-size:.62rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--p5); }
+    .video-placeholder {
+      width:100%; aspect-ratio:16/9; border-radius:12px;
+      background:linear-gradient(135deg,var(--p6),var(--p7));
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.8rem;
+      position:relative; overflow:hidden;
+    }
+    .video-placeholder::before {
+      content:''; position:absolute; inset:0;
+      background:url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='1' fill='rgba(255,255,255,0.06)'/%3E%3C/svg%3E") repeat;
+    }
+    .vp-play {
+      width:56px; height:56px; border-radius:50%;
+      background:rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.5);
+      display:flex; align-items:center; justify-content:center;
+      position:relative; z-index:1;
+    }
+    .vp-play svg { margin-left:4px; }
+    .vp-label { font-size:.72rem; color:rgba(255,255,255,.7); letter-spacing:.08em; text-transform:uppercase; position:relative; z-index:1; }
+    .vp-sub { font-size:.62rem; color:rgba(255,255,255,.4); position:relative; z-index:1; }
+
+    /* Divider */
+    .domain-divider {
+      height:1px; background:linear-gradient(to right,transparent,var(--bdr),transparent);
+      margin:3.5rem 0;
+    }
+
+    /* Progress ring (decorative) */
+    .growth-row { display:flex; gap:1rem; align-items:stretch; }
+    .growth-meter {
+      flex-shrink:0; background:#fff; border:1px solid var(--bdr); border-radius:18px;
+      padding:1.5rem; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:.6rem; width:140px;
+    }
+    .gm-ring { position:relative; width:72px; height:72px; }
+    .gm-ring svg { transform:rotate(-90deg); }
+    .gm-ring circle { fill:none; stroke-width:6; }
+    .gm-bg { stroke:var(--p1); }
+    .gm-fill { stroke:var(--p4); stroke-linecap:round; transition:stroke-dashoffset 1.4s var(--ease); }
+    .gm-pct {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      font-family:var(--serif); font-size:1rem; font-weight:700; color:var(--p6);
+    }
+    .gm-label { font-size:.6rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink3); text-align:center; }
+    .growth-content { flex:1; }
+
+    /* Back to top */
+    .btt {
+      position:fixed; bottom:2rem; right:2rem; z-index:200;
+      width:44px; height:44px; border-radius:50%;
+      background:var(--p6); color:#fff; border:none; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 6px 20px rgba(26,62,110,.3);
+      opacity:0; transform:translateY(10px); transition:all .3s var(--ease);
+    }
+    .btt.show { opacity:1; transform:translateY(0); }
+    .btt:hover { background:var(--p7); }
+
+    /* ── FOOTER ── */
+    .ppst-footer {
+      background:var(--p6); padding:2.5rem 2rem; text-align:center;
+    }
+    .pf-name { font-family:var(--serif); font-size:1rem; font-weight:700; color:#fff; margin-bottom:.3rem; }
+    .pf-detail { font-size:.68rem; color:rgba(255,255,255,.5); line-height:1.9; }
+    .pf-back {
+      display:inline-flex; align-items:center; gap:.4rem; margin-top:1rem;
+      font-size:.62rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      color:#fff; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2);
+      padding:.4rem 1.1rem; border-radius:2rem; text-decoration:none; transition:all .2s;
+    }
+    .pf-back:hover { background:rgba(255,255,255,.22); }
+
+    /* Animations */
+    [data-a] { opacity:0; transition:opacity .6s var(--ease), transform .6s var(--ease); }
+    [data-a="up"]   { transform:translateY(24px); }
+    [data-a="left"] { transform:translateX(-24px); }
+    [data-a].vis { opacity:1; transform:none; }
+    [data-d="1"]{transition-delay:.08s}[data-d="2"]{transition-delay:.16s}[data-d="3"]{transition-delay:.24s}[data-d="4"]{transition-delay:.32s}
+
+    @media(max-width:780px){
+      #nav{padding:0 1.2rem}
+      .n-right a:not(.n-logo-back){display:none}
+      .domain-body{grid-template-columns:1fr}
+      .evidence-row{grid-template-columns:1fr 1fr}
+      .ppst-main{padding:2.5rem 1.2rem 4rem}
+      .growth-row{flex-direction:column}
+      .dom-nav{justify-content:flex-start}
+    }
+    @media(max-width:520px){
+      .evidence-row{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="nav">
+  <div style="display:flex;align-items:center;gap:.8rem">
+    <a href="index.html" class="n-logo-back">← Back to Portfolio</a>
+    <span style="font-family:var(--serif);font-size:.95rem;font-weight:700;color:var(--p6)">PPST Reflections</span>
+  </div>
+  <div class="n-right">
+    <a href="#domain-a" class="n-jump">Domain 1</a>
+    <a href="#domain-b" class="n-jump">Domain 2</a>
+    <a href="#domain-c" class="n-jump">Domain 3</a>
+    <a href="#domain-d" class="n-jump">Domain 4</a>
+    <a href="#domain-e" class="n-jump">Domain 5</a>
+    <a href="#domain-f" class="n-jump">Domain 6</a>
+    <a href="#domain-g" class="n-jump">Domain 7</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="ppst-hero">
+  <div class="ph-pill">Philippine Professional Standards for Teachers</div>
+  <h1 class="ph-title">PPST Domain<em>Reflections & Evidence</em></h1>
+  <p class="ph-sub">A comprehensive documentation of my growth and developmental experiences across all seven PPST domains during my 360-hour pre-service teaching internship.</p>
+  <div class="ph-stats">
+    <div class="phst"><span class="phst-n">7</span><span class="phst-l">Domains</span></div>
+    <div class="phst"><span class="phst-n">360</span><span class="phst-l">Hours</span></div>
+    <div class="phst"><span class="phst-n">10+</span><span class="phst-l">Lessons</span></div>
+    <div class="phst"><span class="phst-n">20</span><span class="phst-l">Students</span></div>
+  </div>
+</div>
+
+<!-- ── STICKY DOMAIN NAV ── -->
+<nav class="dom-nav" id="domNav">
+  <a href="#domain-a" class="dom-pill" data-target="domain-a">Domain 1 · Content Knowledge</a>
+  <a href="#domain-b" class="dom-pill" data-target="domain-b">Domain 2 · Learning Env.</a>
+  <a href="#domain-c" class="dom-pill" data-target="domain-c">Domain 3 · Diversity</a>
+  <a href="#domain-d" class="dom-pill" data-target="domain-d">Domain 4 · Curriculum</a>
+  <a href="#domain-e" class="dom-pill" data-target="domain-e">Domain 5 · Assessment</a>
+  <a href="#domain-f" class="dom-pill" data-target="domain-f">Domain 6 · Community</a>
+  <a href="#domain-g" class="dom-pill" data-target="domain-g">Domain 7 · Growth</a>
+</nav>
+
+<!-- ── MAIN ── -->
+<main class="ppst-main">
+
+  <!-- ═══════════ DOMAIN A ═══════════ -->
+  <section class="domain-sec" id="domain-a" data-a="up">
+    <div class="domain-header">
+      <div class="domain-badge">A</div>
+      <div class="domain-meta">
+        <div class="domain-num">Domain 1</div>
+        <div class="domain-title">Content Knowledge and Pedagogy</div>
+        <div class="domain-desc">Demonstrating knowledge and understanding of content across learning areas and applying research-based knowledge of effective pedagogy.</div>
+      </div>
+      <div class="domain-status">✓ Completed</div>
+    </div>
+
+    <div class="domain-body">
+      <div class="domain-card">
+        <div class="dc-label">Experiences & Activities</div>
+        <ol class="exp-list">
+          <li>Designed and delivered 10+ lesson plans aligned with the K–12 curriculum across Math, Science, English, Araling Panlipunan, MAPEH, and Values Education.</li>
+          <li>Applied the <strong>Concrete-Pictorial-Abstract (CPA)</strong> approach in teaching Mathematics to make abstract concepts tangible for young learners.</li>
+          <li>Used <strong>inquiry-based strategies</strong> in Science lessons (e.g., The Water Cycle) to encourage student-led exploration and discovery.</li>
+          <li>Incorporated interactive grammar games and role-play activities to make language lessons engaging and contextual.</li>
+          <li>Integrated cross-curricular connections (e.g., linking Math patterns to Art and Music in MAPEH lessons).</li>
+        </ol>
+        <div class="comp-list">
+          <span class="comp-tag">K–12 Curriculum</span>
+          <span class="comp-tag">CPA Approach</span>
+          <span class="comp-tag">Inquiry-Based Learning</span>
+          <span class="comp-tag">Cross-Curricular Integration</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <div class="dc-label">Reflections</div>
+        <div class="reflection-wrap">
+          <p class="reflection-text">Teaching content effectively required me to deeply understand the material first — I could not simply follow the textbook. I learned to anticipate student misconceptions, especially in Math, and to have multiple explanations ready.</p>
+          <p class="reflection-text">I realized that pedagogy is not a one-size-fits-all approach: the same concept might need a different entry point depending on the learner. This domain pushed me to become not just a teacher of subjects, but a teacher of students.</p>
+        </div>
+        <div class="key-insight">
+          <div class="ki-icon">💡</div>
+          <div>
+            <div class="ki-label">Key Insight</div>
+            <div class="ki-text"><em>"Deep content knowledge is only half the work — knowing how to translate it for a specific learner is the real craft of teaching."</em></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-row" data-a="up" data-d="2">
+      <div class="evidence-card">
+        <div class="ev-icon">📋</div>
+        <div class="ev-type">Lesson Plan</div>
+        <div class="ev-label">Introduction to Fractions (Math)</div>
+        <div class="ev-hint">Detailed DLP with CPA progression, materials list, and assessment rubric.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+      <div class="evidence-card">
+        <div class="ev-icon">📋</div>
+        <div class="ev-type">Lesson Plan</div>
+        <div class="ev-label">The Water Cycle (Science)</div>
+        <div class="ev-hint">Inquiry-based lesson with guided questions, group activity, and exit ticket.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+      <div class="evidence-card">
+        <div class="ev-icon">📸</div>
+        <div class="ev-type">Photo Documentation</div>
+        <div class="ev-label">CPA Manipulatives in Action</div>
+        <div class="ev-hint">Photos showing students using fraction tiles and number lines.</div>
+        <a href="#" class="ev-btn">View Photos →</a>
+      </div>
+    </div>
+
+    <div class="video-wrap" data-a="up" data-d="3">
+      <div class="video-header">
+        <div class="vh-dot"></div>
+        <div class="vh-title">Optional · Video Reflection (1–2 minutes)</div>
+      </div>
+      <div class="video-placeholder">
+        <div class="vp-play">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="vp-label">Domain 1 Video Reflection</div>
+        <div class="vp-sub">Replace with &lt;video src="..."&gt; or embed link</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="domain-divider"></div>
+
+  <!-- ═══════════ DOMAIN B ═══════════ -->
+  <section class="domain-sec" id="domain-b" data-a="up">
+    <div class="domain-header">
+      <div class="domain-badge" style="background:linear-gradient(135deg,#3A8BA0,#1E5F70)">B</div>
+      <div class="domain-meta">
+        <div class="domain-num">Domain 2</div>
+        <div class="domain-title">Learning Environment</div>
+        <div class="domain-desc">Establishing a safe and supportive learning environment that promotes fairness, respect, and care for students' physical and socio-emotional needs.</div>
+      </div>
+      <div class="domain-status">✓ Completed</div>
+    </div>
+
+    <div class="domain-body">
+      <div class="domain-card">
+        <div class="dc-label">Experiences & Activities</div>
+        <ol class="exp-list">
+          <li>Arranged classroom seating to promote <strong>collaborative learning</strong> and ease of movement during group activities.</li>
+          <li>Established classroom routines (entry, transitions, dismissal) that minimized disruptions and maximized learning time.</li>
+          <li>Created a <strong>print-rich environment</strong> with word walls, learning charts, and student-produced displays.</li>
+          <li>Addressed behavioral concerns using <strong>positive reinforcement</strong> — praise, sticker charts, and class rewards rather than punitive measures.</li>
+          <li>Modeled respectful communication and established clear behavioral expectations from Day 1.</li>
+        </ol>
+        <div class="comp-list">
+          <span class="comp-tag">Positive Reinforcement</span>
+          <span class="comp-tag">Classroom Routines</span>
+          <span class="comp-tag">Print-Rich Environment</span>
+          <span class="comp-tag">Behavior Management</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <div class="dc-label">Reflections</div>
+        <div class="reflection-wrap">
+          <p class="reflection-text">I underestimated how much the physical and emotional environment shapes learning. In my first weeks, I focused on my lesson content and often overlooked transitions — and that is where most disruptions happened.</p>
+          <p class="reflection-text">Observing my cooperating teacher showed me that a well-managed classroom is built over time through consistent routines and genuine relationships. By Week 6, our classroom had a rhythm, and I felt the difference in student focus and participation.</p>
+        </div>
+        <div class="key-insight">
+          <div class="ki-icon">🌱</div>
+          <div>
+            <div class="ki-label">Key Insight</div>
+            <div class="ki-text"><em>"A safe classroom is not built in a day — it is grown through consistent care, clear expectations, and genuine relationships."</em></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-row" data-a="up" data-d="2">
+      <div class="evidence-card">
+        <div class="ev-icon">📐</div>
+        <div class="ev-type">Classroom Layout</div>
+        <div class="ev-label">Seating Arrangement Plan</div>
+        <div class="ev-hint">Diagram showing collaborative seating layout and learning zones.</div>
+        <a href="#" class="ev-btn">View Image →</a>
+      </div>
+      <div class="evidence-card">
+        <div class="ev-icon">📝</div>
+        <div class="ev-type">Classroom Rules</div>
+        <div class="ev-label">Posted Behavioral Expectations</div>
+        <div class="ev-hint">Student-created classroom agreement and visual behavior chart.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+      <div class="evidence-card">
+        <div class="ev-icon">📸</div>
+        <div class="ev-type">Documentation</div>
+        <div class="ev-label">Print-Rich Environment Photos</div>
+        <div class="ev-hint">Photos of word walls, learning displays, and student work exhibits.</div>
+        <a href="#" class="ev-btn">View Photos →</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="domain-divider"></div>
+
+  <!-- ═══════════ DOMAIN C ═══════════ -->
+  <section class="domain-sec" id="domain-c" data-a="up">
+    <div class="domain-header">
+      <div class="domain-badge" style="background:linear-gradient(135deg,#7A5BA0,#4E2E78)">C</div>
+      <div class="domain-meta">
+        <div class="domain-num">Domain 3</div>
+        <div class="domain-title">Diversity of Learners</div>
+        <div class="domain-desc">Recognizing learner differences, needs, and contexts, and applying differentiated teaching strategies to address these differences.</div>
+      </div>
+      <div class="domain-status">✓ Completed</div>
+    </div>
+
+    <div class="domain-body">
+      <div class="domain-card">
+        <div class="dc-label">Experiences & Activities</div>
+        <ol class="exp-list">
+          <li>Identified learners with varying ability levels and adapted instruction through <strong>differentiated tasks</strong> and tiered activities.</li>
+          <li>Provided additional scaffolding (visual aids, manipulatives, peer support) for struggling learners during Math and English lessons.</li>
+          <li>Used <strong>flexible grouping strategies</strong> — pairing advanced learners with those needing support in collaborative tasks.</li>
+          <li>Incorporated culturally relevant examples and local contexts (community helpers, folk dances) to make content relatable to all learners.</li>
+          <li>Adapted pacing and explanations based on real-time observation of student responses during lessons.</li>
+        </ol>
+        <div class="comp-list">
+          <span class="comp-tag">Differentiated Instruction</span>
+          <span class="comp-tag">Scaffolding</span>
+          <span class="comp-tag">Flexible Grouping</span>
+          <span class="comp-tag">Cultural Relevance</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <div class="dc-label">Reflections</div>
+        <div class="reflection-wrap">
+          <p class="reflection-text">Every child in my class of 20 was unique — different learning speeds, different home situations, different strengths. I had to learn to see each student as an individual, not as "the class."</p>
+          <p class="reflection-text">Differentiation was the hardest skill to develop, but also the most rewarding. When a struggling student finally grasped a concept through a different approach I had tried, that moment of understanding made every extra hour of planning worthwhile.</p>
+        </div>
+        <div class="key-insight">
+          <div class="ki-icon">🌟</div>
+          <div>
+            <div class="ki-label">Key Insight</div>
+            <div class="ki-text"><em>"Fairness in teaching is not giving every student the same thing — it is giving each student what they need to succeed."</em></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-row" data-a="up" data-d="2">
+      <div class="evidence-card">
+        <div class="ev-icon">📋</div>
+        <div class="ev-type">Lesson Plan</div>
+        <div class="ev-label">Differentiated Math Activity</div>
+        <div class="ev-hint">Tiered worksheet sets for three ability levels with scaffolding notes.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+      <div class="evidence-card">
+        <div class="ev-icon">📊</div>
+        <div class="ev-type">Learner Profile</div>
+        <div class="ev-label">Class Observation Notes</div>
+        <div class="ev-hint">Anecdotal records documenting individual student learning needs and progress.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+      <div class="evidence-card">
+        <div class="ev-icon">📸</div>
+        <div class="ev-type">Documentation</div>
+        <div class="ev-label">Flexible Grouping in Action</div>
+        <div class="ev-hint">Photos of small-group differentiated activities during class sessions.</div>
+        <a href="#" class="ev-btn">View Photos →</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="domain-divider"></div>
+
+  <!-- ═══════════ DOMAIN D ═══════════ -->
+  <section class="domain-sec" id="domain-d" data-a="up">
+    <div class="domain-header">
+      <div class="domain-badge" style="background:linear-gradient(135deg,#B85A2A,#7A3410)">D</div>
+      <div class="domain-meta">
+        <div class="domain-num">Domain 4</div>
+        <div class="domain-title">Curriculum and Planning</div>
+        <div class="domain-desc">Preparing and implementing teaching-learning activities aligned with curriculum standards through well-designed and coherent lesson plans.</div>
+      </div>
+      <div class="domain-status">✓ Completed</div>
+    </div>
+
+    <div class="domain-body">
+      <div class="domain-card">
+        <div class="dc-label">Experiences & Activities</div>
+        <ol class="exp-list">
+          <li>Prepared detailed <strong>Daily Lesson Plans (DLPs)</strong> for each teaching day, aligned to the DepEd K–12 curriculum guides and Most Essential Learning Competencies (MELCs).</li>
+          <li>Sequenced lessons to build on prior knowledge — ensuring <strong>conceptual continuity</strong> across weeks.</li>
+          <li>Integrated cross-curricular connections (e.g., linking Math patterns to Art and Music in MAPEH lessons).</li>
+          <li>Submitted weekly lesson plans for review and incorporated feedback from the cooperating teacher into subsequent plans.</li>
+          <li>Developed supplementary materials (worksheets, visual aids, manipulatives) to support lesson objectives.</li>
+        </ol>
+        <div class="comp-list">
+          <span class="comp-tag">Daily Lesson Plans</span>
+          <span class="comp-tag">MELCs Alignment</span>
+          <span class="comp-tag">Lesson Sequencing</span>
+          <span class="comp-tag">Material Development</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <div class="dc-label">Reflections</div>
+        <div class="reflection-wrap">
+          <p class="reflection-text">Planning a lesson is one thing — planning a curriculum is another. I learned to think beyond the single lesson and consider where students are coming from and where they need to go.</p>
+          <p class="reflection-text">Time management within lessons was a consistent challenge; I often planned too much content and had to learn to prioritize depth over breadth. My cooperating teacher's advice — "plan for the learner, not for the subject" — became my guiding principle.</p>
+        </div>
+        <div class="key-insight">
+          <div class="ki-icon">📌</div>
+          <div>
+            <div class="ki-label">Cooperating Teacher's Advice</div>
+            <div class="ki-text"><em>"Plan for the learner, not for the subject."</em> — Ritchel L. Echemane</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-row" data-a="up" data-d="2">
+      <div class="evidence-card">
+        <div class="ev-icon">📋</div>
+        <div class="ev-type">DLP Portfolio</div>
+        <div class="ev-label">Complete Lesson Plan Set</div>
+        <div class="ev-hint">All 10+ DLPs organized by subject area with cooperating teacher signatures.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+      <div class="evidence-card">
+        <div class="ev-icon">📅</div>
+        <div class="ev-type">Teaching Schedule</div>
+        <div class="ev-label">Weekly Lesson Schedule</div>
+        <div class="ev-hint">Weekly teaching schedule showing subject rotation and lesson sequencing.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+      <div class="evidence-card">
+        <div class="ev-icon">📝</div>
+        <div class="ev-type">Feedback Forms</div>
+        <div class="ev-label">Cooperating Teacher Feedback</div>
+        <div class="ev-hint">Signed lesson plan evaluation forms with written feedback and ratings.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="domain-divider"></div>
+
+  <!-- ═══════════ DOMAIN E ═══════════ -->
+  <section class="domain-sec" id="domain-e" data-a="up">
+    <div class="domain-header">
+      <div class="domain-badge" style="background:linear-gradient(135deg,#2A8B6A,#165A42)">E</div>
+      <div class="domain-meta">
+        <div class="domain-num">Domain 5</div>
+        <div class="domain-title">Assessment and Reporting</div>
+        <div class="domain-desc">Using various assessment tools and strategies to monitor learning outcomes and communicating results to support student development.</div>
+      </div>
+      <div class="domain-status">✓ Completed</div>
+    </div>
+
+    <div class="domain-body">
+      <div class="domain-card">
+        <div class="dc-label">Experiences & Activities</div>
+        <ol class="exp-list">
+          <li>Administered <strong>formative assessments</strong> (oral questioning, exit tickets, seatwork, short quizzes) to monitor student understanding throughout each lesson.</li>
+          <li>Prepared and administered <strong>summative assessments</strong> aligned to competencies covered during the internship period.</li>
+          <li>Recorded and analyzed student performance data to identify <strong>learning gaps</strong> and adjust subsequent instruction.</li>
+          <li>Communicated student progress to the cooperating teacher and participated in feedback sessions with learners.</li>
+          <li>Developed rubrics and scoring guides that clearly communicated performance expectations to students.</li>
+        </ol>
+        <div class="comp-list">
+          <span class="comp-tag">Formative Assessment</span>
+          <span class="comp-tag">Exit Tickets</span>
+          <span class="comp-tag">Summative Tests</span>
+          <span class="comp-tag">Data Analysis</span>
+          <span class="comp-tag">Rubric Design</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <div class="dc-label">Reflections</div>
+        <div class="reflection-wrap">
+          <p class="reflection-text">Assessment transformed from something I did to students into something I did for students. I learned that the real purpose of assessment is not to grade, but to understand.</p>
+          <p class="reflection-text">Watching students' faces during oral questioning told me more about their comprehension than any written test. I also struggled at first with providing meaningful written feedback — I defaulted to "Good job!" — but learned to make feedback specific, actionable, and kind.</p>
+        </div>
+        <div class="key-insight">
+          <div class="ki-icon">📊</div>
+          <div>
+            <div class="ki-label">Key Insight</div>
+            <div class="ki-text"><em>"The purpose of assessment is not to measure the learner — it is to illuminate the path forward for both teacher and student."</em></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-row" data-a="up" data-d="2">
+      <div class="evidence-card">
+        <div class="ev-icon">📝</div>
+        <div class="ev-type">Assessment Tools</div>
+        <div class="ev-label">Summative Test Sample</div>
+        <div class="ev-hint">Sample summative test with answer key, scoring guide, and competency mapping.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+      <div class="evidence-card">
+        <div class="ev-icon">📊</div>
+        <div class="ev-type">Grade Record</div>
+        <div class="ev-label">Class Performance Analysis</div>
+        <div class="ev-hint">Encoded grades and class performance analysis showing learning trends.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+      <div class="evidence-card">
+        <div class="ev-icon">📋</div>
+        <div class="ev-type">Rubrics</div>
+        <div class="ev-label">Assessment Rubrics Used</div>
+        <div class="ev-hint">Rubrics developed for performance tasks, oral recitation, and group work.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="domain-divider"></div>
+
+  <!-- ═══════════ DOMAIN F ═══════════ -->
+  <section class="domain-sec" id="domain-f" data-a="up">
+    <div class="domain-header">
+      <div class="domain-badge" style="background:linear-gradient(135deg,#B8A020,#7A6A10)">F</div>
+      <div class="domain-meta">
+        <div class="domain-num">Domain 6</div>
+        <div class="domain-title">Community Linkages and Professional Engagement</div>
+        <div class="domain-desc">Establishing cooperative relationships with parents, communities, and other professionals, and upholding professional and ethical standards.</div>
+      </div>
+      <div class="domain-status">✓ Completed</div>
+    </div>
+
+    <div class="domain-body">
+      <div class="domain-card">
+        <div class="dc-label">Experiences & Activities</div>
+        <ol class="exp-list">
+          <li>Participated in school-wide activities and flag ceremonies, integrating as a <strong>professional member</strong> of the school community.</li>
+          <li>Maintained respectful and professional communication with school administrators, fellow teachers, and non-teaching staff.</li>
+          <li>Engaged with parents informally during dismissal time to share student updates and build <strong>home-school partnerships</strong>.</li>
+          <li>Attended school meetings and submitted all required internship documents (lesson plans, journals, reports) promptly and professionally.</li>
+          <li>Participated in school community programs and contributed to the school's extracurricular activities.</li>
+        </ol>
+        <div class="comp-list">
+          <span class="comp-tag">Professional Conduct</span>
+          <span class="comp-tag">Parent Communication</span>
+          <span class="comp-tag">Community Engagement</span>
+          <span class="comp-tag">School Participation</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <div class="dc-label">Reflections</div>
+        <div class="reflection-wrap">
+          <p class="reflection-text">Teaching does not happen in isolation. The school is a community, and being a professional member of that community required more than just classroom competence.</p>
+          <p class="reflection-text">I learned to navigate professional relationships with grace — to seek guidance without appearing incompetent, to collaborate without overstepping, and to represent Daraga Community College with pride in every interaction. This domain reminded me that education is a shared responsibility between the school and the community it serves.</p>
+        </div>
+        <div class="key-insight">
+          <div class="ki-icon">🤝</div>
+          <div>
+            <div class="ki-label">Key Insight</div>
+            <div class="ki-text"><em>"A teacher is not just an educator of students — they are a steward of the community's trust."</em></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-row" data-a="up" data-d="2">
+      <div class="evidence-card">
+        <div class="ev-icon">📸</div>
+        <div class="ev-type">Documentation</div>
+        <div class="ev-label">School Activities & Flag Ceremonies</div>
+        <div class="ev-hint">Photos showing participation in school programs, assemblies, and community events.</div>
+        <a href="#" class="ev-btn">View Photos →</a>
+      </div>
+      <div class="evidence-card">
+        <div class="ev-icon">📝</div>
+        <div class="ev-type">Parent Engagement</div>
+        <div class="ev-label">Parent Communication Log</div>
+        <div class="ev-hint">Records of parent interactions and home-school communication during internship.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+      <div class="evidence-card">
+        <div class="ev-icon">📋</div>
+        <div class="ev-type">Professional Documents</div>
+        <div class="ev-label">Internship Compliance Records</div>
+        <div class="ev-hint">Submitted documents: DTR, clearance, attendance sheets, and completion certificates.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="domain-divider"></div>
+
+  <!-- ═══════════ DOMAIN G ═══════════ -->
+  <section class="domain-sec" id="domain-g" data-a="up">
+    <div class="domain-header">
+      <div class="domain-badge" style="background:linear-gradient(135deg,#9B3A54,#6E2039)">G</div>
+      <div class="domain-meta">
+        <div class="domain-num">Domain 7</div>
+        <div class="domain-title">Personal Growth and Professional Development</div>
+        <div class="domain-desc">Reflecting on teaching practice, pursuing professional development, and demonstrating a commitment to continuous learning and improvement.</div>
+      </div>
+      <div class="domain-status">✓ Completed</div>
+    </div>
+
+    <div class="domain-body">
+      <div class="domain-card">
+        <div class="dc-label">Experiences & Activities</div>
+        <ol class="exp-list">
+          <li>Maintained a <strong>weekly reflective journal</strong> documenting teaching experiences, challenges, and insights throughout the 360-hour internship.</li>
+          <li>Sought and applied feedback from the cooperating teacher and field supervisor to continuously improve instructional practice.</li>
+          <li>Engaged in <strong>self-assessment</strong> after each teaching day — identifying what worked, what did not, and why.</li>
+          <li>Read professional literature on effective pedagogy, child development, and assessment to supplement practical experience.</li>
+          <li>Participated in post-observation conferences and used feedback constructively to revise lesson approaches.</li>
+        </ol>
+        <div class="comp-list">
+          <span class="comp-tag">Reflective Journaling</span>
+          <span class="comp-tag">Self-Assessment</span>
+          <span class="comp-tag">Professional Reading</span>
+          <span class="comp-tag">Feedback Integration</span>
+        </div>
+      </div>
+      <div class="domain-card">
+        <div class="dc-label">Reflections</div>
+        <div class="reflection-wrap">
+          <p class="reflection-text">This domain is the heart of becoming a professional teacher. Reflective practice was not a requirement to complete — it became a habit of mind. I learned that the best teachers are the ones who never stop learning.</p>
+          <p class="reflection-text">Every lesson taught me something about my students, my subject, and myself. I entered this internship as a student; I am leaving as a beginning professional — humbled, inspired, and deeply committed to lifelong growth in this noble profession.</p>
+        </div>
+        <div class="key-insight">
+          <div class="ki-icon">✍️</div>
+          <div>
+            <div class="ki-label">Key Insight</div>
+            <div class="ki-text"><em>"Reflection is not an act of looking backward — it is the compass that points a teacher forward."</em></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="evidence-row" data-a="up" data-d="2">
+      <div class="evidence-card">
+        <div class="ev-icon">📓</div>
+        <div class="ev-type">Reflective Journal</div>
+        <div class="ev-label">Weekly Journal Entries (Sample)</div>
+        <div class="ev-hint">Selected journal entries demonstrating reflective practice and growth over time.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+      <div class="evidence-card">
+        <div class="ev-icon">📋</div>
+        <div class="ev-type">Observation Forms</div>
+        <div class="ev-label">Post-Observation Feedback Sheets</div>
+        <div class="ev-hint">Signed evaluation forms from cooperating teacher and field supervisor observations.</div>
+        <a href="#" class="ev-btn">View PDF →</a>
+      </div>
+      <div class="evidence-card">
+        <div class="ev-icon">📸</div>
+        <div class="ev-type">Video Reflection</div>
+        <div class="ev-label">Domain 7 Video Reflection</div>
+        <div class="ev-hint">1–2 minute video narrating personal and professional growth across the internship.</div>
+        <a href="#" class="ev-btn">View Video →</a>
+      </div>
+    </div>
+
+    <div class="video-wrap" data-a="up" data-d="3">
+      <div class="video-header">
+        <div class="vh-dot"></div>
+        <div class="vh-title">Optional · Video Reflection — Personal Growth Journey</div>
+      </div>
+      <div class="video-placeholder">
+        <div class="vp-play">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="vp-label">Domain 7 Video Reflection</div>
+        <div class="vp-sub">Replace with &lt;video src="..."&gt; or YouTube/Google Drive embed</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ── -->
+<footer class="ppst-footer">
+  <p class="pf-name">Emelyn S. Ulanday · Pre-Service Teacher</p>
+  <p class="pf-detail">Bachelor of Elementary Education (BEED) 4th Year · Daraga Community College</p>
+  <p class="pf-detail">Teaching Internship @ Malobago Elementary School Site 2 · Aug – Nov 2024</p>
+  <a href="index.html" class="pf-back">← Return to Main Portfolio</a>
+</footer>
+
+<!-- Back to top -->
+<button class="btt" id="btt" title="Back to top">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+  // Scroll reveal
+  const io = new IntersectionObserver(entries =>
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); } }),
+    { threshold:0.06 }
+  );
+  document.querySelectorAll('[data-a]').forEach(el => io.observe(el));
+
+  // Active domain pill
+  const sections = document.querySelectorAll('.domain-sec');
+  const pills = document.querySelectorAll('.dom-pill');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        pills.forEach(p => p.classList.toggle('active', p.dataset.target === id));
+      }
+    });
+  }, { threshold:0.3 });
+  sections.forEach(s => obs.observe(s));
+
+  // Back to top
+  const btt = document.getElementById('btt');
+  window.addEventListener('scroll', () => btt.classList.toggle('show', scrollY > 600), { passive:true });
+  btt.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+</script>
+</body>
+</html>
