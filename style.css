@@ -185,8 +185,28 @@ body { font-family:var(--sans); font-size:var(--fs-body); line-height:var(--lh);
 /* ══ CURRICULUM VITAE ══ */
 .cv-sec { background:#fff; }
 .cv-wrap { display:flex; flex-direction:column; gap:1.5rem; max-width:860px; margin:0 auto; }
-.cv-placeholder { background:linear-gradient(135deg,var(--p1),#fff); border:2px dashed var(--p3); border-radius:20px; overflow:hidden; min-height:780px; display:flex; align-items:stretch; position:relative; }
-.cv-upload-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4rem 2rem; text-align:center; pointer-events:none; }
+.cv-placeholder {
+  position:relative; border-radius:20px; overflow:hidden;
+  min-height:780px; display:flex; align-items:stretch;
+  background: var(--bg2);
+  box-shadow:
+    0 0 0 1px var(--p3),
+    0 0 0 5px var(--bg),
+    0 0 0 6px var(--p2),
+    0 8px 40px rgba(26,62,110,.13);
+}
+.cv-placeholder::before {
+  content:'';
+  position:absolute; inset:0; border-radius:20px; z-index:0;
+  background: linear-gradient(135deg, var(--p1) 0%, #fff 60%, var(--p1) 100%);
+}
+.cv-placeholder::after {
+  content:'';
+  position:absolute; inset:10px; border-radius:14px; z-index:0;
+  border: 1px solid var(--p2);
+  pointer-events:none;
+}
+.cv-upload-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4rem 2rem; text-align:center; pointer-events:none; position:relative; z-index:1; }
 .cv-icon { color:var(--p4); margin-bottom:1rem; }
 .cv-title { font-family:var(--serif); font-size:var(--fs-h1); font-weight:700; color:var(--p6); margin-bottom:.5rem; }
 .cv-sub { font-family:var(--sans); font-size:var(--fs-body); color:var(--ink2); margin-bottom:1.2rem; line-height:var(--lh); }
@@ -198,10 +218,31 @@ body { font-family:var(--sans); font-size:var(--fs-body); line-height:var(--lh);
 /* ══ CERTIFICATE ══ */
 #certificate { background:var(--bg2); }
 .cert-wrap { max-width:860px; margin:0 auto; }
-.cert-placeholder { background:linear-gradient(135deg,var(--p1),#fff); border:2px dashed var(--p3); border-radius:20px; padding:0; text-align:center; min-height:620px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; overflow:hidden; }
-.cert-icon { color:var(--p4); margin-bottom:1rem; }
-.cert-title { font-family:var(--serif); font-size:var(--fs-h1); font-weight:700; color:var(--p6); margin-bottom:.5rem; }
-.cert-sub { font-family:var(--sans); font-size:var(--fs-body); color:var(--ink2); margin-bottom:1.2rem; line-height:var(--lh); pointer-events:none; }
+.cert-placeholder {
+  position:relative; border-radius:20px; overflow:hidden;
+  min-height:620px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; padding:0;
+  background: var(--bg2);
+  box-shadow:
+    0 0 0 1px var(--p3),
+    0 0 0 5px var(--bg),
+    0 0 0 6px var(--p2),
+    0 8px 40px rgba(26,62,110,.13);
+}
+.cert-placeholder::before {
+  content:'';
+  position:absolute; inset:0; border-radius:20px; z-index:0;
+  background: linear-gradient(135deg, var(--p1) 0%, #fff 60%, var(--p1) 100%);
+}
+.cert-placeholder::after {
+  content:'';
+  position:absolute; inset:10px; border-radius:14px; z-index:0;
+  border: 1px solid var(--p2);
+  pointer-events:none;
+}
+.cert-icon { color:var(--p4); margin-bottom:1rem; position:relative; z-index:1; }
+.cert-title { font-family:var(--serif); font-size:var(--fs-h1); font-weight:700; color:var(--p6); margin-bottom:.5rem; position:relative; z-index:1; }
+.cert-sub { font-family:var(--sans); font-size:var(--fs-body); color:var(--ink2); margin-bottom:1.2rem; line-height:var(--lh); pointer-events:none; position:relative; z-index:1; }
 
 /* ══ PROFESSIONAL READINGS ══ */
 #readings { background:#fff; }
@@ -477,14 +518,11 @@ img:not([src=""]):not([onerror]) { cursor:zoom-in; }
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
-  border-radius: inherit;
-  background: #fff;
-  z-index: 2;
+  z-index: 3;
+  border-radius: 20px;
 }
-.cv-placeholder { position: relative; }
-.cert-placeholder { position: relative; }
 /* hide the fallback text/icon once image loads */
 .cv-placeholder img ~ .cv-upload-area,
 .cert-placeholder img ~ .cert-icon,
