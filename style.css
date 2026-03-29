@@ -332,7 +332,7 @@ body { font-family:var(--sans); font-size:var(--fs-body); line-height:var(--lh);
 .ppst-4img img { width:100%; height:100%; object-fit:cover; display:block; }
 .ppst-img-fallback { display:flex; flex-direction:column; align-items:center; gap:.3rem; color:var(--p4); text-align:center; padding:.5rem; position:absolute; inset:0; justify-content:center; pointer-events:none; }
 .ppst-img-fallback small { font-family:var(--poppins); font-size:10px; font-weight:500; color:var(--ink3); line-height:1.3; }
-.ppst-ref { font-family:var(--elegant); font-style:italic; font-size:1.05rem; font-size:var(--fs-body); color:var(--ink2); line-height:var(--lh); }
+.ppst-ref { font-family:var(--elegant); font-style:italic; font-size:var(--fs-body); color:var(--ink2); line-height:var(--lh); }
 .ppst-footer-row { display:flex; align-items:center; justify-content:flex-end; padding:.85rem 2rem; border-top:1px solid var(--bdr); background:linear-gradient(to right,#fff,var(--p1)); }
 .ppst-view-btn { font-family:var(--poppins); font-size:var(--fs-sm); font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--p5); background:var(--p1); border:1px solid var(--bdr); padding:.35rem 1.1rem; border-radius:2rem; text-decoration:none; transition:all .22s var(--ease); display:inline-flex; align-items:center; gap:.4rem; }
 .ppst-view-btn:hover { background:var(--p5); color:#fff; border-color:var(--p5); transform:translateX(3px); }
@@ -465,7 +465,6 @@ footer { background:var(--p6); padding:2.5rem 2rem; text-align:center; }
   backdrop-filter:blur(8px); white-space:nowrap;
 }
 
-/* Make real images show pointer */
 img:not([src=""]):not([onerror]) { cursor:zoom-in; }
 .coop-img-box img,
 .coop-photo-item > img,
@@ -506,22 +505,20 @@ img:not([src=""]):not([onerror]) { cursor:zoom-in; }
 .doc-corners span:nth-child(4) { bottom:6px; right:6px; border-width:0 2px 2px 0; }
 
 /* ══════════════════════════════════════
-   AWARDS & CERTIFICATES — DOCUMENT FRAMES
-   (clean photo upload areas, tags preserved)
+   AWARDS & CERTIFICATES
 ══════════════════════════════════════ */
-.awards-sec { background:var(--bg2); }
+.awards-sec { background: var(--bg2); }
 
 .aw-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.4rem;
+  gap: 1.5rem;
 }
 
-/* every card is a thin column: frame on top, tag badge + meta below */
 .aw-card {
   background: #fff;
   border: 1px solid var(--bdr);
-  border-radius: 18px;
+  border-radius: 20px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -529,31 +526,26 @@ img:not([src=""]):not([onerror]) { cursor:zoom-in; }
   transition: transform .3s var(--ease), box-shadow .3s var(--ease);
 }
 .aw-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 42px rgba(26,62,110,.13);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(26,62,110,.16);
 }
 
-/* Featured card spans 2 columns and is taller */
 .aw-featured { grid-column: span 2; }
 .aw-featured .aw-doc-frame { aspect-ratio: 16/9; }
 
-/* ── Document frame (the photo upload zone) ── */
 .aw-doc-frame {
   position: relative;
-  aspect-ratio: 4/3;
-  background: linear-gradient(160deg, var(--p1) 0%, #fff 55%, var(--p1) 100%);
+  aspect-ratio: 3/2;
   overflow: hidden;
   flex-shrink: 0;
+  background: linear-gradient(160deg, var(--p1) 0%, #fff 55%, var(--p1) 100%);
 }
-
-/* outer border line */
 .aw-doc-frame::before {
   content: '';
   position: absolute; inset: 0;
   border: 1.5px solid var(--p3);
   pointer-events: none; z-index: 4;
 }
-/* inner decorative inset */
 .aw-doc-frame::after {
   content: '';
   position: absolute; inset: 8px;
@@ -561,7 +553,6 @@ img:not([src=""]):not([onerror]) { cursor:zoom-in; }
   pointer-events: none; z-index: 4;
 }
 
-/* the actual image fills the frame */
 .aw-doc-frame img {
   position: absolute;
   inset: 0;
@@ -569,11 +560,10 @@ img:not([src=""]):not([onerror]) { cursor:zoom-in; }
   object-fit: cover;
   display: block;
   z-index: 3;
-  transition: transform .4s var(--ease);
+  transition: transform .5s var(--ease);
 }
-.aw-card:hover .aw-doc-frame img { transform: scale(1.03); }
+.aw-card:hover .aw-doc-frame img { transform: scale(1.05); }
 
-/* fallback shown when image is missing */
 .aw-doc-fallback {
   position: absolute; inset: 0; z-index: 1;
   display: flex; flex-direction: column;
@@ -589,11 +579,18 @@ img:not([src=""]):not([onerror]) { cursor:zoom-in; }
   color: var(--ink3);
   letter-spacing: .04em;
 }
-
-/* hide fallback once real image loads */
 .aw-doc-frame img ~ .aw-doc-fallback { display: none; }
 
-/* ── Ribbon tag — positioned over the frame ── */
+.aw-doc-frame .doc-corners { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
+.aw-doc-frame .doc-corners span {
+  position: absolute; width: 16px; height: 16px;
+  border-color: var(--p5); border-style: solid;
+}
+.aw-doc-frame .doc-corners span:nth-child(1) { top:6px;  left:6px;  border-width:2px 0 0 2px; }
+.aw-doc-frame .doc-corners span:nth-child(2) { top:6px;  right:6px; border-width:2px 2px 0 0; }
+.aw-doc-frame .doc-corners span:nth-child(3) { bottom:6px; left:6px;  border-width:0 0 2px 2px; }
+.aw-doc-frame .doc-corners span:nth-child(4) { bottom:6px; right:6px; border-width:0 2px 2px 0; }
+
 .aw-tag {
   position: absolute;
   top: 12px; left: 12px;
@@ -603,37 +600,41 @@ img:not([src=""]):not([onerror]) { cursor:zoom-in; }
   font-weight: 700;
   letter-spacing: .1em;
   text-transform: uppercase;
-  padding: .28rem .75rem;
+  padding: .28rem .8rem;
   border-radius: 2rem;
   pointer-events: none;
+  backdrop-filter: blur(6px);
 }
-.aw-tag-gold  { background: #B8860B; color: #fff; }
-.aw-tag-teal  { background: #1A6B5A; color: #fff; }
-.aw-tag-blue  { background: var(--p5); color: #fff; }
-.aw-tag-rose  { background: #8B3A5A; color: #fff; }
+.aw-tag-gold   { background: rgba(184,134,11,.9);  color: #fff; }
+.aw-tag-teal   { background: rgba(26,107,90,.9);   color: #fff; }
+.aw-tag-blue   { background: rgba(45,95,154,.9);   color: #fff; }
+.aw-tag-rose   { background: rgba(139,58,90,.9);   color: #fff; }
+.aw-tag-green  { background: rgba(30,120,60,.9);   color: #fff; }
+.aw-tag-purple { background: rgba(90,60,150,.9);   color: #fff; }
 
-/* ── Meta strip below the frame ── */
 .aw-meta {
-  padding: .9rem 1.1rem 1rem;
+  padding: 1rem 1.2rem 1.1rem;
   display: flex;
   flex-direction: column;
-  gap: .25rem;
+  gap: .2rem;
   border-top: 1px solid var(--bdr);
   background: linear-gradient(to right, var(--p1), #fff);
+  flex: 1;
 }
 .aw-label {
-  font-size: var(--fs-sm);
+  font-family: var(--display);
+  font-size: var(--fs-h3);
   font-weight: 700;
-  letter-spacing: .04em;
   color: var(--ink);
   margin: 0;
+  line-height: 1.3;
 }
 .aw-sub {
+  font-family: var(--poppins);
   font-size: var(--fs-xs);
   color: var(--ink3);
   margin: 0;
   line-height: 1.5;
-  font-family: var(--poppins);
   letter-spacing: .03em;
 }
 .aw-btn {
@@ -644,9 +645,12 @@ img:not([src=""]):not([onerror]) { cursor:zoom-in; }
   text-transform: uppercase;
   color: var(--p5);
   text-decoration: none;
-  margin-top: .3rem;
+  margin-top: .5rem;
   transition: color .2s;
   align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
 }
 .aw-btn:hover { color: var(--p7); }
 
@@ -681,10 +685,8 @@ img:not([src=""]):not([onerror]) { cursor:zoom-in; }
   .intro-stats-bar { flex-direction:column; }
   .isb-divider { width:100%; height:1px; }
   .intro-text-header, .intro-text-body, .intro-signature-row { padding-left:1.8rem; padding-right:1.8rem; }
-  /* Awards responsive */
   .aw-grid { grid-template-columns: 1fr 1fr; }
   .aw-featured { grid-column: span 2; }
-  .aw-featured .aw-doc-frame { aspect-ratio: 16/9; }
 }
 @media(max-width:480px){
   .obs-grid { grid-template-columns:1fr; }
@@ -694,8 +696,7 @@ img:not([src=""]):not([onerror]) { cursor:zoom-in; }
   .intro-text-header, .intro-text-body, .intro-signature-row { padding-left:1.2rem; padding-right:1.2rem; }
   .h-stats { flex-wrap:wrap; gap:.5rem; }
   .hst { border-right:none; padding:0 1rem; }
-  /* Awards responsive */
   .aw-grid { grid-template-columns: 1fr; }
   .aw-featured { grid-column: span 1; }
-  .aw-featured .aw-doc-frame { aspect-ratio: 4/3; }
+  .aw-featured .aw-doc-frame { aspect-ratio: 3/2; }
 }
