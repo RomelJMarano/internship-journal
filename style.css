@@ -469,3 +469,19 @@ img:not([src=""]):not([onerror]) { cursor:zoom-in; }
 .ppst-4img img,
 .obs-placeholder img,
 .gi img { cursor:zoom-in; }
+
+/* ══ CV & CERT IMAGE DISPLAY ══ */
+.cv-placeholder img,
+.cert-placeholder img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: inherit;
+  background: #fff;
+  z-index: 2;
+}
+.cv-placeholder { position: relative; }
+.cert-placeholder { position: relative; }
