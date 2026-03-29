@@ -184,8 +184,8 @@ body { font-family:var(--sans); font-size:var(--fs-body); line-height:var(--lh);
 
 /* ══ CURRICULUM VITAE ══ */
 .cv-sec { background:#fff; }
-.cv-wrap { display:flex; flex-direction:column; gap:1.5rem; max-width:760px; margin:0 auto; }
-.cv-placeholder { background:linear-gradient(135deg,var(--p1),#fff); border:2px dashed var(--p3); border-radius:20px; overflow:hidden; min-height:500px; display:flex; align-items:stretch; position:relative; }
+.cv-wrap { display:flex; flex-direction:column; gap:1.5rem; max-width:860px; margin:0 auto; }
+.cv-placeholder { background:linear-gradient(135deg,var(--p1),#fff); border:2px dashed var(--p3); border-radius:20px; overflow:hidden; min-height:780px; display:flex; align-items:stretch; position:relative; }
 .cv-upload-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4rem 2rem; text-align:center; pointer-events:none; }
 .cv-icon { color:var(--p4); margin-bottom:1rem; }
 .cv-title { font-family:var(--serif); font-size:var(--fs-h1); font-weight:700; color:var(--p6); margin-bottom:.5rem; }
@@ -197,8 +197,8 @@ body { font-family:var(--sans); font-size:var(--fs-body); line-height:var(--lh);
 
 /* ══ CERTIFICATE ══ */
 #certificate { background:var(--bg2); }
-.cert-wrap { max-width:680px; margin:0 auto; }
-.cert-placeholder { background:linear-gradient(135deg,var(--p1),#fff); border:2px dashed var(--p3); border-radius:20px; padding:4rem 2rem; text-align:center; min-height:340px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; }
+.cert-wrap { max-width:860px; margin:0 auto; }
+.cert-placeholder { background:linear-gradient(135deg,var(--p1),#fff); border:2px dashed var(--p3); border-radius:20px; padding:0; text-align:center; min-height:620px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; overflow:hidden; }
 .cert-icon { color:var(--p4); margin-bottom:1rem; }
 .cert-title { font-family:var(--serif); font-size:var(--fs-h1); font-weight:700; color:var(--p6); margin-bottom:.5rem; }
 .cert-sub { font-family:var(--sans); font-size:var(--fs-body); color:var(--ink2); margin-bottom:1.2rem; line-height:var(--lh); pointer-events:none; }
@@ -485,3 +485,8 @@ img:not([src=""]):not([onerror]) { cursor:zoom-in; }
 }
 .cv-placeholder { position: relative; }
 .cert-placeholder { position: relative; }
+/* hide the fallback text/icon once image loads */
+.cv-placeholder img ~ .cv-upload-area,
+.cert-placeholder img ~ .cert-icon,
+.cert-placeholder img ~ .cert-title,
+.cert-placeholder img ~ .cert-sub { display: none; }
