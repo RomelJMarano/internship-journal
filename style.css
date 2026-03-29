@@ -186,27 +186,31 @@ body { font-family:var(--sans); font-size:var(--fs-body); line-height:var(--lh);
 .cv-sec { background:#fff; }
 .cv-wrap { display:flex; flex-direction:column; gap:1.5rem; max-width:860px; margin:0 auto; }
 .cv-placeholder {
-  position:relative; border-radius:20px; overflow:hidden;
+  position:relative;
   min-height:780px; display:flex; align-items:stretch;
-  background: var(--bg2);
-  box-shadow:
-    0 0 0 1px var(--p3),
-    0 0 0 5px var(--bg),
-    0 0 0 6px var(--p2),
-    0 8px 40px rgba(26,62,110,.13);
+  background:#fff;
+  border-radius:4px;
+  padding: 18px;
+  box-shadow: 0 2px 8px rgba(26,62,110,.08), 0 20px 60px rgba(26,62,110,.10);
 }
+/* Outer thin line */
 .cv-placeholder::before {
   content:'';
-  position:absolute; inset:0; border-radius:20px; z-index:0;
-  background: linear-gradient(135deg, var(--p1) 0%, #fff 60%, var(--p1) 100%);
+  position:absolute; inset:0;
+  border-radius:4px;
+  border: 1.5px solid var(--p3);
+  pointer-events:none; z-index:4;
 }
+/* Inner decorative frame with corner accents via outline */
 .cv-placeholder::after {
   content:'';
-  position:absolute; inset:10px; border-radius:14px; z-index:0;
+  position:absolute; inset:10px;
+  border-radius:2px;
   border: 1px solid var(--p2);
-  pointer-events:none;
+  pointer-events:none; z-index:4;
+  background: transparent;
 }
-.cv-upload-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4rem 2rem; text-align:center; pointer-events:none; position:relative; z-index:1; }
+.cv-upload-area { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4rem 2rem; text-align:center; pointer-events:none; position:relative; z-index:1; background:linear-gradient(160deg,var(--p1) 0%,#fff 55%,var(--p1) 100%); border-radius:2px; }
 .cv-icon { color:var(--p4); margin-bottom:1rem; }
 .cv-title { font-family:var(--serif); font-size:var(--fs-h1); font-weight:700; color:var(--p6); margin-bottom:.5rem; }
 .cv-sub { font-family:var(--sans); font-size:var(--fs-body); color:var(--ink2); margin-bottom:1.2rem; line-height:var(--lh); }
@@ -219,26 +223,26 @@ body { font-family:var(--sans); font-size:var(--fs-body); line-height:var(--lh);
 #certificate { background:var(--bg2); }
 .cert-wrap { max-width:860px; margin:0 auto; }
 .cert-placeholder {
-  position:relative; border-radius:20px; overflow:hidden;
+  position:relative;
   min-height:620px; display:flex; flex-direction:column;
-  align-items:center; justify-content:center; padding:0;
-  background: var(--bg2);
-  box-shadow:
-    0 0 0 1px var(--p3),
-    0 0 0 5px var(--bg),
-    0 0 0 6px var(--p2),
-    0 8px 40px rgba(26,62,110,.13);
+  align-items:center; justify-content:center; padding:18px;
+  background:#fff;
+  border-radius:4px;
+  box-shadow: 0 2px 8px rgba(26,62,110,.08), 0 20px 60px rgba(26,62,110,.10);
 }
 .cert-placeholder::before {
   content:'';
-  position:absolute; inset:0; border-radius:20px; z-index:0;
-  background: linear-gradient(135deg, var(--p1) 0%, #fff 60%, var(--p1) 100%);
+  position:absolute; inset:0;
+  border-radius:4px;
+  border: 1.5px solid var(--p3);
+  pointer-events:none; z-index:4;
 }
 .cert-placeholder::after {
   content:'';
-  position:absolute; inset:10px; border-radius:14px; z-index:0;
+  position:absolute; inset:10px;
+  border-radius:2px;
   border: 1px solid var(--p2);
-  pointer-events:none;
+  pointer-events:none; z-index:4;
 }
 .cert-icon { color:var(--p4); margin-bottom:1rem; position:relative; z-index:1; }
 .cert-title { font-family:var(--serif); font-size:var(--fs-h1); font-weight:700; color:var(--p6); margin-bottom:.5rem; position:relative; z-index:1; }
@@ -515,16 +519,29 @@ img:not([src=""]):not([onerror]) { cursor:zoom-in; }
 .cv-placeholder img,
 .cert-placeholder img {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  inset: 18px;
+  width: calc(100% - 36px);
+  height: calc(100% - 36px);
   object-fit: cover;
   display: block;
   z-index: 3;
-  border-radius: 20px;
+  border-radius: 2px;
 }
 /* hide the fallback text/icon once image loads */
 .cv-placeholder img ~ .cv-upload-area,
 .cert-placeholder img ~ .cert-icon,
 .cert-placeholder img ~ .cert-title,
 .cert-placeholder img ~ .cert-sub { display: none; }
+
+/* ── Corner accent marks ── */
+.doc-corners {
+  position:absolute; inset:0; z-index:5; pointer-events:none;
+}
+.doc-corners span {
+  position:absolute; width:18px; height:18px;
+  border-color: var(--p5); border-style:solid;
+}
+.doc-corners span:nth-child(1) { top:6px;  left:6px;  border-width:2px 0 0 2px; }
+.doc-corners span:nth-child(2) { top:6px;  right:6px; border-width:2px 2px 0 0; }
+.doc-corners span:nth-child(3) { bottom:6px; left:6px;  border-width:0 0 2px 2px; }
+.doc-corners span:nth-child(4) { bottom:6px; right:6px; border-width:0 2px 2px 0; }
